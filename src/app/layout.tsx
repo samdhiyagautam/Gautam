@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
     default: "[ADD YOUR NAME] | Assistant Manager | Data Analytics | AI-Enabled Business Solutions",
     template: "%s | [ADD YOUR NAME] Portfolio",

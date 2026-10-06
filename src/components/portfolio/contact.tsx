@@ -58,21 +58,40 @@ export function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setFormError(null);
 
-    // Simulate form submission - replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // For now, show success - replace with real API integration
-    setSubmitStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setIsSubmitting(false);
-    
-    toast.success('Message sent! I\'ll get back to you soon.');
+    try {
+      const form = e.target as HTMLFormElement;
+      const honeypot = (new FormData(form).get('website') as string) || '';
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, website: honeypot }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        toast.success("Message sent! I'll get back to you soon.");
+      } else {
+        setSubmitStatus('error');
+        setFormError(data.error || 'Failed to send. Please try again or email directly.');
+        toast.error(data.error || 'Failed to send message.');
+      }
+    } catch {
+      setSubmitStatus('error');
+      setFormError('Network error. Please try again or email directly.');
+      toast.error('Network error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -152,6 +171,11 @@ export function Contact() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                  {/* Honeypot anti-spam field — hidden from human users */}
+                  <div className="hidden" aria-hidden="true">
+                    <Label htmlFor="website">Website</Label>
+                    <Input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" disabled={isSubmitting} />
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Name *</Label>
@@ -222,16 +246,16 @@ export function Contact() {
                   </Button>
 
                   {submitStatus === 'success' && (
-                    <div className="flex items-center space-x-2 text-green-600 dark:text-green-400 animate-in fade-in">
+                    <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
                       <CheckCircle className="h-5 w-5" />
                       <span>Message sent successfully! I'll respond within 24 hours.</span>
                     </div>
                   )}
 
                   {submitStatus === 'error' && (
-                    <div className="flex items-center space-x-2 text-destructive animate-in fade-in">
+                    <div className="flex items-center space-x-2 text-destructive" role="alert">
                       <AlertCircle className="h-5 w-5" />
-                      <span>Failed to send. Please try again or email me directly.</span>
+                      <span>{formError || 'Failed to send. Please try again or email directly.'}</span>
                     </div>
                   )}
                 </form>

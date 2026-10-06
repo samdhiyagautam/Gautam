@@ -25,7 +25,7 @@ const EXPERIENCE_DATA = [
       'Executive Dashboard - Real-time KPI monitoring',
       'Sales Analytics Pipeline - Automated data processing',
       'Operations Portal - Next.js web application',
-      'AI-Assisted Reporting System - Reduced manual effort by 60%',
+      'AI-Assisted Reporting System - automated compilation with human review checkpoints',
     ],
     technologies: ['Python', 'SQL', 'Power BI', 'Excel', 'Power Query', 'DAX', 'Next.js', 'React', 'Supabase', 'PostgreSQL', 'Tailwind CSS', 'AI Tools'],
     description: 'As Assistant Manager, I bridge business requirements with technical solutions. My role combines data analytics, business intelligence, web development, and AI-enabled automation to drive operational efficiency and data-driven decision making.',
