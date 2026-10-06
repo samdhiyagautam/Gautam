@@ -1,11 +1,13 @@
 import { Metadata } from "next";
 import { Contact } from "@/components/portfolio/contact";
+import { getPublishedProfile, isContactConfigured } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch for project inquiries, job opportunities, or collaboration",
 };
 
-export default function ContactPage() {
-  return <Contact />;
+export default async function ContactPage() {
+  const profile = await getPublishedProfile();
+  return <Contact deliveryConfigured={isContactConfigured()} contactEmail={profile.email} />;
 }

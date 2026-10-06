@@ -465,3 +465,7 @@ export async function getAllResumes(): Promise<Resume[]> {
 }
 
 export { isSupabaseConfigured };
+
+export function isContactConfigured(): boolean {
+  return !!(process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL);
+}

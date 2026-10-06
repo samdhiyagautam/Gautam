@@ -15,6 +15,7 @@ import {
   getPublishedSkills,
   getPublishedProjects,
   getPublishedResume,
+  isContactConfigured,
 } from "@/lib/cms";
 
 export default async function Home() {
@@ -38,7 +39,7 @@ export default async function Home() {
         <Projects projects={projects} />
         <AIWorkflow />
         <Resume resume={resume} />
-        <Contact />
+        <Contact deliveryConfigured={isContactConfigured()} contactEmail={profile.email} />
       </main>
       <Footer />
     </div>

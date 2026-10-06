@@ -49,7 +49,13 @@ const CONTACT_INFO = [
   },
 ];
 
-export function Contact() {
+export function Contact({
+  deliveryConfigured,
+  contactEmail,
+}: {
+  deliveryConfigured: boolean;
+  contactEmail: string;
+}) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -166,10 +172,13 @@ export function Contact() {
               <CardHeader>
                 <CardTitle className="text-xl">Send a Message</CardTitle>
                 <p className="text-muted-foreground text-sm">
-                  Or fill out the form below and I'll get back to you within 24 hours.
+                  {deliveryConfigured
+                    ? "Or fill out the form below and I'll get back to you within 24 hours."
+                    : "Direct email is the fastest way to reach me right now."}
                 </p>
               </CardHeader>
               <CardContent>
+                {deliveryConfigured ? (
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                   {/* Honeypot anti-spam field — hidden from human users */}
                   <div className="hidden" aria-hidden="true">
@@ -259,6 +268,20 @@ export function Contact() {
                     </div>
                   )}
                 </form>
+                ) : (
+                  <div className="space-y-4">
+                    <p className="text-muted-foreground">
+                      The contact form is not connected yet — email me directly and I’ll respond within 24 hours.
+                    </p>
+                    <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
+                      <a href={`mailto:${contactEmail}`} className="flex items-center space-x-2">
+                        <Mail className="h-5 w-5" />
+                        <span>Email Me</span>
+                      </a>
+                    </Button>
+                    <p className="text-sm text-muted-foreground break-all">{contactEmail}</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
