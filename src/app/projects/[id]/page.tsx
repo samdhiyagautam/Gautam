@@ -1,25 +1,22 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { GitBranch, ExternalLink, ChevronLeft, BarChart2, Zap, Layout, Image, Calendar, Code, Database, Users, CheckCircle } from "lucide-react";
+import { GitBranch, ExternalLink, ChevronLeft, BarChart2, Zap, Layout, Image, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { PROJECTS_DATA, type Project } from "@/components/portfolio/projects";
+import { getPublishedProject } from "@/lib/cms";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-function getCategoryIcon(category: string) {
-  const icons = {
-    "data-analytics": BarChart2,
-    "ai-automation": Zap,
-    "web-applications": Layout,
-    "creative-technology": Image,
-  };
-  return icons[category as keyof typeof icons] || Layout;
-}
+const CATEGORY_ICONS = {
+  "data-analytics": BarChart2,
+  "ai-automation": Zap,
+  "web-applications": Layout,
+  "creative-technology": Image,
+} as const;
 
 function getCategoryLabel(category: string) {
   const labels = {
@@ -33,7 +30,7 @@ function getCategoryLabel(category: string) {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const project = PROJECTS_DATA.find((p: Project) => p.id === resolvedParams.id);
+  const project = await getPublishedProject(resolvedParams.id);
   
   if (!project) {
     return { title: "Project Not Found" };
@@ -52,13 +49,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const resolvedParams = await params;
-  const project = PROJECTS_DATA.find((p: Project) => p.id === resolvedParams.id);
+  const project = await getPublishedProject(resolvedParams.id);
   
   if (!project) {
     notFound();
   }
 
-  const Icon = getCategoryIcon(project.category);
+  const Icon = CATEGORY_ICONS[project.category as keyof typeof CATEGORY_ICONS] ?? Layout;
 
   return (
     <div className="min-h-screen bg-background">

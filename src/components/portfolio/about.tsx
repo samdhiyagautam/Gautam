@@ -1,17 +1,12 @@
 'use client';
 
 import { CAREER_JOURNEY } from '@/lib/constants';
-import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { Reveal } from './reveal';
 import { SectionHeading } from './section-heading';
+import type { Profile } from '@/types';
 
-export function About() {
-  const profile = {
-    name: '[ADD YOUR NAME]',
-    about: 'I turn business problems into practical solutions using data, AI and modern technology. With 2+ years of experience as an Assistant Manager at Dhuri Na Venture Private Limited, I combine business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.\n\nMy journey from MAS Educative to Assistant Manager has been defined by continuous learning and practical application. I work with Python, SQL, Power BI, and Excel for data analysis; build web applications with Next.js, React, Supabase, and PostgreSQL; and leverage AI to accelerate research, analysis, development, and creative workflows.\n\nI focus on solving the underlying business problem rather than simply using technology. Whether it\'s building a dashboard that drives decisions, automating a repetitive workflow, or developing a web application that streamlines operations, my approach is always: understand the problem first, then apply the right tools.',
-  };
-
+export function About({ profile }: { profile: Profile }) {
   return (
     <section id="about" className="py-20 sm:py-28 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

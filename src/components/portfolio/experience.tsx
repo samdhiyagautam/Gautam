@@ -1,72 +1,11 @@
 'use client';
 
-import { Calendar, Building2, CheckCircle, Clock, Code, Database, Users, BarChart, Zap, Globe } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Calendar, Building2, CheckCircle, Code, Database } from 'lucide-react';
 import { Reveal } from './reveal';
 import { SectionHeading } from './section-heading';
+import type { Experience as ExperienceItem } from '@/types';
 
-const EXPERIENCE_DATA = [
-  {
-    id: '1',
-    company: 'Dhuri Na Venture Private Limited',
-    designation: 'Assistant Manager',
-    startDate: '2022-01',
-    endDate: null,
-    isCurrent: true,
-    responsibilities: [
-      'Lead data analytics initiatives for business decision-making',
-      'Design and maintain Power BI dashboards for operational reporting',
-      'Automate repetitive workflows using Python and AI-assisted tools',
-      'Collaborate with cross-functional teams to define data requirements',
-      'Build and maintain web applications for internal operations',
-      'Implement AI-enabled productivity workflows across teams',
-    ],
-    projects: [
-      'Executive Dashboard - Real-time KPI monitoring',
-      'Sales Analytics Pipeline - Automated data processing',
-      'Operations Portal - Next.js web application',
-      'AI-Assisted Reporting System - automated compilation with human review checkpoints',
-    ],
-    technologies: ['Python', 'SQL', 'Power BI', 'Excel', 'Power Query', 'DAX', 'Next.js', 'React', 'Supabase', 'PostgreSQL', 'Tailwind CSS', 'AI Tools'],
-    description: 'As Assistant Manager, I bridge business requirements with technical solutions. My role combines data analytics, business intelligence, web development, and AI-enabled automation to drive operational efficiency and data-driven decision making.',
-    order: 1,
-  },
-  {
-    id: '2',
-    company: 'MAS Educative',
-    designation: '[ADD EXACT DESIGNATION]',
-    startDate: '[ADD START DATE]',
-    endDate: '[ADD END DATE]',
-    isCurrent: false,
-    responsibilities: [
-      '[ADD VERIFIED RESPONSIBILITY 1]',
-      '[ADD VERIFIED RESPONSIBILITY 2]',
-      '[ADD VERIFIED RESPONSIBILITY 3]',
-    ],
-    projects: [
-      '[ADD PROJECT 1]',
-      '[ADD PROJECT 2]',
-    ],
-    technologies: ['[ADD TECHNOLOGY 1]', '[ADD TECHNOLOGY 2]'],
-    description: '[ADD ROLE DESCRIPTION]',
-    order: 2,
-  },
-];
-
-const ICONS = {
-  calendar: Calendar,
-  building: Building2,
-  check: CheckCircle,
-  clock: Clock,
-  code: Code,
-  database: Database,
-  users: Users,
-  chart: BarChart,
-  zap: Zap,
-  globe: Globe,
-};
-
-export function Experience() {
+export function Experience({ items }: { items: ExperienceItem[] }) {
   return (
     <section id="experience" className="py-20 sm:py-28 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -80,7 +19,7 @@ export function Experience() {
           <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border" />
           
           <div className="space-y-12">
-            {EXPERIENCE_DATA.map((exp, expIndex) => (
+            {items.map((exp, expIndex) => (
               <Reveal key={exp.id} delay={expIndex * 100}>
               <article
                 className="relative pl-20"

@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import type { Resume as ResumeData } from '@/types';
 
-export function Resume() {
-  const resumeExists = false; // Set to true when resume.pdf is added to public folder
+export function Resume({ resume }: { resume: ResumeData | null }) {
+  const resumeExists = resume !== null;
+  const resumeUrl = resume?.fileUrl ?? '/resume.pdf';
 
   return (
     <section id="resume" className="py-20 sm:py-28 bg-background">
@@ -38,13 +40,13 @@ export function Resume() {
                 {resumeExists ? (
                   <>
                     <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
-                      <a href="/resume.pdf" download className="flex items-center space-x-2">
+                      <a href={resumeUrl} download className="flex items-center space-x-2">
                         <Download className="h-5 w-5" />
                         <span>Download Resume</span>
                       </a>
                     </Button>
                     <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
-                      <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+                      <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
                         <Eye className="h-5 w-5" />
                         <span>View in Browser</span>
                       </a>
@@ -61,11 +63,11 @@ export function Resume() {
                 <div className="pt-4 border-t border-border space-y-3">
                   <div className="grid sm:grid-cols-3 gap-4 text-center">
                     <div className="p-3 rounded-xl bg-muted/50">
-                      <div className="text-2xl font-bold text-primary">v1.0</div>
+                      <div className="text-2xl font-bold text-primary">{resume?.version ?? '—'}</div>
                       <div className="text-xs text-muted-foreground">Version</div>
                     </div>
                     <div className="p-3 rounded-xl bg-muted/50">
-                      <div className="text-2xl font-bold text-primary">{new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</div>
+                      <div className="text-2xl font-bold text-primary">{resume ? new Date(resume.uploadedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '—'}</div>
                       <div className="text-xs text-muted-foreground">Last Updated</div>
                     </div>
                     <div className="p-3 rounded-xl bg-muted/50">

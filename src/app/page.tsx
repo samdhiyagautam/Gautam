@@ -9,20 +9,35 @@ import { AIWorkflow } from "@/components/portfolio/ai-workflow";
 import { Resume } from "@/components/portfolio/resume";
 import { Contact } from "@/components/portfolio/contact";
 import { Footer } from "@/components/portfolio/footer";
+import {
+  getPublishedProfile,
+  getPublishedExperiences,
+  getPublishedSkills,
+  getPublishedProjects,
+  getPublishedResume,
+} from "@/lib/cms";
 
-export default function Home() {
+export default async function Home() {
+  const [profile, experiences, skills, projects, resume] = await Promise.all([
+    getPublishedProfile(),
+    getPublishedExperiences(),
+    getPublishedSkills(),
+    getPublishedProjects(),
+    getPublishedResume(),
+  ]);
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Navigation />
       <main className="flex-1" id="main-content">
-        <Hero />
+        <Hero profile={profile} />
         <WhatIBring />
-        <About />
-        <Experience />
-        <Skills />
-        <Projects />
+        <About profile={profile} />
+        <Experience items={experiences} />
+        <Skills skills={skills} />
+        <Projects projects={projects} />
         <AIWorkflow />
-        <Resume />
+        <Resume resume={resume} />
         <Contact />
       </main>
       <Footer />

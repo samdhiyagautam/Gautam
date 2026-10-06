@@ -2,10 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ArrowUpRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
-import { DEFAULT_PROFILE, PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
+import { PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
+import type { Profile } from '@/types';
 
-export function Hero() {
-  const profile = DEFAULT_PROFILE;
+export function Hero({ profile }: { profile: Profile }) {
 
   return (
     <section className="relative overflow-hidden pt-16" aria-label="Introduction">
