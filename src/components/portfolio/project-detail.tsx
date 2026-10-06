@@ -3,6 +3,7 @@ import { GitBranch, ExternalLink, ChevronLeft, BarChart2, Zap, Layout, Image, Ch
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { isPlaceholderLink } from "@/lib/utils";
 import type { Project } from "@/types";
 
 const CATEGORY_ICONS = {
@@ -112,7 +113,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                 <div className="pt-4 border-t border-border">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Links</p>
                   <div className="flex flex-col gap-2">
-                    {project.githubUrl && project.githubUrl !== "[ADD GITHUB URL]" && (
+                    {project.githubUrl && !isPlaceholderLink(project.githubUrl) && (
                       <Button variant="outline" asChild className="w-full justify-start">
                         <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
                           <GitBranch className="h-4 w-4" />
@@ -120,7 +121,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                         </a>
                       </Button>
                     )}
-                    {project.liveDemoUrl && project.liveDemoUrl !== "[ADD LIVE DEMO URL]" && (
+                    {project.liveDemoUrl && !isPlaceholderLink(project.liveDemoUrl) && (
                       <Button variant="outline" asChild className="w-full justify-start">
                         <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
                           <ExternalLink className="h-4 w-4" />
@@ -128,7 +129,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                         </a>
                       </Button>
                     )}
-                    {project.caseStudyUrl && project.caseStudyUrl !== "[ADD CASE STUDY URL]" && (
+                    {project.caseStudyUrl && !isPlaceholderLink(project.caseStudyUrl) && (
                       <Button variant="ghost" asChild className="w-full justify-start">
                         <a href={project.caseStudyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
                           <span>Case Study</span>

@@ -8,7 +8,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { isPlaceholderLink } from '@/lib/utils';
 import type { Profile } from '@/types';
+
+function isEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
 
 export function Contact({
   profile,
@@ -131,7 +136,7 @@ export function Contact({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-medium">{item.label}</div>
-                      {item.href ? (
+                      {item.href && !isPlaceholderLink(item.href) ? (
                         <a
                           href={item.href}
                           target={item.external ? '_blank' : undefined}
@@ -273,12 +278,18 @@ export function Contact({
                     <p className="text-muted-foreground">
                       The contact form is not connected yet — email me directly and I’ll respond within 24 hours.
                     </p>
-                    <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
-                      <a href={`mailto:${contactEmail}`} className="flex items-center space-x-2">
-                        <Mail className="h-5 w-5" />
-                        <span>Email Me</span>
-                      </a>
-                    </Button>
+                    {isEmail(contactEmail) ? (
+                      <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
+                        <a href={`mailto:${contactEmail}`} className="flex items-center space-x-2">
+                          <Mail className="h-5 w-5" />
+                          <span>Email Me</span>
+                        </a>
+                      </Button>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Direct contact details are being added — check back soon.
+                      </p>
+                    )}
                     <p className="text-sm text-muted-foreground break-all">{contactEmail}</p>
                   </div>
                 )}

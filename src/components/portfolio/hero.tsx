@@ -3,7 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ArrowUpRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
 import { PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
+import { isPlaceholderLink } from '@/lib/utils';
 import type { Profile } from '@/types';
+
+function isEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
 
 export function Hero({ profile }: { profile: Profile }) {
 
@@ -62,22 +67,35 @@ export function Hero({ profile }: { profile: Profile }) {
             </div>
 
             <div className="hero-enter mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-muted-foreground" style={{ animationDelay: '340ms' }}>
-              <span className="inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4" aria-hidden="true" />
-                {profile.location}
-              </span>
-              <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
-                <Mail className="h-4 w-4" aria-hidden="true" />
-                {profile.email}
-              </a>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
-                <Link2 className="h-4 w-4" aria-hidden="true" />
-                LinkedIn
-              </a>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
-                <GitBranch className="h-4 w-4" aria-hidden="true" />
-                GitHub
-              </a>
+              {!isPlaceholderLink(profile.location) && (
+                <span className="inline-flex items-center gap-2">
+                  <MapPin className="h-4 w-4" aria-hidden="true" />
+                  {profile.location}
+                </span>
+              )}
+              {isEmail(profile.email) ? (
+                <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  {profile.email}
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2">
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  {profile.email}
+                </span>
+              )}
+              {!isPlaceholderLink(profile.linkedin) && (
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+                  <Link2 className="h-4 w-4" aria-hidden="true" />
+                  LinkedIn
+                </a>
+              )}
+              {!isPlaceholderLink(profile.github) && (
+                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 transition-colors hover:text-foreground">
+                  <GitBranch className="h-4 w-4" aria-hidden="true" />
+                  GitHub
+                </a>
+              )}
             </div>
           </div>
 

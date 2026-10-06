@@ -40,3 +40,12 @@ export function getInitials(name: string): string {
     .toUpperCase()
     .slice(0, 2);
 }
+
+/**
+ * True when a link value is missing or still a scaffold placeholder.
+ * Callers must never render such values as links — show plain text or
+ * hide the element instead.
+ */
+export function isPlaceholderLink(href: string | null | undefined): boolean {
+  return !href || href.trim() === '' || href.includes('[ADD');
+}

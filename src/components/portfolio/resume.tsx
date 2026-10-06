@@ -28,9 +28,9 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
               </div>
               <CardTitle className="text-2xl">Professional Resume</CardTitle>
               <p className="text-muted-foreground">
-                {resumeExists 
-                  ? 'Current version reflecting my latest experience and skills.' 
-                  : '[PLACEHOLDER] Resume not yet uploaded. Add resume.pdf to public folder.'
+                {resumeExists
+                  ? 'Current version reflecting my latest experience and skills.'
+                  : 'Resume not yet published. Upload a PDF in Admin → Resume to enable downloads.'
                 }
               </p>
             </CardHeader>
@@ -53,7 +53,7 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                   </>
                 ) : (
                   <Button size="lg" variant="outline" disabled className="w-full sm:w-auto">
-                    <span>Add resume.pdf to public/ folder</span>
+                    <span>Resume coming soon</span>
                   </Button>
                 )}
               </div>
@@ -87,10 +87,10 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                     <Award className="h-5 w-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-destructive">Resume Placeholder</h4>
+                    <h4 className="font-semibold text-destructive">Resume not published</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      To enable the resume download, add your <code className="bg-background px-1 rounded">resume.pdf</code> file to the 
-                      <code className="bg-background px-1 rounded">public/</code> folder. The download and view buttons will automatically activate.
+                      No published resume version exists yet. Upload a PDF in Admin → Resume and publish it —
+                      the download and view buttons will activate automatically.
                     </p>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { GitBranch, ExternalLink, BarChart2, Zap, Layout, Image, ChevronRight, A
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { isPlaceholderLink } from '@/lib/utils';
 import { Reveal } from './reveal';
 import { SectionHeading } from './section-heading';
 import type { Project } from '@/types';
@@ -102,7 +103,7 @@ function ProjectCard({ project }: { project: Project }) {
     <Card className="cinematic-card h-full overflow-hidden group">
       <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
         <div className="cinematic-media absolute inset-0">
-          {project.thumbnail && project.thumbnail !== '[ADD THUMBNAIL URL]' ? (
+          {project.thumbnail && !isPlaceholderLink(project.thumbnail) ? (
             // External owner-provided URL with unknown host — plain img avoids
             // baking a remote-pattern allowlist for user content.
             // eslint-disable-next-line @next/next/no-img-element
@@ -138,7 +139,7 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="flex items-center space-x-4 pt-4 border-t border-border">
-          {project.githubUrl && project.githubUrl !== '[ADD GITHUB URL]' && (
+          {project.githubUrl && !isPlaceholderLink(project.githubUrl) && (
             <Button variant="ghost" size="sm" asChild>
               <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
                 <GitBranch className="h-4 w-4" />
@@ -146,7 +147,7 @@ function ProjectCard({ project }: { project: Project }) {
               </a>
             </Button>
           )}
-          {project.liveDemoUrl && project.liveDemoUrl !== '[ADD LIVE DEMO URL]' && (
+          {project.liveDemoUrl && !isPlaceholderLink(project.liveDemoUrl) && (
             <Button variant="ghost" size="sm" asChild>
               <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
                 <ExternalLink className="h-4 w-4" />
@@ -154,7 +155,7 @@ function ProjectCard({ project }: { project: Project }) {
               </a>
             </Button>
           )}
-          {project.caseStudyUrl && project.caseStudyUrl !== '[ADD CASE STUDY URL]' && (
+          {project.caseStudyUrl && !isPlaceholderLink(project.caseStudyUrl) && (
             <Button variant="ghost" size="sm" asChild>
               <a href={project.caseStudyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
                 <span>Case Study</span>

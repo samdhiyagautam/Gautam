@@ -3,7 +3,12 @@
 import Link from 'next/link';
 import { GitBranch, Link2, Mail, Briefcase, Heart } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
+import { isPlaceholderLink } from '@/lib/utils';
 import type { Profile } from '@/types';
+
+function isEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
 
 export function Footer({ profile }: { profile: Profile }) {
   const currentYear = new Date().getFullYear();
@@ -23,15 +28,21 @@ export function Footer({ profile }: { profile: Profile }) {
               I turn business problems into practical solutions using data, AI and modern technology.
             </p>
             <div className="flex items-center space-x-4">
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
-                <Link2 className="h-5 w-5" />
-              </a>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="GitHub">
-                <GitBranch className="h-5 w-5" />
-              </a>
-              <a href={`mailto:${profile.email}`} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Email">
-                <Mail className="h-5 w-5" />
-              </a>
+              {!isPlaceholderLink(profile.linkedin) && (
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
+                  <Link2 className="h-5 w-5" />
+                </a>
+              )}
+              {!isPlaceholderLink(profile.github) && (
+                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="GitHub">
+                  <GitBranch className="h-5 w-5" />
+                </a>
+              )}
+              {isEmail(profile.email) && (
+                <a href={`mailto:${profile.email}`} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Email">
+                  <Mail className="h-5 w-5" />
+                </a>
+              )}
             </div>
           </div>
 
@@ -53,24 +64,30 @@ export function Footer({ profile }: { profile: Profile }) {
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <ul className="space-y-2">
-              <li>
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                  <Link2 className="h-4 w-4" />
-                  <span>LinkedIn</span>
-                </a>
-              </li>
-              <li>
-                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                  <GitBranch className="h-4 w-4" />
-                  <span>GitHub</span>
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${profile.email}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                  <Mail className="h-4 w-4" />
-                  <span>Email</span>
-                </a>
-              </li>
+              {!isPlaceholderLink(profile.linkedin) && (
+                <li>
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                    <Link2 className="h-4 w-4" />
+                    <span>LinkedIn</span>
+                  </a>
+                </li>
+              )}
+              {!isPlaceholderLink(profile.github) && (
+                <li>
+                  <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                    <GitBranch className="h-4 w-4" />
+                    <span>GitHub</span>
+                  </a>
+                </li>
+              )}
+              {isEmail(profile.email) && (
+                <li>
+                  <a href={`mailto:${profile.email}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
+                    <Mail className="h-4 w-4" />
+                    <span>Email</span>
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
