@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { safeNextPath } from "@/lib/safe-redirect";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,13 +20,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate the post-login path (open-redirect protection), then build an
+    // absolute callback URL — Supabase requires emailRedirectTo to be absolute
+    // and allowlisted in the project settings.
+    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+    const next = safeNextPath(redirectTo);
+    const emailRedirectTo = `${siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}`;
+
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: redirectTo || `${process.env.NEXT_PUBLIC_SITE_URL}/admin`,
+        emailRedirectTo,
+        // Never auto-create auth users from this form — the owner allowlists
+        // addresses in Supabase Auth first, then in public.admin_users.
+        shouldCreateUser: false,
       },
     });
 
