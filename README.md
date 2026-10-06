@@ -10,7 +10,7 @@ A premium, recruiter-first personal portfolio and professional brand system buil
 - **Authentication**: Supabase Auth with magic link sign-in
 - **Content Management**: Draft → Preview → Publish workflow
 - **SEO Ready**: Metadata, Open Graph, sitemap, robots.txt
-- **Accessible**: WCAG AA compliant, semantic HTML, keyboard navigation
+- **Accessible**: Semantic HTML, keyboard navigation, visible focus states, reduced-motion support (formal WCAG audit not yet performed)
 - **Responsive**: Mobile-first design, works on all screen sizes
 - **Dark/Light Mode**: System-aware with manual toggle
 
@@ -23,7 +23,7 @@ A premium, recruiter-first personal portfolio and professional brand system buil
 - **Authentication**: Supabase Auth
 - **UI Components**: Radix UI primitives
 - **Icons**: Lucide React
-- **Forms**: React Hook Form + Zod
+- **Forms**: Server actions with Zod validation
 - **Deployment**: Vercel
 
 ## Project Structure
@@ -66,7 +66,8 @@ src/
 │   ├── constants.ts       # Site constants
 │   └── utils.ts           # Helper functions
 ├── types/                 # TypeScript type definitions
-└── middleware.ts          # Next.js middleware
+├── actions/              # Server actions (admin CMS mutations)
+├── proxy.ts              # Auth session refresh + admin redirect gate
 ```
 
 ## Getting Started
@@ -150,8 +151,7 @@ Access the admin panel at `/admin` after signing in with your configured admin e
 ### Content Placeholders
 
 Replace all `[ADD ...]` placeholders in:
-- `src/lib/constants.ts` - Profile info, experience, skills
-- `src/components/portfolio/projects.tsx` - Project data
+- `src/lib/constants.ts` - Profile info, experience, skills, fallback projects
 - `src/app/layout.tsx` - SEO metadata
 - `.env.local` - Environment variables
 

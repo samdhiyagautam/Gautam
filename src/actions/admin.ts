@@ -241,6 +241,32 @@ export async function deleteProject(id: string): Promise<ActionResult> {
   return { ok: true, message: "Project deleted." };
 }
 
+// Publish toggle ---------------------------------------------------------------
+const PUBLISHABLE_TABLES = ["experiences", "projects"] as const;
+type PublishableTable = (typeof PUBLISHABLE_TABLES)[number];
+
+function isPublishableTable(table: string): table is PublishableTable {
+  return (PUBLISHABLE_TABLES as readonly string[]).includes(table);
+}
+
+export async function setPublishStatus(
+  table: string,
+  id: string,
+  status: "draft" | "published"
+): Promise<ActionResult> {
+  if (!isPublishableTable(table)) {
+    return { ok: false, message: "Unknown content type." };
+  }
+  const gate = await adminClient();
+  if (!gate.ok) return gate;
+  const { error } = await gate.supabase.from(table).update({ status }).eq("id", id);
+  if (error) {
+    return { ok: false, message: `Could not update status: ${error.message}` };
+  }
+  revalidateSite();
+  return { ok: true, message: status === "published" ? "Published." : "Moved to draft." };
+}
+
 // Resume ----------------------------------------------------------------------
 const MAX_RESUME_BYTES = 5 * 1024 * 1024;
 

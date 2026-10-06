@@ -3,8 +3,9 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Star, StarOff } from "lucide-react";
+import { Plus, Edit, Star, StarOff, Eye } from "lucide-react";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { PublishButton } from "@/components/admin/publish-button";
 import { deleteProject } from "@/actions/admin";
 import { getAllProjects } from "@/lib/cms";
 
@@ -62,6 +63,13 @@ export default async function AdminProjects() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
+                {projects.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">
+                      No projects yet. Add your first real project with verifiable proof.
+                    </td>
+                  </tr>
+                )}
                 {projects.map((project) => (
                   <tr key={project.id} className="hover:bg-accent/50 transition-colors">
                     <td className="p-4 font-medium">{project.name}</td>
@@ -87,7 +95,13 @@ export default async function AdminProjects() {
                             <Edit className="h-4 w-4" />
                           </Link>
                         </Button>
+                        <Button variant="ghost" size="icon" asChild aria-label="Preview project">
+                          <Link href={`/admin/projects/${project.id}/preview`}>
+                            <Eye className="h-4 w-4" />
+                          </Link>
+                        </Button>
                         <DeleteButton id={project.id} action={deleteProject} label="Delete project" />
+                        <PublishButton table="projects" id={project.id} status={project.status} />
                       </div>
                     </td>
                   </tr>

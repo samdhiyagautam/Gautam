@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Briefcase, Calendar, CheckCircle } from "lucide-react";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { PublishButton } from "@/components/admin/publish-button";
 import { deleteExperience } from "@/actions/admin";
 import { getAllExperiences } from "@/lib/cms";
 
@@ -85,6 +86,7 @@ export default async function AdminExperience() {
                           </Link>
                         </Button>
                         <DeleteButton id={exp.id} action={deleteExperience} label="Delete experience" />
+                        <PublishButton table="experiences" id={exp.id} status={exp.status} />
                       </div>
                     </td>
                   </tr>
