@@ -3,16 +3,10 @@
 import Link from 'next/link';
 import { GitBranch, Link2, Mail, Briefcase, Heart } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
-import { cn } from '@/lib/utils';
+import type { Profile } from '@/types';
 
-export function Footer() {
+export function Footer({ profile }: { profile: Profile }) {
   const currentYear = new Date().getFullYear();
-  const profile = {
-    name: '[ADD YOUR NAME]',
-    email: '[ADD YOUR EMAIL]',
-    linkedin: '[ADD YOUR LINKEDIN URL]',
-    github: '[ADD YOUR GITHUB URL]',
-  };
 
   return (
     <footer className="border-t border-border bg-background/50 backdrop-blur-sm">
@@ -24,7 +18,7 @@ export function Footer() {
               <span className="text-xl font-bold tracking-tight">{profile.name}</span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-xs">
-              Assistant Manager | Data Analytics | AI-Enabled Business Solutions
+              {profile.headline}
               <br />
               I turn business problems into practical solutions using data, AI and modern technology.
             </p>

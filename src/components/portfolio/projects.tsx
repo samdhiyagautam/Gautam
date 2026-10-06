@@ -29,6 +29,7 @@ const CATEGORY_LABELS = {
 export function Projects({ projects }: { projects: Project[] }) {
   const featuredProjects = projects.filter(p => p.isFeatured && p.status === 'published');
   const otherProjects = projects.filter(p => !p.isFeatured && p.status === 'published');
+  const hasProjects = featuredProjects.length > 0 || otherProjects.length > 0;
 
   return (
     <section id="projects" className="py-20 sm:py-28 bg-background">
@@ -40,6 +41,19 @@ export function Projects({ projects }: { projects: Project[] }) {
         />
 
         <div className="space-y-14">
+          {!hasProjects && (
+            <Reveal className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-8 text-center">
+              <h3 className="text-xl font-semibold tracking-tight">Case studies in preparation</h3>
+              <p className="mt-2 text-muted-foreground">
+                Published case studies with verifiable proof (code, dashboards, datasets) will appear here.
+                In the meantime, let&apos;s talk about what I can do with your data.
+              </p>
+              <Button variant="premium" size="lg" asChild className="mt-6">
+                <a href="#contact">Contact Me</a>
+              </Button>
+            </Reveal>
+          )}
+          {featuredProjects.length > 0 && (
           <div>
             <Reveal className="mb-6 flex items-center gap-3">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Core projects</span>
@@ -53,6 +67,7 @@ export function Projects({ projects }: { projects: Project[] }) {
               ))}
             </div>
           </div>
+          )}
 
           {otherProjects.length > 0 && (
             <div>

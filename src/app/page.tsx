@@ -38,10 +38,10 @@ export default async function Home() {
         <Skills skills={skills} />
         <Projects projects={projects} />
         <AIWorkflow />
-        <Resume resume={resume} />
-        <Contact deliveryConfigured={isContactConfigured()} contactEmail={profile.email} />
+        <Resume resume={resume} experiences={experiences} />
+        <Contact profile={profile} deliveryConfigured={isContactConfigured()} />
       </main>
-      <Footer />
+      <Footer profile={profile} />
     </div>
   );
 }

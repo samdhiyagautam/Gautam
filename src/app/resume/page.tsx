@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Resume } from "@/components/portfolio/resume";
-import { getPublishedResume } from "@/lib/cms";
+import { getPublishedResume, getPublishedExperiences } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -8,6 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ResumePage() {
-  const resume = await getPublishedResume();
-  return <Resume resume={resume} />;
+  const [resume, experiences] = await Promise.all([
+    getPublishedResume(),
+    getPublishedExperiences(),
+  ]);
+  return <Resume resume={resume} experiences={experiences} />;
 }

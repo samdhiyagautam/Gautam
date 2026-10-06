@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 const FALLBACK_TITLE =
-  "[ADD YOUR NAME] | Assistant Manager | Data Analytics | AI-Enabled Business Solutions";
+  "[ADD YOUR NAME] | Data Analyst (SQL, Python, Power BI, Excel)";
 const FALLBACK_DESCRIPTION =
-  "Assistant Manager with 2+ years of professional experience, combining business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.";
+  "Data Analyst with 2+ years of professional experience as an Assistant Manager. SQL, Python, Power BI and Excel for business reporting, dashboards and practical problem-solving.";
 
 // Site metadata comes from published SEO settings when Supabase is
 // configured, otherwise from the built-in defaults below.
@@ -81,9 +81,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "[ADD YOUR NAME] | Assistant Manager | Data Analytics",
+      title: "[ADD YOUR NAME] | Data Analyst",
       description:
-        "Assistant Manager with 2+ years of experience in data analytics, AI-enabled workflows, and web development.",
+        "Data Analyst with 2+ years of experience as an Assistant Manager. SQL, Python, Power BI, Excel.",
       images: [ogImage],
       creator: "[ADD YOUR TWITTER HANDLE]",
     },

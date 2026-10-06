@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import type { Resume as ResumeData } from '@/types';
+import type { Resume as ResumeData, Experience } from '@/types';
 
-export function Resume({ resume }: { resume: ResumeData | null }) {
+export function Resume({ resume, experiences }: { resume: ResumeData | null; experiences: Experience[] }) {
   const resumeExists = resume !== null;
   const resumeUrl = resume?.fileUrl ?? '/resume.pdf';
 
@@ -124,20 +124,17 @@ export function Resume({ resume }: { resume: ResumeData | null }) {
                   <span>Experience Timeline</span>
                 </h4>
                 <div className="space-y-3">
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-24 text-muted-foreground">2022 – Present</div>
-                    <div className="flex-1">
-                      <div className="font-medium">Assistant Manager</div>
-                      <div className="text-muted-foreground">Dhuri Na Venture Private Limited</div>
+                  {experiences.map((exp) => (
+                    <div key={exp.id} className="flex items-center space-x-3 text-sm">
+                      <div className="w-24 text-muted-foreground">
+                        {exp.isCurrent ? 'Present' : exp.endDate || exp.startDate}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">{exp.designation}</div>
+                        <div className="text-muted-foreground">{exp.company}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-24 text-muted-foreground">[ADD DATES]</div>
-                    <div className="flex-1">
-                      <div className="font-medium">[ADD EXACT DESIGNATION]</div>
-                      <div className="text-muted-foreground">MAS Educative</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 

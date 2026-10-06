@@ -25,7 +25,7 @@ export function Hero({ profile }: { profile: Profile }) {
               <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-500" aria-hidden="true" />
               <span className="uppercase tracking-[0.18em]">Open to new opportunities</span>
               <span aria-hidden="true" className="text-border">/</span>
-              <span className="text-foreground">Assistant Manager · Data Analytics</span>
+              <span className="text-foreground">Data Analyst · SQL · Python · Power BI</span>
             </div>
 
             <h1 className="hero-enter mt-6 text-[2.6rem] sm:text-6xl lg:text-[4.4rem] font-bold tracking-[-0.03em] leading-[1.02] text-balance" style={{ animationDelay: '90ms' }}>

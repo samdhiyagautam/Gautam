@@ -8,54 +8,54 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-
-const CONTACT_INFO = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: '[ADD YOUR EMAIL]',
-    href: 'mailto:[ADD YOUR EMAIL]',
-    description: 'Best for professional inquiries',
-  },
-  {
-    icon: Link2,
-    label: 'LinkedIn',
-    value: '[ADD YOUR LINKEDIN URL]',
-    href: '[ADD YOUR LINKEDIN URL]',
-    description: 'Connect professionally',
-    external: true,
-  },
-  {
-    icon: GitBranch,
-    label: 'GitHub',
-    value: '[ADD YOUR GITHUB URL]',
-    href: '[ADD YOUR GITHUB URL]',
-    description: 'View code and projects',
-    external: true,
-  },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: '[ADD YOUR LOCATION]',
-    description: 'Open to hybrid/remote roles',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '[ADD YOUR PHONE]',
-    href: 'tel:[ADD YOUR PHONE]',
-    description: 'Available during business hours',
-  },
-];
+import type { Profile } from '@/types';
 
 export function Contact({
+  profile,
   deliveryConfigured,
-  contactEmail,
 }: {
+  profile: Profile;
   deliveryConfigured: boolean;
-  contactEmail: string;
 }) {
+  const contactEmail = profile.email;
+  const CONTACT_INFO = [
+    {
+      icon: Mail,
+      label: 'Email',
+      value: profile.email,
+      href: `mailto:${profile.email}`,
+      description: 'Best for professional inquiries',
+    },
+    {
+      icon: Link2,
+      label: 'LinkedIn',
+      value: profile.linkedin,
+      href: profile.linkedin,
+      description: 'Connect professionally',
+      external: true,
+    },
+    {
+      icon: GitBranch,
+      label: 'GitHub',
+      value: profile.github,
+      href: profile.github,
+      description: 'View code and projects',
+      external: true,
+    },
+    {
+      icon: MapPin,
+      label: 'Location',
+      value: profile.location,
+      description: 'Open to hybrid/remote roles',
+    },
+    {
+      icon: Phone,
+      label: 'Phone',
+      value: profile.phone,
+      href: `tel:${profile.phone}`,
+      description: 'Available during business hours',
+    },
+  ];
   const [formData, setFormData] = useState({
     name: '',
     email: '',
