@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback, createContext, useContext, ReactNode } from "react";
+import React, { useState, useEffect, useMemo, createContext, useContext, ReactNode } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 
 interface Session {
@@ -35,36 +35,25 @@ const SessionProviderInner = ({ value, children }: { value: SessionContextType; 
   React.createElement(SessionContext.Provider, { value }, children);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
+  const configured = isSupabaseConfigured();
   const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Nothing to load when Supabase is unconfigured — start settled.
+  const [isLoading, setIsLoading] = useState(configured);
 
-  const supabase = useMemo(() => {
-    if (!isSupabaseConfigured()) return null;
-    return createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-  }, []);
+  const supabase = useMemo(
+    () =>
+      configured
+        ? createBrowserClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+          )
+        : null,
+    [configured]
+  );
 
-  const fetchSession = useCallback(async () => {
-    if (!supabase) {
-      setSession(null);
-      setIsLoading(false);
-      return;
-    }
-    try {
-      const { data } = await supabase.auth.getSession();
-      const s = data.session;
-      setSession(s ? { user: { id: s.user.id, email: s.user.email ?? "" } } : null);
-    } catch {
-      setSession(null);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [supabase]);
-
+  // Supabase emits INITIAL_SESSION on subscribe, so the subscription alone
+  // delivers the first state — no separate fetch (and no setState in effect).
   useEffect(() => {
-    fetchSession();
     if (!supabase) return;
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s ? { user: { id: s.user.id, email: s.user.email ?? "" } } : null);
@@ -73,9 +62,28 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => {
       subscription.subscription.unsubscribe();
     };
-  }, [supabase, fetchSession]);
+  }, [supabase]);
 
-  const value = { session, isLoading, refreshSession: fetchSession };
+  const value = {
+    session,
+    isLoading,
+    refreshSession: async () => {
+      if (!supabase) {
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+      try {
+        const { data } = await supabase.auth.getSession();
+        const s = data.session;
+        setSession(s ? { user: { id: s.user.id, email: s.user.email ?? "" } } : null);
+      } catch {
+        setSession(null);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+  };
 
   return React.createElement(SessionProviderInner, { value, children } as never);
 }

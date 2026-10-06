@@ -1,9 +1,7 @@
 'use client';
 
-import { Cpu, Brain, Zap, CheckCircle, ArrowRight, GitBranch, User, Shield } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Cpu, Brain, Zap, CheckCircle, GitBranch, User, Shield } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 const AI_WORKFLOW_STEPS = [
   {
@@ -162,7 +160,7 @@ export function AIWorkflow() {
           <div>
             <h3 className="text-2xl font-bold mb-6 text-center">Core Principles</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {AI_PRINCIPLES.map((principle, index) => (
+              {AI_PRINCIPLES.map((principle) => (
                 <Card key={principle.title} className="hover:border-primary/30 transition-colors">
                   <CardContent className="p-6">
                     <h4 className="font-semibold mb-2">{principle.title}</h4>

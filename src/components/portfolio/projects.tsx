@@ -4,13 +4,9 @@ import { GitBranch, ExternalLink, BarChart2, Zap, Layout, Image, ChevronRight, A
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { Reveal } from './reveal';
 import { SectionHeading } from './section-heading';
-
 import type { Project } from '@/types';
-
-export type { Project };
 
 const CATEGORY_ICONS = {
   'data-analytics': BarChart2,
@@ -107,6 +103,9 @@ function ProjectCard({ project }: { project: Project }) {
       <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
         <div className="cinematic-media absolute inset-0">
           {project.thumbnail && project.thumbnail !== '[ADD THUMBNAIL URL]' ? (
+            // External owner-provided URL with unknown host — plain img avoids
+            // baking a remote-pattern allowlist for user content.
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={project.thumbnail} alt={project.name} className="w-full h-full object-cover" />
           ) : (
             <div className="flex items-center justify-center h-full">

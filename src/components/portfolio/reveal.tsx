@@ -18,15 +18,15 @@ export function Reveal({
   ...props
 }: RevealProps) {
   const ref = React.useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = React.useState(false);
+  // Visible immediately when IntersectionObserver is unavailable (SSR/old
+  // browsers) — computed during render, no effect needed for this case.
+  const [visible, setVisible] = React.useState(
+    () => typeof IntersectionObserver === "undefined"
+  );
 
   React.useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
-    }
+    if (!el || visible) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -40,11 +40,12 @@ export function Reveal({
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [visible]);
 
   return (
     <div
       ref={ref}
+      suppressHydrationWarning
       style={{ transitionDelay: `${delay}ms` }}
       className={cn(
         "reveal",

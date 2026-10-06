@@ -85,7 +85,7 @@ export function Contact({
       if (response.ok) {
         setSubmitStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
-        toast.success("Message sent! I'll get back to you soon.");
+        toast.success("Message sent! I will get back to you soon.");
       } else {
         setSubmitStatus('error');
         setFormError(data.error || 'Failed to send. Please try again or email directly.');
@@ -110,7 +110,7 @@ export function Contact({
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Get In Touch</h2>
           <p className="text-lg text-muted-foreground">
-            Have a project in mind or want to discuss opportunities? I'd love to hear from you.
+            Have a project in mind or want to discuss opportunities? I&apos;d love to hear from you.
           </p>
         </div>
 
@@ -118,9 +118,9 @@ export function Contact({
           <div className="lg:col-span-1 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Let's Build Something Useful</CardTitle>
+                <CardTitle className="text-xl">Let&apos;s Build Something Useful</CardTitle>
                 <p className="text-muted-foreground text-sm">
-                  Whether it's a data project, web application, AI automation, or just a conversation — I'm open to discussing how I can help.
+                  Whether it&apos;s a data project, web application, AI automation, or just a conversation — I&apos;m open to discussing how I can help.
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -173,7 +173,7 @@ export function Contact({
                 <CardTitle className="text-xl">Send a Message</CardTitle>
                 <p className="text-muted-foreground text-sm">
                   {deliveryConfigured
-                    ? "Or fill out the form below and I'll get back to you within 24 hours."
+                    ? "Or fill out the form below and I will get back to you within 24 hours."
                     : "Direct email is the fastest way to reach me right now."}
                 </p>
               </CardHeader>
@@ -257,7 +257,7 @@ export function Contact({
                   {submitStatus === 'success' && (
                     <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
                       <CheckCircle className="h-5 w-5" />
-                      <span>Message sent successfully! I'll respond within 24 hours.</span>
+                      <span>Message sent successfully! I will respond within 24 hours.</span>
                     </div>
                   )}
 

@@ -2,7 +2,6 @@
 
 import { Briefcase, BarChart2, Cpu, Code, Puzzle } from 'lucide-react';
 import { WHAT_I_BRING } from '@/lib/constants';
-import { cn } from '@/lib/utils';
 
 const ICONS = {
   briefcase: Briefcase,

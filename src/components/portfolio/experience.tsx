@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Building2, CheckCircle, Code, Database } from 'lucide-react';
+import { Building2, CheckCircle, Code, Database } from 'lucide-react';
 import { Reveal } from './reveal';
 import { SectionHeading } from './section-heading';
 import type { Experience as ExperienceItem } from '@/types';

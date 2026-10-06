@@ -33,7 +33,7 @@ export function About({ profile }: { profile: Profile }) {
               <h3 className="text-xl font-semibold mb-4">Career Journey</h3>
               <div className="relative">
                 <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border" />
-                {CAREER_JOURNEY.map((step, index) => (
+                {CAREER_JOURNEY.map((step) => (
                   <div key={step.role} className="relative pl-14 pb-8 last:pb-0">
                     <div className="absolute left-0 top-1 flex h-10 w-10 items-center justify-center rounded-full border-4 border-background bg-primary z-10">
                       {step.isCurrent ? (

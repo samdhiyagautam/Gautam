@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
-import { Save, Shield, Bell, Palette, Database, Key, Globe, Loader2 } from "lucide-react";
+import { Save, Shield, Palette, Database, Key } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Settings",
