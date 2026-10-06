@@ -14,6 +14,7 @@ const AUTH_ERRORS: Record<string, string> = {
   "unconfigured": "Auth backend is not configured. Set Supabase env vars to enable sign-in.",
   "exchange-failed": "Could not complete sign-in. The link may have expired — request a new one.",
   "missing-code": "No sign-in code was provided. Request a new magic link.",
+  "forbidden": "This email is not authorized for admin access. Contact the site owner.",
 };
 
 function isSupabaseConfigured(): boolean {

@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
 
 export async function GET() {
-  // Sign-out is handled client-side when Supabase is configured.
-  // Without Supabase there is no session to clear — go back to sign-in.
+  try {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch {
+    // Supabase not configured or session already gone — still leave /admin.
+  }
   redirect("/admin/auth");
 }
