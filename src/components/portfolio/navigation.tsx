@@ -7,6 +7,7 @@ import { Menu, X, Download, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NAV_ITEMS } from '@/lib/constants';
+import { ThemeToggle } from './theme-toggle';
 
 export function Navigation() {
   const pathname = usePathname();
@@ -65,9 +66,11 @@ export function Navigation() {
                 <span>Download Resume</span>
               </Link>
             </Button>
+            <ThemeToggle />
           </div>
 
           <div className="flex md:hidden items-center space-x-4">
+            <ThemeToggle />
             <Button variant="premium" size="sm" asChild>
               <Link href="/resume" className="flex items-center space-x-2">
                 <Download className="h-4 w-4" />

@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
     {
       source: "/resume.pdf",
       headers: [
-        { key: "Content-Disposition", value: "attachment; filename=\"[ADD YOUR NAME]-Resume.pdf\"" },
+        { key: "Content-Disposition", value: "attachment; filename=\"Gautam-Samdhiya-Resume.pdf\"" },
         { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
       ],
     },

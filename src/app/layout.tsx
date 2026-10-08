@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 const FALLBACK_TITLE =
-  "[ADD YOUR NAME] | Data Analyst (SQL, Python, Power BI, Excel)";
+  "Gautam Samdhiya | Data Analyst (SQL, Python, Power BI, Excel)";
 const FALLBACK_DESCRIPTION =
   "Data Analyst with 2+ years of professional experience as an Assistant Manager. SQL, Python, Power BI and Excel for business reporting, dashboards and practical problem-solving.";
 
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
     title: {
       default: title,
-      template: "%s | [ADD YOUR NAME] Portfolio",
+      template: "%s | Gautam Samdhiya Portfolio",
     },
     description,
     keywords: [
@@ -49,9 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
       "Next.js",
       "Web Development",
     ],
-    authors: [{ name: "[ADD YOUR NAME]" }],
-    creator: "[ADD YOUR NAME]",
-    publisher: "[ADD YOUR NAME]",
+    authors: [{ name: "Gautam Samdhiya" }],
+    creator: "Gautam Samdhiya",
+    publisher: "Gautam Samdhiya",
     robots: {
       index: true,
       follow: true,
@@ -67,7 +67,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_US",
       url: "https://[ADD YOUR DOMAIN]",
-      siteName: "[ADD YOUR NAME] Portfolio",
+      siteName: "Gautam Samdhiya Portfolio",
       title,
       description,
       images: [
@@ -75,13 +75,13 @@ export async function generateMetadata(): Promise<Metadata> {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: "[ADD YOUR NAME] Portfolio",
+          alt: "Gautam Samdhiya Portfolio",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "[ADD YOUR NAME] | Data Analyst",
+      title: "Gautam Samdhiya | Data Analyst",
       description:
         "Data Analyst with 2+ years of experience as an Assistant Manager. SQL, Python, Power BI, Excel.",
       images: [ogImage],

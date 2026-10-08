@@ -42,20 +42,6 @@ export const PROFICIENCY_LEVELS = [
   { value: 'familiar', label: 'Familiar' },
 ];
 
-export const DEFAULT_PROFILE = {
-  name: '[ADD YOUR NAME]',
-  headline: 'Assistant Manager | Data Analytics | AI-Enabled Business Solutions',
-  heroDescription: 'Assistant Manager with 2+ years of professional experience, combining business understanding, data analytics, AI-assisted workflows and modern technology to solve practical problems.',
-  about: 'I turn business problems into practical solutions using data, AI and modern technology. With 2+ years of experience as an Assistant Manager at Dhuri Na Venture Private Limited, I combine business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.\n\nMy journey from MAS Educative to Assistant Manager has been defined by continuous learning and practical application. I work with Python, SQL, Power BI, and Excel for data analysis; build web applications with Next.js, React, Supabase, and PostgreSQL; and leverage AI to accelerate research, analysis, development, and creative workflows.\n\nI focus on solving the underlying business problem rather than simply using technology. Whether it\'s building a dashboard that drives decisions, automating a repetitive workflow, or developing a web application that streamlines operations, my approach is always: understand the problem first, then apply the right tools.',
-  location: '[ADD YOUR LOCATION]',
-  email: '[ADD YOUR EMAIL]',
-  phone: '[ADD YOUR PHONE]',
-  linkedin: '[ADD YOUR LINKEDIN URL]',
-  github: '[ADD YOUR GITHUB URL]',
-  openToWork: true,
-  ctaText: 'Let\'s Build Something Useful',
-};
-
 export const WHAT_I_BRING = [
   {
     title: 'Business Understanding',
@@ -116,17 +102,17 @@ export const PROFESSIONAL_SNAPSHOT = [
 // ---------------------------------------------------------------------------
 
 export const FALLBACK_PROFILE: Profile = {
-  name: '[ADD YOUR NAME]',
+  name: 'Gautam Samdhiya',
   headline: 'Data Analyst | SQL · Python · Power BI · Excel',
   heroDescription:
     'Data Analyst with 2+ years of professional experience as an Assistant Manager, combining business understanding, data analytics with SQL, Python, Power BI and Excel, AI-assisted workflows and modern technology to solve practical problems.',
   about:
     "I turn business problems into practical solutions using data, AI and modern technology. With 2+ years of experience as an Assistant Manager at Dhuri Na Venture Private Limited, I combine business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.\n\nMy journey from MAS Educative to Assistant Manager has been defined by continuous learning and practical application. I work with Python, SQL, Power BI, and Excel for data analysis; build web applications with Next.js, React, Supabase, and PostgreSQL; and leverage AI to accelerate research, analysis, development, and creative workflows.\n\nI focus on solving the underlying business problem rather than simply using technology. Whether it's building a dashboard that drives decisions, automating a repetitive workflow, or developing a web application that streamlines operations, my approach is always: understand the problem first, then apply the right tools.",
   location: '[ADD YOUR LOCATION]',
-  email: '[ADD YOUR EMAIL]',
-  phone: '[ADD YOUR PHONE]',
-  linkedin: '[ADD YOUR LINKEDIN URL]',
-  github: '[ADD YOUR GITHUB URL]',
+  email: 'gautamsamdhiya2000@gmail.com',
+  phone: '8797918451',
+  linkedin: 'https://www.linkedin.com/in/connectwithgautam',
+  github: 'https://github.com/samdhiyagautam',
   openToWork: true,
   ctaText: "Let's Build Something Useful",
   updatedAt: new Date(0).toISOString(),
