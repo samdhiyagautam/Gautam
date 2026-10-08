@@ -2,25 +2,46 @@ import { NextRequest, NextResponse } from "next/server";
 import { safeNextPath } from "@/lib/safe-redirect";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Generic response: identical whether the email exists or not, so the
+// endpoint cannot be used to enumerate admin addresses. Real errors are
+// logged server-side only.
+const GENERIC_SUCCESS = { success: true };
+
 export async function POST(request: NextRequest) {
   // Per-IP throttle: 5 magic-link requests per 10 minutes (in-memory,
   // best-effort on serverless — Supabase also enforces its own email limits).
   const ip = clientIp(request);
-  const limit = rateLimit(ip, 5, 10 * 60 * 1000);
-  if (!limit.allowed) {
+  const ipLimit = rateLimit(`magic-link:ip:${ip}`, 5, 10 * 60 * 1000);
+  if (!ipLimit.allowed) {
     const response = NextResponse.json(
       { error: "Too many requests. Please try again later." },
       { status: 429 }
     );
-    response.headers.set("Retry-After", String(limit.retryAfterSeconds));
+    response.headers.set("Retry-After", String(ipLimit.retryAfterSeconds));
     return response;
   }
 
   try {
     const { email, redirectTo } = await request.json();
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    // Malformed input is rejected plainly — this reveals nothing about
+    // whether an address exists.
+    if (typeof email !== "string" || !EMAIL_RE.test(email.trim())) {
+      return NextResponse.json({ error: "A valid email address is required." }, { status: 400 });
+    }
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Per-email throttle: same budget, keyed by address.
+    const emailLimit = rateLimit(`magic-link:email:${normalizedEmail}`, 5, 10 * 60 * 1000);
+    if (!emailLimit.allowed) {
+      const response = NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+      response.headers.set("Retry-After", String(emailLimit.retryAfterSeconds));
+      return response;
     }
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -45,7 +66,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
 
     const { error } = await supabase.auth.signInWithOtp({
-      email,
+      email: normalizedEmail,
       options: {
         emailRedirectTo,
         // Never auto-create auth users from this form — the owner allowlists
@@ -56,14 +77,13 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Magic link request failed:", error.message);
-      return NextResponse.json(
-        { error: "Could not send the magic link. Please try again later." },
-        { status: 500 }
-      );
     }
 
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    // Always respond identically — success, unknown address, and send
+    // failures are indistinguishable to the caller.
+    return NextResponse.json(GENERIC_SUCCESS);
+  } catch (error) {
+    console.error("Magic link request failed:", error);
+    return NextResponse.json(GENERIC_SUCCESS);
   }
 }

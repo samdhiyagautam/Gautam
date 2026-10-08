@@ -72,15 +72,6 @@ const nextConfig: NextConfig = {
         { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
       ],
     },
-    {
-      source: "/resume.pdf",
-      headers: [
-        // Short cache with revalidation so a newly published resume goes
-        // live quickly; no forced download so "View in Browser" works
-        // (the Download button already uses the download attribute).
-        { key: "Cache-Control", value: "public, max-age=300, must-revalidate" },
-      ],
-    },
   ],
 };
 

@@ -288,6 +288,16 @@ export async function uploadResume(_prev: ActionResult, formData: FormData): Pro
   if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
     return { ok: false, message: "Only PDF files are accepted." };
   }
+  // MIME type and extension are client-supplied — verify the file signature.
+  // Every PDF starts with the magic bytes "%PDF-".
+  try {
+    const header = new TextDecoder().decode(await file.slice(0, 5).arrayBuffer());
+    if (header !== "%PDF-") {
+      return { ok: false, message: "The file is not a valid PDF." };
+    }
+  } catch {
+    return { ok: false, message: "Could not read the file. Please try again." };
+  }
   if (file.size > MAX_RESUME_BYTES) {
     return { ok: false, message: "Resume must be 5 MB or smaller." };
   }

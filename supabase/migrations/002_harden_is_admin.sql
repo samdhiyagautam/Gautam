@@ -17,6 +17,9 @@ as $$
   );
 $$;
 
--- Restrict direct execution: the function is only useful inside RLS policies.
+-- anon/authenticated REQUIRE execute on this function: RLS policy
+-- expressions evaluate with the caller's privileges, so without these
+-- grants every admin policy would fail closed and lock everyone out
+-- (including the owner). service_role keeps full access for maintenance.
 revoke all on function public.is_admin() from public, anon, authenticated;
 grant execute on function public.is_admin() to anon, authenticated, service_role;

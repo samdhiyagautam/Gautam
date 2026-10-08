@@ -41,7 +41,7 @@ export default async function AdminSettings() {
                 <Label htmlFor="adminEmail">Admin Email</Label>
                 <p className="text-sm text-muted-foreground">Email address for admin access</p>
               </div>
-              <Input id="adminEmail" defaultValue="[ADD YOUR EMAIL]" disabled className="w-64" />
+              <Input id="adminEmail" defaultValue={process.env.ADMIN_EMAIL || "Not set — add ADMIN_EMAIL to env vars"} disabled className="w-64" />
             </div>
             <div className="flex items-center justify-between">
               <div>
@@ -105,7 +105,7 @@ export default async function AdminSettings() {
                   Connected
                 </span>
               </div>
-              <p className="text-sm text-muted-foreground">Project URL: [ADD YOUR SUPABASE URL]</p>
+              <p className="text-sm text-muted-foreground">Project URL: {process.env.NEXT_PUBLIC_SUPABASE_URL || "Not set"}</p>
             </div>
             <div className="p-4 bg-muted/50 rounded-lg">
               <div className="flex items-center justify-between mb-2">
