@@ -61,6 +61,12 @@ function splitList(raw: string): string[] {
     .slice(0, 60);
 }
 
+/** Log backend details server-side; return only a generic client message. */
+function dbError(error: unknown, message: string): ActionResult {
+  console.error(`[admin] ${message}`, error);
+  return { ok: false, message };
+}
+
 // Profile ---------------------------------------------------------------------
 export async function saveProfile(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
   const parsed = profileSchema.safeParse(formValues(formData, ["openToWork"]));
@@ -93,7 +99,7 @@ export async function saveProfile(_prev: ActionResult, formData: FormData): Prom
     : await supabase.from("profiles").insert(payload);
 
   if (error) {
-    return { ok: false, message: `Could not save profile: ${error.message}` };
+    return dbError(error, "Could not save profile. Please try again.");
   }
   revalidateSite();
   return { ok: true, message: d.status === "published" ? "Profile published." : "Profile saved as draft." };
@@ -129,7 +135,7 @@ export async function saveExperience(_prev: ActionResult, formData: FormData): P
     : await supabase.from("experiences").insert(payload);
 
   if (error) {
-    return { ok: false, message: `Could not save experience: ${error.message}` };
+    return dbError(error, "Could not save experience. Please try again.");
   }
   revalidateSite(["/", "/about", "/experience", "/resume"]);
   return { ok: true, message: d.status === "published" ? "Experience published." : "Experience saved as draft." };
@@ -140,7 +146,7 @@ export async function deleteExperience(id: string): Promise<ActionResult> {
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from("experiences").delete().eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not delete experience: ${error.message}` };
+    return dbError(error, "Could not delete experience. Please try again.");
   }
   revalidateSite(["/", "/about", "/experience", "/resume"]);
   return { ok: true, message: "Experience deleted." };
@@ -171,7 +177,7 @@ export async function saveSkill(_prev: ActionResult, formData: FormData): Promis
     : await supabase.from("skills").insert(payload);
 
   if (error) {
-    return { ok: false, message: `Could not save skill: ${error.message}` };
+    return dbError(error, "Could not save skill. Please try again.");
   }
   revalidateSite(["/", "/skills", "/resume"]);
   return { ok: true, message: "Skill saved." };
@@ -182,7 +188,7 @@ export async function deleteSkill(id: string): Promise<ActionResult> {
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from("skills").delete().eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not delete skill: ${error.message}` };
+    return dbError(error, "Could not delete skill. Please try again.");
   }
   revalidateSite(["/", "/skills", "/resume"]);
   return { ok: true, message: "Skill deleted." };
@@ -224,7 +230,7 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
     : await supabase.from("projects").insert(payload);
 
   if (error) {
-    return { ok: false, message: `Could not save project: ${error.message}` };
+    return dbError(error, "Could not save project. Please try again.");
   }
   revalidateSite(["/", "/projects", "/resume"]);
   return { ok: true, message: d.status === "published" ? "Project published." : "Project saved as draft." };
@@ -235,7 +241,7 @@ export async function deleteProject(id: string): Promise<ActionResult> {
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from("projects").delete().eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not delete project: ${error.message}` };
+    return dbError(error, "Could not delete project. Please try again.");
   }
   revalidateSite(["/", "/projects", "/resume"]);
   return { ok: true, message: "Project deleted." };
@@ -261,7 +267,7 @@ export async function setPublishStatus(
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from(table).update({ status }).eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not update status: ${error.message}` };
+    return dbError(error, "Could not update status. Please try again.");
   }
   revalidateSite();
   return { ok: true, message: status === "published" ? "Published." : "Moved to draft." };
@@ -293,7 +299,7 @@ export async function uploadResume(_prev: ActionResult, formData: FormData): Pro
     .upload(path, file, { contentType: "application/pdf", upsert: false });
 
   if (uploadError) {
-    return { ok: false, message: `Upload failed: ${uploadError.message}` };
+    return dbError(uploadError, "Resume upload failed. Please try again.");
   }
 
   const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
@@ -309,7 +315,7 @@ export async function uploadResume(_prev: ActionResult, formData: FormData): Pro
   });
 
   if (insertError) {
-    return { ok: false, message: `Upload saved but record failed: ${insertError.message}` };
+    return dbError(insertError, "Upload saved but the record could not be created. Please try again.");
   }
   revalidateSite(["/", "/resume"]);
   return { ok: true, message: `Resume ${version} uploaded as draft. Publish it to go live.` };
@@ -320,7 +326,7 @@ export async function setResumeStatus(id: string, status: "draft" | "published")
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from("resumes").update({ status }).eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not update resume: ${error.message}` };
+    return dbError(error, "Could not update resume. Please try again.");
   }
   revalidateSite(["/", "/resume"]);
   return { ok: true, message: status === "published" ? "Resume published." : "Resume unpublished." };
@@ -331,7 +337,7 @@ export async function deleteResume(id: string): Promise<ActionResult> {
   if (!gate.ok) return gate;
   const { error } = await gate.supabase.from("resumes").delete().eq("id", id);
   if (error) {
-    return { ok: false, message: `Could not delete resume: ${error.message}` };
+    return dbError(error, "Could not delete resume. Please try again.");
   }
   revalidateSite(["/", "/resume"]);
   return { ok: true, message: "Resume deleted." };
@@ -363,7 +369,7 @@ export async function saveSeo(_prev: ActionResult, formData: FormData): Promise<
     : await supabase.from("seo_settings").insert(payload);
 
   if (error) {
-    return { ok: false, message: `Could not save SEO settings: ${error.message}` };
+    return dbError(error, "Could not save SEO settings. Please try again.");
   }
   revalidateSite();
   return { ok: true, message: d.status === "published" ? "SEO settings published." : "SEO settings saved as draft." };

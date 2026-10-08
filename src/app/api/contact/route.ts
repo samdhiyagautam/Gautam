@@ -5,7 +5,7 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LENGTHS = { name: 100, email: 254, subject: 200, message: 5000 } as const;
 const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
 interface ContactPayload {
   name?: unknown;
@@ -74,9 +74,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const name = (body.name as string).trim();
-  const email = (body.email as string).trim();
-  const subject = (body.subject as string).trim();
+  const name = (body.name as string).trim().replace(/[\r\n]+/g, " ");
+  const email = (body.email as string).trim().replace(/[\r\n]+/g, "");
+  const subject = (body.subject as string).trim().replace(/[\r\n]+/g, " ");
   const message = (body.message as string).trim();
   const from = process.env.CONTACT_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
 

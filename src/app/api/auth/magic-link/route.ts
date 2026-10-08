@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeNextPath } from "@/lib/safe-redirect";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  // Per-IP throttle: 5 magic-link requests per 10 minutes (in-memory,
+  // best-effort on serverless — Supabase also enforces its own email limits).
+  const ip = clientIp(request);
+  const limit = rateLimit(ip, 5, 10 * 60 * 1000);
+  if (!limit.allowed) {
+    const response = NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429 }
+    );
+    response.headers.set("Retry-After", String(limit.retryAfterSeconds));
+    return response;
+  }
+
   try {
     const { email, redirectTo } = await request.json();
 
@@ -41,7 +55,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("Magic link request failed:", error.message);
+      return NextResponse.json(
+        { error: "Could not send the magic link. Please try again later." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
