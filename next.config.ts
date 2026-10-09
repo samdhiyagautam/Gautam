@@ -32,6 +32,9 @@ const csp = [
   "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
+  // Video embeds (YouTube privacy mode) and uploaded clips from our storage.
+  "frame-src 'self' https://www.youtube-nocookie.com",
+  `media-src 'self'${host ? ` https://${host}` : ""}`,
   "frame-ancestors 'none'",
 ].join("; ");
 

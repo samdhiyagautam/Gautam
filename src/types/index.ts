@@ -66,6 +66,8 @@ export interface Project {
   screenshots: string[];
   datasetUrl: string;
   attachments: string[];
+  videoUrl: string;
+  videos: string[];
   isFeatured: boolean;
   status: 'draft' | 'published';
   order: number;

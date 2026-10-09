@@ -24,9 +24,17 @@ export function getCategoryLabel(category: string): string {
   return CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] || category;
 }
 
+/** Convert YouTube watch/shorts/share URLs to a privacy-enhanced embed URL. */
+function toYouTubeEmbed(url: string): string | null {
+  if (!url || isPlaceholderLink(url)) return null;
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
+  return match ? `https://www.youtube-nocookie.com/embed/${match[1]}` : null;
+}
+
 /** Shared Problem → Approach → Solution → Outcome layout for public and admin preview. */
 export function ProjectDetailView({ project }: { project: Project }) {
   const Icon = CATEGORY_ICONS[project.category as keyof typeof CATEGORY_ICONS] ?? Layout;
+  const youTubeEmbed = toYouTubeEmbed(project.videoUrl);
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 lg:py-20">
@@ -47,6 +55,32 @@ export function ProjectDetailView({ project }: { project: Project }) {
 
       <div className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
+          {(youTubeEmbed || project.videos.length > 0) && (
+            <Card>
+              <CardContent className="p-6 pt-0 space-y-4">
+                <h2 className="text-2xl font-bold mb-4">Watch</h2>
+                {youTubeEmbed && (
+                  <div className="relative aspect-video overflow-hidden rounded-xl border border-border">
+                    <iframe
+                      src={youTubeEmbed}
+                      title={`${project.name} — demo video`}
+                      className="absolute inset-0 h-full w-full"
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                )}
+                {project.videos.map((url) => (
+                  <video key={url} controls preload="none" className="w-full rounded-xl border border-border">
+                    <source src={url} />
+                    Your browser does not support video playback.
+                  </video>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardContent className="p-6 pt-0">
               <h2 className="text-2xl font-bold mb-4">Problem</h2>

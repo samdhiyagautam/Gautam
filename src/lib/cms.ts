@@ -108,6 +108,8 @@ interface ProjectRow {
   screenshots: unknown;
   dataset_url: string;
   attachments: unknown;
+  video_url: string;
+  videos: unknown;
   is_featured: boolean;
   display_order: number;
   status: unknown;
@@ -200,6 +202,8 @@ function mapProject(row: ProjectRow): Project {
     screenshots: toStringArray(row.screenshots),
     datasetUrl: row.dataset_url ?? "",
     attachments: toStringArray(row.attachments),
+    videoUrl: row.video_url ?? "",
+    videos: toStringArray(row.videos),
     isFeatured: row.is_featured,
     status: isStatus(row.status) ? row.status : "draft",
     order: row.display_order,
@@ -310,7 +314,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
   const rows = await query<ProjectRow[]>("projects", (supabase) =>
     supabase
       .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, is_featured, display_order, status, created_at, updated_at")
+      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
       .eq("status", "published")
       .order("display_order", { ascending: true })
   );
@@ -328,7 +332,7 @@ export async function getPublishedProject(id: string): Promise<Project | null> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, is_featured, display_order, status, created_at, updated_at")
+      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
       .eq("id", id)
       .eq("status", "published")
       .maybeSingle();
@@ -412,7 +416,7 @@ const EXPERIENCE_COLUMNS =
 const SKILL_COLUMNS =
   "id, name, category, proficiency, description, display_order, is_active, created_at, updated_at";
 const PROJECT_COLUMNS =
-  "id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, is_featured, display_order, status, created_at, updated_at";
+  "id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at";
 
 export function getAdminExperience(id: string): Promise<Experience | null> {
   return getAdminRow<Experience, ExperienceRow>("experiences", id, EXPERIENCE_COLUMNS, mapExperience);
@@ -451,7 +455,7 @@ export async function getAllProjects(): Promise<Project[]> {
   const rows = await query<ProjectRow[]>("projects", (supabase) =>
     supabase
       .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, is_featured, display_order, status, created_at, updated_at")
+      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
       .order("display_order", { ascending: true })
   );
   if (!rows || rows.length === 0) return FALLBACK_PROJECTS;

@@ -147,6 +147,30 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
               </div>
             </div>
           )}
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="videoUrl">YouTube / Video URL</Label>
+              <Input id="videoUrl" name="videoUrl" defaultValue={initial?.videoUrl ?? ""} placeholder="https://www.youtube.com/watch?v=..." />
+              <FieldError message={fields?.videoUrl} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="videoFiles">Video Files MP4/WebM (max 50 MB each)</Label>
+              <Input id="videoFiles" name="videoFiles" type="file" multiple accept=".mp4,.webm" />
+            </div>
+          </div>
+          {initial && initial.videos.length > 0 && (
+            <div className="space-y-2">
+              <Label>Uploaded videos (check to remove)</Label>
+              <div className="space-y-1">
+                {initial.videos.map((url) => (
+                  <label key={url} className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="removeVideos" value={url} className="h-4 w-4" />
+                    <span className="truncate text-muted-foreground">{url.split("/").pop()}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

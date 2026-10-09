@@ -222,6 +222,8 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
     screenshots: splitList(d.screenshotsText),
     dataset_url: d.datasetUrl || "",
     attachments: [] as string[],
+    video_url: d.videoUrl || "",
+    videos: [] as string[],
     is_featured: d.isFeatured,
     display_order: d.displayOrder,
     status: d.status,
@@ -230,6 +232,9 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
   const resolved = await resolveAttachments(supabase, d.id, formData);
   if (!resolved.ok) return resolved;
   payload.attachments = resolved.attachments;
+  const resolvedVideos = await resolveVideos(supabase, d.id, formData);
+  if (!resolvedVideos.ok) return resolvedVideos;
+  payload.videos = resolvedVideos.videos;
 
   const { error } = d.id
     ? await supabase.from("projects").update(payload).eq("id", d.id)
@@ -257,6 +262,8 @@ export async function deleteProject(id: string): Promise<ActionResult> {
 // Excel/CSV files attached to a project. Stored under datasets/ in the
 // portfolio-assets bucket; URLs saved on the project row.
 const MAX_DATASET_BYTES = 5 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
+const VIDEO_EXTENSIONS = [".mp4", ".webm"] as const;
 const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv"] as const;
 
 async function isSpreadsheet(file: File): Promise<boolean> {
@@ -279,6 +286,69 @@ async function isSpreadsheet(file: File): Promise<boolean> {
 }
 
 type AttachmentResult = { ok: true; attachments: string[] } | { ok: false; message: string };
+
+async function isVideo(file: File): Promise<boolean> {
+  const name = file.name.toLowerCase();
+  if (!VIDEO_EXTENSIONS.some((ext) => name.endsWith(ext))) return false;
+  try {
+    const header = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    if (name.endsWith(".webm")) {
+      // WebM/Matroska magic bytes: 1A 45 DF A3.
+      return header[0] === 0x1a && header[1] === 0x45 && header[2] === 0xdf && header[3] === 0xa3;
+    }
+    // MP4: "ftyp" box at offset 4.
+    return header[4] === 0x66 && header[5] === 0x74 && header[6] === 0x79 && header[7] === 0x70;
+  } catch {
+    return false;
+  }
+}
+
+type VideoResult = { ok: true; videos: string[] } | { ok: false; message: string };
+
+async function resolveVideos(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  projectId: string | undefined,
+  formData: FormData
+): Promise<VideoResult> {
+  let videos: string[] = [];
+  if (projectId) {
+    const { data } = await supabase.from("projects").select("videos").eq("id", projectId).maybeSingle();
+    const current = (data as { videos?: unknown } | null)?.videos;
+    const removed = new Set(
+      formData.getAll("removeVideos").filter((v): v is string => typeof v === "string")
+    );
+    videos = Array.isArray(current)
+      ? current.filter((u): u is string => typeof u === "string" && !removed.has(u))
+      : [];
+  }
+
+  const files = formData
+    .getAll("videoFiles")
+    .filter((v): v is File => v instanceof File && v.size > 0);
+
+  for (const file of files) {
+    if (file.size > MAX_VIDEO_BYTES) {
+      return { ok: false, message: `Video "${file.name}" exceeds the 50 MB limit.` };
+    }
+    if (!(await isVideo(file))) {
+      return { ok: false, message: `File "${file.name}" is not a valid MP4 or WebM video.` };
+    }
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+    const path = `videos/${stamp}-${safeName}`;
+    const { error: uploadError } = await supabase.storage
+      .from("portfolio-assets")
+      .upload(path, file, { upsert: false });
+    if (uploadError) {
+      console.error("[admin] video upload failed:", uploadError.message);
+      return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
+    }
+    const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+    videos.push(urlData.publicUrl);
+  }
+
+  return { ok: true, videos: videos.slice(0, 10) };
+}
 
 async function resolveAttachments(
   supabase: Awaited<ReturnType<typeof createClient>>,
