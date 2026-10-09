@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
 import { getSeoSettings } from "@/lib/cms";
+import { getSiteUrl } from "@/lib/site-url";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,17 +27,23 @@ const FALLBACK_DESCRIPTION =
 // configured, otherwise from the built-in defaults below.
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getSeoSettings();
-  const title = seo?.pageTitle || FALLBACK_TITLE;
-  const description = seo?.metaDescription || FALLBACK_DESCRIPTION;
-  const ogImage = seo?.ogImage || "/og-image.png";
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+  // Empty values and unfilled "[ADD ...]" scaffold placeholders count as "not set".
+  const clean = (value: string | null | undefined): string | undefined => {
+    const v = value?.trim();
+    return v && !v.includes("[ADD") ? v : undefined;
+  };
+  const title = clean(seo?.pageTitle) ?? FALLBACK_TITLE;
+  const description = clean(seo?.metaDescription) ?? FALLBACK_DESCRIPTION;
+  // No image is advertised until one is set in Admin → SEO: a missing file would 404 in every link preview.
+  const ogImage = clean(seo?.ogImage);
+  const siteUrl = getSiteUrl();
   // Optional identifiers: omitted entirely when unset so metadata never
   // emits a placeholder value.
   const twitterHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE || undefined;
   const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined;
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+    metadataBase: new URL(siteUrl),
     title: {
       default: title,
       template: "%s | Gautam Samdhiya Portfolio",
@@ -75,21 +82,16 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Gautam Samdhiya Portfolio",
       title,
       description,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: "Gautam Samdhiya Portfolio",
-        },
-      ],
+      ...(ogImage
+        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: "Gautam Samdhiya Portfolio" }] }
+        : {}),
     },
     twitter: {
-      card: "summary_large_image",
+      card: ogImage ? "summary_large_image" : "summary",
       title: "Gautam Samdhiya | Data Analyst",
       description:
         "Data Analyst with 2+ years of experience as an Assistant Manager. SQL, Python, Power BI, Excel.",
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
       ...(twitterHandle ? { creator: twitterHandle } : {}),
     },
     ...(googleVerification ? { verification: { google: googleVerification } } : {}),

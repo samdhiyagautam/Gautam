@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeNextPath } from "@/lib/safe-redirect";
+import { getSiteUrl } from "@/lib/site-url";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Validate the post-login path (open-redirect protection), then build an
     // absolute callback URL — Supabase requires emailRedirectTo to be absolute
     // and allowlisted in the project settings.
-    const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+    const siteUrl = getSiteUrl();
     const next = safeNextPath(redirectTo);
     const emailRedirectTo = `${siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}`;
 
