@@ -22,7 +22,9 @@ const csp = [
   "default-src 'self'",
   // Next.js hydration + Tailwind v4 inject inline <script>/<style> tags, so
   // 'unsafe-inline' is required. No remote scripts are allowlisted.
-  "script-src 'self' 'unsafe-inline'",
+  // React's development build additionally needs eval() for debugging
+  // callstacks — allowed in dev only; production React never uses eval().
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== "production" ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   `img-src ${imgSrc}`,
   `connect-src ${connectSrc}`,
