@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useFormStatus } from "react-dom";
+import { createContext, useContext, useState, useTransition } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,8 +12,46 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const FormPendingContext = createContext(false);
+
+/**
+ * Form wrapper for server actions. React 19 resets every uncontrolled field
+ * after a form `action` finishes — even when the action returned validation
+ * errors — which wipes what the admin typed. Submitting through onSubmit and
+ * dispatching inside a transition keeps the typed values on screen.
+ */
+export function AdminForm({
+  action,
+  pending,
+  className,
+  children,
+}: {
+  action: (payload: FormData) => void;
+  pending: boolean;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [, startTransition] = useTransition();
+  return (
+    <FormPendingContext.Provider value={pending}>
+      <form
+        className={className}
+        onSubmit={(event) => {
+          event.preventDefault();
+          const data = new FormData(event.currentTarget);
+          startTransition(() => {
+            action(data);
+          });
+        }}
+      >
+        {children}
+      </form>
+    </FormPendingContext.Provider>
+  );
+}
+
 export function SubmitButton({ children }: { children: React.ReactNode }) {
-  const { pending } = useFormStatus();
+  const pending = useContext(FormPendingContext);
   return (
     <Button type="submit" variant="premium" disabled={pending}>
       {pending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}

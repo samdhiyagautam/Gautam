@@ -9,11 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { User, Mail, Briefcase } from "lucide-react";
 import { saveProfile } from "@/actions/admin";
-import { SubmitButton, StatusField, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, StatusField, FieldError } from "./form-ui";
 import type { Profile } from "@/types";
 
 export function ProfileForm({ initial }: { initial: Profile }) {
-  const [state, formAction] = useActionState(saveProfile, { ok: true, message: "" });
+  const [state, formAction, isPending] = useActionState(saveProfile, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
@@ -24,7 +24,7 @@ export function ProfileForm({ initial }: { initial: Profile }) {
   const fields = "fields" in state ? state.fields : undefined;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <AdminForm action={formAction} pending={isPending} className="space-y-6">
       <Card>
         <CardHeader>
           <div className="flex items-center space-x-2">
@@ -120,6 +120,6 @@ export function ProfileForm({ initial }: { initial: Profile }) {
       <div className="flex items-center justify-end">
         <SubmitButton>Save Profile</SubmitButton>
       </div>
-    </form>
+    </AdminForm>
   );
 }

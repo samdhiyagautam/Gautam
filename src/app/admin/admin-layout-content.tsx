@@ -8,7 +8,6 @@ import { useSession, isSupabaseConfigured } from "@/hooks/use-session";
 import { LayoutDashboard, User, Briefcase, Code, FolderKanban, FileText, Settings, Search, LogOut, Menu, ChevronLeft, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { signOutAdmin } from "@/actions/admin";
 import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 
 export default function AdminLayoutContent({ children }: { children: React.ReactNode }) {
@@ -17,7 +16,6 @@ export default function AdminLayoutContent({ children }: { children: React.React
   const { session, isLoading } = useSession();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
-  const [signingOut, startSignOut] = React.useTransition();
 
   const isAuthPage = pathname.startsWith("/admin/auth");
   const authConfigured = isSupabaseConfigured();
@@ -57,7 +55,7 @@ export default function AdminLayoutContent({ children }: { children: React.React
       >
         <div className="flex h-16 items-center justify-between px-4 border-b border-border">
           {!sidebarCollapsed && (
-            <Link href="/admin" className="flex items-center space-x-2">
+            <Link href="/admin" className="flex items-center space-x-2" onClick={() => setSidebarOpen(false)}>
               <Briefcase className="h-8 w-8 text-primary" />
               <span className="text-xl font-bold">Admin</span>
             </Link>
@@ -89,6 +87,7 @@ export default function AdminLayoutContent({ children }: { children: React.React
                   sidebarCollapsed && "justify-center"
                 )}
                 aria-current={isActive ? "page" : undefined}
+                onClick={() => setSidebarOpen(false)}
               >
                 <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
                 {!sidebarCollapsed && <span>{item.label}</span>}
@@ -140,22 +139,12 @@ export default function AdminLayoutContent({ children }: { children: React.React
                 </span>
               )}
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={signingOut}
-              onClick={() => {
-                startSignOut(async () => {
-                  await signOutAdmin();
-                  router.push("/admin/auth");
-                  router.refresh();
-                });
-              }}
-              className="flex items-center space-x-2"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">{signingOut ? "Signing out…" : "Sign Out"}</span>
-            </Button>
+            <form method="post" action="/api/auth/signout">
+              <Button type="submit" variant="ghost" size="sm" className="flex items-center space-x-2">
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </Button>
+            </form>
           </div>
         </header>
 

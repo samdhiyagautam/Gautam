@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Upload, Eye, Download, Trash2, Loader2, FileText } from "lucide-react";
 import { uploadResume, setResumeStatus, deleteResume } from "@/actions/admin";
-import { SubmitButton, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, FieldError } from "./form-ui";
 import type { Resume } from "@/types";
 
 function ResumeRowButtons({ resume }: { resume: Resume }) {
@@ -69,7 +69,7 @@ function ResumeRowButtons({ resume }: { resume: Resume }) {
 }
 
 export function ResumeManager({ resumes }: { resumes: Resume[] }) {
-  const [state, formAction] = useActionState(uploadResume, { ok: true, message: "" });
+  const [state, formAction, isPending] = useActionState(uploadResume, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
@@ -92,7 +92,7 @@ export function ResumeManager({ resumes }: { resumes: Resume[] }) {
           </div>
         </CardHeader>
         <CardContent>
-          <form action={formAction} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+          <AdminForm action={formAction} pending={isPending} className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
             <div className="space-y-2 flex-1 w-full">
               <Label htmlFor="resume">PDF File *</Label>
               <Input id="resume" name="resume" type="file" accept="application/pdf" required />
@@ -102,7 +102,7 @@ export function ResumeManager({ resumes }: { resumes: Resume[] }) {
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </SubmitButton>
-          </form>
+          </AdminForm>
         </CardContent>
       </Card>
 

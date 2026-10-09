@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Building2 } from "lucide-react";
 import { saveExperience } from "@/actions/admin";
-import { SubmitButton, StatusField, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, StatusField, FieldError } from "./form-ui";
 import type { Experience } from "@/types";
 
 function joinLines(list: string[]): string {
@@ -17,18 +18,21 @@ function joinLines(list: string[]): string {
 }
 
 export function ExperienceForm({ initial }: { initial?: Experience | null }) {
-  const [state, formAction] = useActionState(saveExperience, { ok: true, message: "" });
+  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(saveExperience, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
     if (state.ok) toast.success(state.message);
     else toast.error(state.message);
-  }, [state]);
+    // A created entry has no id yet — leave the form so a second Save cannot insert a duplicate.
+    if (state.ok && !initial) router.push("/admin/experience");
+  }, [state, initial, router]);
 
   const fields = "fields" in state ? state.fields : undefined;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <AdminForm action={formAction} pending={isPending} className="space-y-6">
       {initial && <input type="hidden" name="id" value={initial.id} />}
       <Card>
         <CardHeader>
@@ -95,6 +99,6 @@ export function ExperienceForm({ initial }: { initial?: Experience | null }) {
       <div className="flex items-center justify-end">
         <SubmitButton>{initial ? "Save Changes" : "Create Experience"}</SubmitButton>
       </div>
-    </form>
+    </AdminForm>
   );
 }

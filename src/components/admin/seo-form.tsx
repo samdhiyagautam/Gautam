@@ -8,11 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Search } from "lucide-react";
 import { saveSeo } from "@/actions/admin";
-import { SubmitButton, StatusField, ChoiceField, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, StatusField, ChoiceField, FieldError } from "./form-ui";
 import type { SEO } from "@/types";
 
 export function SeoForm({ initial }: { initial?: SEO | null }) {
-  const [state, formAction] = useActionState(saveSeo, { ok: true, message: "" });
+  const [state, formAction, isPending] = useActionState(saveSeo, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
@@ -23,7 +23,7 @@ export function SeoForm({ initial }: { initial?: SEO | null }) {
   const fields = "fields" in state ? state.fields : undefined;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <AdminForm action={formAction} pending={isPending} className="space-y-6">
       <Card>
         <CardHeader>
           <div className="flex items-center space-x-2">
@@ -66,6 +66,6 @@ export function SeoForm({ initial }: { initial?: SEO | null }) {
       <div className="flex items-center justify-end">
         <SubmitButton>Save SEO Settings</SubmitButton>
       </div>
-    </form>
+    </AdminForm>
   );
 }

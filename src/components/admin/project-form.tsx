@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { FolderKanban } from "lucide-react";
 import { saveProject } from "@/actions/admin";
-import { SubmitButton, StatusField, ChoiceField, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, StatusField, ChoiceField, FieldError } from "./form-ui";
 import { PROJECT_CATEGORIES } from "@/lib/constants";
 import type { Project } from "@/types";
 
@@ -18,18 +19,21 @@ function joinLines(list: string[]): string {
 }
 
 export function ProjectForm({ initial }: { initial?: Project | null }) {
-  const [state, formAction] = useActionState(saveProject, { ok: true, message: "" });
+  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(saveProject, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
     if (state.ok) toast.success(state.message);
     else toast.error(state.message);
-  }, [state]);
+    // A created entry has no id yet — leave the form so a second Save cannot insert a duplicate.
+    if (state.ok && !initial) router.push("/admin/projects");
+  }, [state, initial, router]);
 
   const fields = "fields" in state ? state.fields : undefined;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <AdminForm action={formAction} pending={isPending} className="space-y-6">
       {initial && <input type="hidden" name="id" value={initial.id} />}
       <Card>
         <CardHeader>
@@ -125,6 +129,6 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
       <div className="flex items-center justify-end">
         <SubmitButton>{initial ? "Save Changes" : "Create Project"}</SubmitButton>
       </div>
-    </form>
+    </AdminForm>
   );
 }

@@ -67,20 +67,6 @@ function dbError(error: unknown, message: string): ActionResult {
   return { ok: false, message };
 }
 
-// Session ---------------------------------------------------------------------
-export async function signOutAdmin(): Promise<ActionResult> {
-  try {
-    if (!isAuthConfigured()) {
-      return { ok: true, message: "Signed out." };
-    }
-    const supabase = await createClient();
-    await supabase.auth.signOut();
-  } catch (error) {
-    console.error("[admin] sign out failed:", error);
-  }
-  return { ok: true, message: "Signed out." };
-}
-
 // Profile ---------------------------------------------------------------------
 export async function saveProfile(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
   const parsed = profileSchema.safeParse(formValues(formData, ["openToWork"]));
@@ -352,6 +338,17 @@ export async function setResumeStatus(id: string, status: "draft" | "published")
   if (error) {
     return dbError(error, "Could not update resume. Please try again.");
   }
+  if (status === "published") {
+    // Exactly one live resume: publishing a version retires the others.
+    const { error: demoteError } = await gate.supabase
+      .from("resumes")
+      .update({ status: "draft" })
+      .eq("status", "published")
+      .neq("id", id);
+    if (demoteError) {
+      return dbError(demoteError, "Resume published, but older versions could not be unpublished.");
+    }
+  }
   revalidateSite(["/", "/resume"]);
   return { ok: true, message: status === "published" ? "Resume published." : "Resume unpublished." };
 }
@@ -359,9 +356,26 @@ export async function setResumeStatus(id: string, status: "draft" | "published")
 export async function deleteResume(id: string): Promise<ActionResult> {
   const gate = await adminClient();
   if (!gate.ok) return gate;
+
+  // Remember the stored file so it is removed too — otherwise the public URL
+  // (and any personal details in the PDF) stays reachable after "delete".
+  const { data: row } = await gate.supabase.from("resumes").select("file_url").eq("id", id).maybeSingle();
+
   const { error } = await gate.supabase.from("resumes").delete().eq("id", id);
   if (error) {
     return dbError(error, "Could not delete resume. Please try again.");
+  }
+
+  const fileUrl = (row as { file_url?: string } | null)?.file_url ?? "";
+  const marker = "/portfolio-assets/";
+  const markerIndex = fileUrl.indexOf(marker);
+  if (markerIndex !== -1) {
+    const objectPath = decodeURIComponent(fileUrl.slice(markerIndex + marker.length).split("?")[0]);
+    const { error: removeError } = await gate.supabase.storage.from("portfolio-assets").remove([objectPath]);
+    if (removeError) {
+      revalidateSite(["/", "/resume"]);
+      return { ok: true, message: "Resume record deleted, but the stored file could not be removed. Delete it from Supabase Storage." };
+    }
   }
   revalidateSite(["/", "/resume"]);
   return { ok: true, message: "Resume deleted." };

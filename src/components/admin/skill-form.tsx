@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,23 +10,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Code } from "lucide-react";
 import { saveSkill } from "@/actions/admin";
-import { SubmitButton, ChoiceField, FieldError } from "./form-ui";
+import { AdminForm, SubmitButton, ChoiceField, FieldError } from "./form-ui";
 import { SKILL_CATEGORIES, PROFICIENCY_LEVELS } from "@/lib/constants";
 import type { Skill } from "@/types";
 
 export function SkillForm({ initial }: { initial?: Skill | null }) {
-  const [state, formAction] = useActionState(saveSkill, { ok: true, message: "" });
+  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(saveSkill, { ok: true, message: "" });
 
   useEffect(() => {
     if (!state.message) return;
     if (state.ok) toast.success(state.message);
     else toast.error(state.message);
-  }, [state]);
+    // A created entry has no id yet — leave the form so a second Save cannot insert a duplicate.
+    if (state.ok && !initial) router.push("/admin/skills");
+  }, [state, initial, router]);
 
   const fields = "fields" in state ? state.fields : undefined;
 
   return (
-    <form action={formAction} className="space-y-6">
+    <AdminForm action={formAction} pending={isPending} className="space-y-6">
       {initial && <input type="hidden" name="id" value={initial.id} />}
       <Card>
         <CardHeader>
@@ -77,6 +81,6 @@ export function SkillForm({ initial }: { initial?: Skill | null }) {
       <div className="flex items-center justify-end">
         <SubmitButton>{initial ? "Save Changes" : "Create Skill"}</SubmitButton>
       </div>
-    </form>
+    </AdminForm>
   );
 }
