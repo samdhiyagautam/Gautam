@@ -26,12 +26,11 @@ Both are idempotent (safe to re-run).
 
 ## 3. Create your admin user (two places, same email)
 
-**A. Supabase Auth user** (required — the app uses `shouldCreateUser: false`,
-so magic links only work for pre-existing auth users):
+**A. Supabase Auth user** (required — accounts are created by you, never
+self-registered from the site):
 
 1. Go to **Authentication → Users → Add user → Create new user**.
-2. Enter your email, check **Auto Confirm User**, save.
-   (No password needed — you will sign in via magic link.)
+2. Enter your email, set a strong password, check **Auto Confirm User**, save.
 
 **B. Allowlist row** (required — RLS + the app check this table):
 
@@ -65,8 +64,8 @@ plus `NEXT_PUBLIC_SITE_URL=https://YOUR-DOMAIN` and the Resend keys below.
 ## 6. Verify (acceptance test)
 
 1. `npm run dev` → open `http://localhost:3000/admin`.
-2. You are redirected to `/admin/auth`. Enter your email → Send Magic Link.
-3. Click the link in your inbox → you land on `/admin` (not `?error=`).
+2. You are redirected to `/admin/auth`. Sign in with your admin email + password.
+3. Wrong password → identical generic error (no email enumeration).
 4. **Profile**: change the headline → Save → toast success → refresh →
    value persists → open `/` → new headline visible.
 5. **Projects**: Add Project (draft) → appears in admin table as draft →

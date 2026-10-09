@@ -1,20 +1,19 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Briefcase, Mail, Loader2, AlertCircle, TriangleAlert } from "lucide-react";
+import { Briefcase, Mail, Lock, Loader2, Eye, EyeOff, AlertCircle, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { toast } from "sonner";
 import { safeNextPath } from "@/lib/safe-redirect";
 
 const AUTH_ERRORS: Record<string, string> = {
   "unconfigured": "Auth backend is not configured. Set Supabase env vars to enable sign-in.",
-  "exchange-failed": "Could not complete sign-in. The link may have expired — request a new one.",
-  "missing-code": "No sign-in code was provided. Request a new magic link.",
+  "exchange-failed": "Could not complete sign-in. Please try again.",
+  "missing-code": "Sign-in link is invalid. Please sign in with your password.",
   "forbidden": "This email is not authorized for admin access. Contact the site owner.",
 };
 
@@ -25,6 +24,7 @@ function isSupabaseConfigured(): boolean {
 }
 
 function AdminAuthForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   // Validate the post-login destination: same-origin paths only.
   const callbackUrl = safeNextPath(searchParams.get("callbackUrl"));
@@ -32,30 +32,33 @@ function AdminAuthForm() {
   const error = errorParam ? (AUTH_ERRORS[errorParam] ?? "Sign-in failed. Please try again.") : null;
 
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [linkSent, setLinkSent] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const authConfigured = isSupabaseConfigured();
 
-  const handleMagicLink = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setFormError(null);
 
     try {
-      const response = await fetch("/api/auth/magic-link", {
+      const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, redirectTo: callbackUrl }),
+        body: JSON.stringify({ email, password, redirectTo: callbackUrl }),
       });
+      const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        setLinkSent(true);
-        toast.success("Magic link sent! Check your email.");
+        router.push(typeof data.redirectTo === "string" ? data.redirectTo : callbackUrl);
+        router.refresh();
       } else {
-        const data = await response.json().catch(() => ({}));
-        toast.error(data.error || "Failed to send magic link");
+        setFormError(data.error || "Sign-in failed. Please try again.");
       }
     } catch {
-      toast.error("An error occurred. Please try again.");
+      setFormError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +72,7 @@ function AdminAuthForm() {
             <Briefcase className="h-7 w-7" />
           </div>
           <CardTitle className="text-2xl">Admin Sign In</CardTitle>
-          <CardDescription>Passwordless sign-in for the portfolio owner</CardDescription>
+          <CardDescription>Sign in with your admin email and password</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {!authConfigured && (
@@ -89,48 +92,71 @@ function AdminAuthForm() {
             </div>
           )}
 
-          {linkSent ? (
-            <div className="p-4 rounded-lg bg-primary/5 border border-primary/20 text-sm text-center space-y-2">
-              <p className="font-medium">Check your inbox</p>
-              <p className="text-muted-foreground">
-                A sign-in link is on its way to {email}. It expires in 60 minutes.
-              </p>
-              <Button variant="ghost" size="sm" onClick={() => setLinkSent(false)}>
-                Use a different email
-              </Button>
-            </div>
-          ) : (
-            <form onSubmit={handleMagicLink} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="magicEmail">Admin Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="magicEmail"
-                    type="email"
-                    placeholder="admin@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                    required
-                    disabled={isLoading}
-                    autoComplete="email"
-                  />
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="admin@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10"
+                  required
+                  disabled={isLoading}
+                  autoComplete="email"
+                />
               </div>
+            </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Sending...
-                  </>
-                ) : (
-                  "Send Magic Link"
-                )}
-              </Button>
-            </form>
-          )}
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 pr-10"
+                  required
+                  disabled={isLoading}
+                  autoComplete="current-password"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+
+            {formError && (
+              <div className="flex items-center space-x-2 p-3 rounded-lg bg-destructive/10 text-destructive text-sm" role="alert">
+                <AlertCircle className="h-4 w-4" />
+                <span>{formError}</span>
+              </div>
+            )}
+
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </Button>
+          </form>
 
           <p className="text-center text-sm text-muted-foreground">
             Only allowlisted admin emails can sign in.{" "}
