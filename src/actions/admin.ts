@@ -67,6 +67,20 @@ function dbError(error: unknown, message: string): ActionResult {
   return { ok: false, message };
 }
 
+// Session ---------------------------------------------------------------------
+export async function signOutAdmin(): Promise<ActionResult> {
+  try {
+    if (!isAuthConfigured()) {
+      return { ok: true, message: "Signed out." };
+    }
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+  } catch (error) {
+    console.error("[admin] sign out failed:", error);
+  }
+  return { ok: true, message: "Signed out." };
+}
+
 // Profile ---------------------------------------------------------------------
 export async function saveProfile(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
   const parsed = profileSchema.safeParse(formValues(formData, ["openToWork"]));

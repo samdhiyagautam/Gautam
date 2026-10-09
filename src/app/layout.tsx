@@ -29,6 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const title = seo?.pageTitle || FALLBACK_TITLE;
   const description = seo?.metaDescription || FALLBACK_DESCRIPTION;
   const ogImage = seo?.ogImage || "/og-image.png";
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+  // Optional identifiers: omitted entirely when unset so metadata never
+  // emits a placeholder value.
+  const twitterHandle = process.env.NEXT_PUBLIC_TWITTER_HANDLE || undefined;
+  const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined;
 
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
@@ -66,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: "https://[ADD YOUR DOMAIN]",
+      url: siteUrl,
       siteName: "Gautam Samdhiya Portfolio",
       title,
       description,
@@ -85,11 +90,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Data Analyst with 2+ years of experience as an Assistant Manager. SQL, Python, Power BI, Excel.",
       images: [ogImage],
-      creator: "[ADD YOUR TWITTER HANDLE]",
+      ...(twitterHandle ? { creator: twitterHandle } : {}),
     },
-    verification: {
-      google: "[ADD GOOGLE VERIFICATION CODE]",
-    },
+    ...(googleVerification ? { verification: { google: googleVerification } } : {}),
   };
 }
 

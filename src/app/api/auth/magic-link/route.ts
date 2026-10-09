@@ -33,8 +33,13 @@ export async function POST(request: NextRequest) {
     }
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Per-email throttle: same budget, keyed by address.
-    const emailLimit = rateLimit(`magic-link:email:${normalizedEmail}`, 5, 10 * 60 * 1000);
+    // Per-email throttle, keyed by IP + address: a single global per-email
+    // bucket would let one attacker starve the owner by exhausting it from
+    // many IPs. Tradeoff: with rotating IPs an attacker can still send to
+    // the victim repeatedly — Supabase's own email rate limits are the real
+    // backstop; this layer only raises the cost of casual abuse.
+    const emailKey = `magic-link:email:${ip}:${normalizedEmail}`;
+    const emailLimit = rateLimit(emailKey, 5, 10 * 60 * 1000);
     if (!emailLimit.allowed) {
       const response = NextResponse.json(
         { error: "Too many requests. Please try again later." },

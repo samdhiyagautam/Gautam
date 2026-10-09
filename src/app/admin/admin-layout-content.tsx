@@ -8,6 +8,7 @@ import { useSession, isSupabaseConfigured } from "@/hooks/use-session";
 import { LayoutDashboard, User, Briefcase, Code, FolderKanban, FileText, Settings, Search, LogOut, Menu, ChevronLeft, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { signOutAdmin } from "@/actions/admin";
 import { ADMIN_NAV_ITEMS } from "@/lib/constants";
 
 export default function AdminLayoutContent({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export default function AdminLayoutContent({ children }: { children: React.React
   const { session, isLoading } = useSession();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  const [signingOut, startSignOut] = React.useTransition();
 
   const isAuthPage = pathname.startsWith("/admin/auth");
   const authConfigured = isSupabaseConfigured();
@@ -138,11 +140,21 @@ export default function AdminLayoutContent({ children }: { children: React.React
                 </span>
               )}
             </div>
-            <Button variant="ghost" size="sm" asChild>
-              <a href="/api/auth/signout" className="flex items-center space-x-2">
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Sign Out</span>
-              </a>
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={signingOut}
+              onClick={() => {
+                startSignOut(async () => {
+                  await signOutAdmin();
+                  router.push("/admin/auth");
+                  router.refresh();
+                });
+              }}
+              className="flex items-center space-x-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">{signingOut ? "Signing out…" : "Sign Out"}</span>
             </Button>
           </div>
         </header>

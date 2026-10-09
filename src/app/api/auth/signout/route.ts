@@ -1,12 +1,14 @@
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
-export async function GET() {
+// POST-only: signing out changes state, so GET must not trigger it
+// (unexported methods return 405 automatically).
+export async function POST() {
   try {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
     await supabase.auth.signOut();
-  } catch {
-    // Supabase not configured or session already gone — still leave /admin.
+  } catch (error) {
+    console.error("[auth] sign out failed:", error);
   }
-  redirect("/admin/auth");
+  return NextResponse.json({ success: true });
 }
