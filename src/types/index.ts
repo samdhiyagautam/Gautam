@@ -64,6 +64,8 @@ export interface Project {
   caseStudyUrl: string;
   thumbnail: string;
   screenshots: string[];
+  datasetUrl: string;
+  attachments: string[];
   isFeatured: boolean;
   status: 'draft' | 'published';
   order: number;

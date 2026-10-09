@@ -74,6 +74,7 @@ export const projectSchema = z.object({
   caseStudyUrl: optionalUrl,
   thumbnail: z.string().trim().max(2048).default(""),
   screenshotsText: z.string().trim().max(4000).default(""),
+  datasetUrl: optionalUrl,
   isFeatured: z.boolean().default(false),
   displayOrder: z.coerce.number().int().min(0).max(1000).default(0),
   status: statusSchema.default("draft"),

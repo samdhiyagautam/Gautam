@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GitBranch, ExternalLink, ChevronLeft, BarChart2, Zap, Layout, Image, CheckCircle } from "lucide-react";
+import { GitBranch, ExternalLink, ChevronLeft, BarChart2, Zap, Layout, Image, CheckCircle, Table, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -137,6 +137,22 @@ export function ProjectDetailView({ project }: { project: Project }) {
                         </a>
                       </Button>
                     )}
+                    {project.datasetUrl && !isPlaceholderLink(project.datasetUrl) && (
+                      <Button variant="outline" asChild className="w-full justify-start">
+                        <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+                          <Table className="h-4 w-4" />
+                          <span>Open Spreadsheet</span>
+                        </a>
+                      </Button>
+                    )}
+                    {project.attachments.map((url, i) => (
+                      <Button key={url} variant="ghost" asChild className="w-full justify-start">
+                        <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+                          <FileSpreadsheet className="h-4 w-4" />
+                          <span className="truncate">{url.split("/").pop() || `Dataset ${i + 1}`}</span>
+                        </a>
+                      </Button>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -123,6 +123,30 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
               <Textarea id="screenshotsText" name="screenshotsText" rows={2} defaultValue={initial ? joinLines(initial.screenshots) : ""} />
             </div>
           </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="datasetUrl">Google Sheets / Dataset URL</Label>
+              <Input id="datasetUrl" name="datasetUrl" defaultValue={initial?.datasetUrl ?? ""} placeholder="https://docs.google.com/spreadsheets/..." />
+              <FieldError message={fields?.datasetUrl} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="attachmentFiles">Excel / CSV Files (max 5 MB each)</Label>
+              <Input id="attachmentFiles" name="attachmentFiles" type="file" multiple accept=".xlsx,.xls,.csv" />
+            </div>
+          </div>
+          {initial && initial.attachments.length > 0 && (
+            <div className="space-y-2">
+              <Label>Attached files (check to remove)</Label>
+              <div className="space-y-1">
+                {initial.attachments.map((url) => (
+                  <label key={url} className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="removeAttachments" value={url} className="h-4 w-4" />
+                    <span className="truncate text-muted-foreground">{url.split("/").pop()}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

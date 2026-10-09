@@ -220,10 +220,16 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
     case_study_url: d.caseStudyUrl || "",
     thumbnail: d.thumbnail,
     screenshots: splitList(d.screenshotsText),
+    dataset_url: d.datasetUrl || "",
+    attachments: [] as string[],
     is_featured: d.isFeatured,
     display_order: d.displayOrder,
     status: d.status,
   };
+
+  const resolved = await resolveAttachments(supabase, d.id, formData);
+  if (!resolved.ok) return resolved;
+  payload.attachments = resolved.attachments;
 
   const { error } = d.id
     ? await supabase.from("projects").update(payload).eq("id", d.id)
@@ -245,6 +251,83 @@ export async function deleteProject(id: string): Promise<ActionResult> {
   }
   revalidateSite(["/", "/projects", "/resume"]);
   return { ok: true, message: "Project deleted." };
+}
+
+// Project dataset attachments -------------------------------------------------
+// Excel/CSV files attached to a project. Stored under datasets/ in the
+// portfolio-assets bucket; URLs saved on the project row.
+const MAX_DATASET_BYTES = 5 * 1024 * 1024;
+const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv"] as const;
+
+async function isSpreadsheet(file: File): Promise<boolean> {
+  const name = file.name.toLowerCase();
+  if (name.endsWith(".csv")) return true; // plain text, no magic bytes
+  try {
+    const header = new Uint8Array(await file.slice(0, 4).arrayBuffer());
+    if (name.endsWith(".xlsx")) {
+      // OOXML workbooks are ZIP archives ("PK\x03\x04").
+      return header[0] === 0x50 && header[1] === 0x4b && header[2] === 0x03 && header[3] === 0x04;
+    }
+    if (name.endsWith(".xls")) {
+      // Legacy binary workbooks start with the OLE signature.
+      return header[0] === 0xd0 && header[1] === 0xcf && header[2] === 0x11 && header[3] === 0xe0;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
+type AttachmentResult = { ok: true; attachments: string[] } | { ok: false; message: string };
+
+async function resolveAttachments(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  projectId: string | undefined,
+  formData: FormData
+): Promise<AttachmentResult> {
+  // Start from the project's current attachments (edit flow), minus removals.
+  let attachments: string[] = [];
+  if (projectId) {
+    const { data } = await supabase.from("projects").select("attachments").eq("id", projectId).maybeSingle();
+    const current = (data as { attachments?: unknown } | null)?.attachments;
+    const removed = new Set(
+      formData.getAll("removeAttachments").filter((v): v is string => typeof v === "string")
+    );
+    attachments = Array.isArray(current)
+      ? current.filter((u): u is string => typeof u === "string" && !removed.has(u))
+      : [];
+  }
+
+  const files = formData
+    .getAll("attachmentFiles")
+    .filter((v): v is File => v instanceof File && v.size > 0);
+
+  for (const file of files) {
+    const lower = file.name.toLowerCase();
+    if (!DATASET_EXTENSIONS.some((ext) => lower.endsWith(ext))) {
+      return { ok: false, message: `File "${file.name}" is not an Excel or CSV file.` };
+    }
+    if (file.size > MAX_DATASET_BYTES) {
+      return { ok: false, message: `File "${file.name}" exceeds the 5 MB limit.` };
+    }
+    if (!(await isSpreadsheet(file))) {
+      return { ok: false, message: `File "${file.name}" is not a valid spreadsheet.` };
+    }
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const safeName = lower.replace(/[^a-z0-9._-]+/g, "_");
+    const path = `datasets/${stamp}-${safeName}`;
+    const { error: uploadError } = await supabase.storage
+      .from("portfolio-assets")
+      .upload(path, file, { upsert: false });
+    if (uploadError) {
+      console.error("[admin] dataset upload failed:", uploadError.message);
+      return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
+    }
+    const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+    attachments.push(urlData.publicUrl);
+  }
+
+  return { ok: true, attachments: attachments.slice(0, 20) };
 }
 
 // Publish toggle ---------------------------------------------------------------
