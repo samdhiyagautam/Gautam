@@ -1,7 +1,13 @@
 import { z } from "zod";
 
 const statusSchema = z.enum(["draft", "published"]);
-const optionalUrl = z.string().trim().max(2048).optional().default("");
+const optionalUrl = z
+  .string()
+  .trim()
+  .max(2048)
+  .optional()
+  .default("")
+  .refine((v) => v === "" || /^https?:\/\//i.test(v), "Link must start with http:// or https://");
 
 export const profileSchema = z.object({
   name: z.string().trim().min(1, "Name is required.").max(120),

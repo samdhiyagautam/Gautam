@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Briefcase, Mail, Lock, Loader2, Eye, EyeOff, AlertCircle, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,6 @@ function isSupabaseConfigured(): boolean {
 }
 
 function AdminAuthForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   // Validate the post-login destination: same-origin paths only.
   const callbackUrl = safeNextPath(searchParams.get("callbackUrl"));
@@ -52,8 +51,10 @@ function AdminAuthForm() {
       const data = await response.json().catch(() => ({}));
 
       if (response.ok) {
-        router.push(typeof data.redirectTo === "string" ? data.redirectTo : callbackUrl);
-        router.refresh();
+        // Full page load, not router.push: the admin shell's session state is
+        // read once on mount, so a soft navigation would still see "signed
+        // out" and bounce straight back to this page.
+        window.location.assign(safeNextPath(typeof data.redirectTo === "string" ? data.redirectTo : callbackUrl));
       } else {
         setFormError(data.error || "Sign-in failed. Please try again.");
       }
