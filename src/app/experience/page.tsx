@@ -9,5 +9,10 @@ export const metadata: Metadata = {
 
 export default async function ExperiencePage() {
   const experiences = await getPublishedExperiences();
-  return <Experience items={experiences} />;
+  return (
+    <>
+      <h1 className="sr-only">Experience — Gautam Samdhiya, Data Analyst</h1>
+      <Experience items={experiences} />
+    </>
+  );
 }

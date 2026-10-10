@@ -9,5 +9,10 @@ export const metadata: Metadata = {
 
 export default async function SkillsPage() {
   const skills = await getPublishedSkills();
-  return <Skills skills={skills} />;
+  return (
+    <>
+      <h1 className="sr-only">Skills — Gautam Samdhiya, Data Analyst</h1>
+      <Skills skills={skills} />
+    </>
+  );
 }

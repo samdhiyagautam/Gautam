@@ -9,5 +9,10 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const profile = await getPublishedProfile();
-  return <About profile={profile} />;
+  return (
+    <>
+      <h1 className="sr-only">About — Gautam Samdhiya, Data Analyst</h1>
+      <About profile={profile} />
+    </>
+  );
 }

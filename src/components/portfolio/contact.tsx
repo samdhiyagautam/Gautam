@@ -50,7 +50,7 @@ export function Contact({
     {
       icon: MapPin,
       label: 'Location',
-      value: profile.location,
+      value: isPlaceholderLink(profile.location) ? 'Location available on request' : profile.location,
       description: 'Open to hybrid/remote roles',
     },
     {
@@ -276,7 +276,7 @@ export function Contact({
                 ) : (
                   <div className="space-y-4">
                     <p className="text-muted-foreground">
-                      The contact form is not connected yet — email me directly and I’ll respond within 24 hours.
+                      Prefer email — I respond within 24 hours.
                     </p>
                     {isEmail(contactEmail) ? (
                       <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
@@ -290,7 +290,9 @@ export function Contact({
                         Direct contact details are being added — check back soon.
                       </p>
                     )}
-                    <p className="text-sm text-muted-foreground break-all">{contactEmail}</p>
+                    {isEmail(contactEmail) && (
+                      <p className="text-sm text-muted-foreground break-all">{contactEmail}</p>
+                    )}
                   </div>
                 )}
               </CardContent>

@@ -39,6 +39,15 @@ function multilineList(raw: string, label: string): string[] {
     .map((line) => stringList(label).parse(line));
 }
 
+/** Split free text on commas or new lines into a clean, capped string list. */
+function splitList(raw: string): string[] {
+  return raw
+    .split(/[\n,]+/)
+    .map((part) => part.trim().replace(/^[-•*]\s+/, ""))
+    .filter(Boolean)
+    .slice(0, 60);
+}
+
 export const experienceSchema = z.object({
   id: z.string().uuid().optional(),
   company: z.string().trim().min(1, "Company is required.").max(200),
@@ -101,7 +110,7 @@ export type SkillInput = z.infer<typeof skillSchema>;
 export type ProjectInput = z.infer<typeof projectSchema>;
 export type SeoInput = z.infer<typeof seoSchema>;
 
-export { multilineList };
+export { multilineList, splitList };
 
 export function zodErrors(error: z.ZodError): Record<string, string> {
   const fields: Record<string, string> = {};

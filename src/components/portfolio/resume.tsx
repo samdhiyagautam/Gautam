@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileText, Eye, Clock, Calendar, Award, TrendingUp } from 'lucide-react';
+import { Download, FileText, Eye, Clock, Calendar, Award, TrendingUp, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +30,7 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
               <p className="text-muted-foreground">
                 {resumeExists
                   ? 'Current version reflecting my latest experience and skills.'
-                  : 'Resume not yet published. Upload a PDF in Admin → Resume to enable downloads.'
+                  : 'A full resume is available on request. In the meantime, review my experience, skills, and selected work below.'
                 }
               </p>
             </CardHeader>
@@ -52,9 +52,19 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                     </Button>
                   </>
                 ) : (
-                  <Button size="lg" variant="outline" disabled className="w-full sm:w-auto">
-                    <span>Resume coming soon</span>
-                  </Button>
+                  <>
+                    <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
+                      <a href="#contact" className="flex items-center space-x-2">
+                        <Mail className="h-5 w-5" />
+                        <span>Request Resume</span>
+                      </a>
+                    </Button>
+                    <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
+                      <a href="/experience" className="flex items-center space-x-2">
+                        <span>View Experience</span>
+                      </a>
+                    </Button>
+                  </>
                 )}
               </div>
 
@@ -80,17 +90,17 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
           </Card>
 
           {!resumeExists && (
-            <Card className="border-destructive/20 bg-destructive/5">
+            <Card>
               <CardContent className="pt-6">
                 <div className="flex items-start space-x-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-destructive/10 text-destructive shrink-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
                     <Award className="h-5 w-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-destructive">Resume not published</h4>
+                    <h4 className="font-semibold">What recruiters usually ask for</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      No published resume version exists yet. Upload a PDF in Admin → Resume and publish it —
-                      the download and view buttons will activate automatically.
+                      Experience history, analytics tooling, and availability — all covered in
+                      the summary below. For the formatted PDF, use Request Resume above.
                     </p>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ import { Plus, Edit, Star, StarOff, Eye } from "lucide-react";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { PublishButton } from "@/components/admin/publish-button";
 import { deleteProject } from "@/actions/admin";
-import { getAllProjects } from "@/lib/cms";
+import { listProjectsAdmin } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -25,7 +25,7 @@ function getCategoryLabel(category: string) {
 }
 
 export default async function AdminProjects() {
-  const projects = await getAllProjects();
+  const { rows: projects, live } = await listProjectsAdmin();
 
   return (
     <div className="space-y-6">
@@ -50,6 +50,13 @@ export default async function AdminProjects() {
       </div>
 
       <Card>
+        {!live && (
+          <div className="border-b border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-muted-foreground" role="status">
+            Showing local content — Supabase is not reachable or migrations are missing.
+            Run migrations <code className="rounded bg-background px-1">001</code>, <code className="rounded bg-background px-1">004</code> and{" "}
+            <code className="rounded bg-background px-1">005</code>, then refresh. Saves will fail until then.
+          </div>
+        )}
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full">

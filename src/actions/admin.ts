@@ -10,6 +10,7 @@ import {
   projectSchema,
   seoSchema,
   multilineList,
+  splitList,
   zodErrors,
   type ActionResult,
 } from "@/lib/validators";
@@ -50,15 +51,6 @@ function formValues(formData: FormData, booleans: string[] = []): Record<string,
     obj[name] = formData.get(name) === "on";
   }
   return obj;
-}
-
-/** Split a textarea into a clean string list (commas or new lines). */
-function splitList(raw: string): string[] {
-  return raw
-    .split(/[\n,]+/)
-    .map((part) => part.trim().replace(/^[-•*]\s+/, ""))
-    .filter(Boolean)
-    .slice(0, 60);
 }
 
 /** Log backend details server-side; return only a generic client message. */

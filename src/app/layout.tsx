@@ -3,8 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
-import { getSeoSettings } from "@/lib/cms";
+import { getSeoSettings, getPublishedProfile } from "@/lib/cms";
 import { getSiteUrl } from "@/lib/site-url";
+import { isPlaceholderLink } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL(siteUrl),
+    alternates: { canonical: "/" },
     title: {
       default: title,
       template: "%s | Gautam Samdhiya Portfolio",
@@ -108,10 +110,32 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const profile = await getPublishedProfile();
+  const siteUrl = getSiteUrl();
+  const sameAs = [profile.linkedin, profile.github].filter((url) => !isPlaceholderLink(url));
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name.includes("[ADD") ? "Portfolio Owner" : profile.name,
+    jobTitle: "Data Analyst",
+    description: profile.headline,
+    url: siteUrl,
+    worksFor: {
+      "@type": "Organization",
+      name: "Dhuri Na Venture Private Limited",
+    },
+    knowsAbout: ["Data Analysis", "SQL", "Python", "Power BI", "Excel", "Business Reporting", "AI Automation", "Next.js"],
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+  };
+
   return (
     <html suppressHydrationWarning lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
         <Providers>
           {children}
           <Toaster richColors position="top-center" />

@@ -10,7 +10,7 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-export function Hero({ profile }: { profile: Profile }) {
+export function Hero({ profile, hasResume }: { profile: Profile; hasResume: boolean }) {
 
   return (
     <section className="relative overflow-hidden pt-16" aria-label="Introduction">
@@ -45,19 +45,32 @@ export function Hero({ profile }: { profile: Profile }) {
               {profile.heroDescription}
             </p>
 
+            <p className="hero-enter mx-auto lg:mx-0 mt-4 max-w-xl text-base font-medium text-foreground/90 text-balance" style={{ animationDelay: '220ms' }}>
+              I help teams turn operational data into clear decisions, reliable dashboards, and practical automation.
+            </p>
+
             <div className="hero-enter mt-9 flex flex-col sm:flex-row items-center sm:justify-start justify-center gap-3" style={{ animationDelay: '260ms' }}>
               <Button size="xl" asChild variant="premium" className="w-full sm:w-auto">
                 <a href="#projects" className="flex items-center gap-2">
-                  <span>View my work</span>
+                  <span>View selected work</span>
                   <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
                 </a>
               </Button>
-              <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
-                <a href="/resume" className="flex items-center gap-2">
-                  <Download className="h-5 w-5" aria-hidden="true" />
-                  <span>Download resume</span>
-                </a>
-              </Button>
+              {hasResume ? (
+                <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
+                  <a href="/resume" className="flex items-center gap-2">
+                    <Download className="h-5 w-5" aria-hidden="true" />
+                    <span>Download resume</span>
+                  </a>
+                </Button>
+              ) : (
+                <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
+                  <a href="#contact" className="flex items-center gap-2">
+                    <Download className="h-5 w-5" aria-hidden="true" />
+                    <span>Request resume</span>
+                  </a>
+                </Button>
+              )}
               <Button size="xl" variant="ghost" asChild className="w-full sm:w-auto group">
                 <a href="#contact" className="flex items-center gap-1.5">
                   <span>Contact me</span>

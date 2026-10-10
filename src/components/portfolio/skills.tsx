@@ -1,6 +1,7 @@
 'use client';
 
 import { Database, Code, Cpu, Palette } from 'lucide-react';
+import Link from 'next/link';
 import { SKILL_CATEGORIES, PROFICIENCY_LEVELS } from '@/lib/constants';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -30,7 +31,7 @@ export function Skills({ skills: allSkills }: { skills: Skill[] }) {
         <SectionHeading
           eyebrow="Skills — evidence linked"
           title="Skills & expertise"
-          lede="Grouped by craft, labeled by real proficiency. Each skill connects to project proof."
+          lede="Grouped by craft, labeled by real proficiency. No percentages, no padding."
         />
 
         <div className="space-y-12">
@@ -84,6 +85,7 @@ export function Skills({ skills: allSkills }: { skills: Skill[] }) {
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
             Proficiency levels reflect verified practical ability, not self-reported percentages.
+            See these skills in context in <Link href="/projects" className="text-primary underline underline-offset-4 hover:opacity-80">selected work</Link>.
           </p>
         </Reveal>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { GitBranch, ExternalLink, BarChart2, Zap, Layout, Image, ChevronRight, ArrowUpRight } from 'lucide-react';
+import { GitBranch, ExternalLink, BarChart2, Zap, Layout, Image, ChevronRight, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,36 @@ const CATEGORY_LABELS = {
   'creative-technology': 'Creative Technology',
 };
 
+// Truthful capability cards shown while no published case studies exist.
+// Built only from verified experience content — labeled as representative
+// work, never as completed client case studies. No metrics, no clients.
+const REPRESENTATIVE_WORK = [
+  {
+    icon: BarChart2,
+    title: 'Operational dashboards',
+    description: 'Power BI dashboards for operational reporting — KPI tracking with DAX measures and automated refresh.',
+    tools: ['Power BI', 'DAX', 'Power Query', 'SQL'],
+  },
+  {
+    icon: Zap,
+    title: 'Reporting automation',
+    description: 'Repetitive reporting workflows automated with Python and AI-assisted tooling, with human review checkpoints.',
+    tools: ['Python', 'Excel', 'SQL', 'AI Tools'],
+  },
+  {
+    icon: Layout,
+    title: 'Business web applications',
+    description: 'Internal operations apps for data entry, task tracking, and reporting workflows.',
+    tools: ['Next.js', 'React', 'Supabase', 'PostgreSQL'],
+  },
+  {
+    icon: Image,
+    title: 'Data requirements & analysis',
+    description: 'Working with cross-functional teams to define data requirements and turn them into practical analysis.',
+    tools: ['SQL', 'Excel', 'Power BI', 'Stakeholder Reviews'],
+  },
+];
+
 export function Projects({ projects }: { projects: Project[] }) {
   const featuredProjects = projects.filter(p => p.isFeatured && p.status === 'published');
   const otherProjects = projects.filter(p => !p.isFeatured && p.status === 'published');
@@ -39,16 +69,48 @@ export function Projects({ projects }: { projects: Project[] }) {
 
         <div className="space-y-14">
           {!hasProjects && (
-            <Reveal className="mx-auto max-w-2xl rounded-2xl border border-border bg-card p-8 text-center">
-              <h3 className="text-xl font-semibold tracking-tight">Case studies in preparation</h3>
-              <p className="mt-2 text-muted-foreground">
-                Published case studies with verifiable proof (code, dashboards, datasets) will appear here.
-                In the meantime, let&apos;s talk about what I can do with your data.
-              </p>
-              <Button variant="premium" size="lg" asChild className="mt-6">
-                <a href="#contact">Contact Me</a>
-              </Button>
-            </Reveal>
+            <div>
+              <Reveal className="mx-auto max-w-2xl text-center mb-10">
+                <h3 className="text-xl font-semibold tracking-tight">Selected work</h3>
+                <p className="mt-2 text-muted-foreground">
+                  Full case studies with verifiable proof are being documented. Below is
+                  representative work drawn from my current role.
+                </p>
+              </Reveal>
+              <div className="grid sm:grid-cols-2 gap-6">
+                {REPRESENTATIVE_WORK.map((item, i) => (
+                  <Reveal key={item.title} delay={(i % 2) * 90}>
+                    <Card className="cinematic-card h-full">
+                      <CardContent className="p-6 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                            <item.icon className="h-5 w-5" aria-hidden="true" />
+                          </div>
+                          <Badge variant="outline">Representative work</Badge>
+                        </div>
+                        <h4 className="text-lg font-bold tracking-tight">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {item.tools.map((tool) => (
+                            <Badge key={tool} variant="outline" className="text-xs bg-muted/50">
+                              {tool}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Reveal>
+                ))}
+              </div>
+              <Reveal className="text-center mt-10">
+                <Button variant="premium" size="lg" asChild className="group">
+                  <a href="#contact" className="inline-flex items-center gap-2">
+                    <span>Discuss a similar need</span>
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+                  </a>
+                </Button>
+              </Reveal>
+            </div>
           )}
           {featuredProjects.length > 0 && (
           <div>

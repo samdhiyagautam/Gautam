@@ -312,11 +312,7 @@ export async function getPublishedSkills(): Promise<Skill[]> {
 
 export async function getPublishedProjects(): Promise<Project[]> {
   const rows = await query<ProjectRow[]>("projects", (supabase) =>
-    supabase
-      .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
-      .eq("status", "published")
-      .order("display_order", { ascending: true })
+    projectQuery(supabase, true)
   );
   if (!rows || rows.length === 0) {
     return FALLBACK_PROJECTS.filter((p) => p.status === "published");
@@ -418,6 +414,18 @@ const SKILL_COLUMNS =
 const PROJECT_COLUMNS =
   "id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at";
 
+function projectQuery(supabase: Awaited<ReturnType<typeof createClient>>, publishedOnly: boolean) {
+  let q = supabase
+    .from("projects")
+    .select(PROJECT_COLUMNS)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (publishedOnly) {
+    q = q.eq("status", "published");
+  }
+  return q;
+}
+
 export function getAdminExperience(id: string): Promise<Experience | null> {
   return getAdminRow<Experience, ExperienceRow>("experiences", id, EXPERIENCE_COLUMNS, mapExperience);
 }
@@ -452,14 +460,29 @@ export async function getAllSkills(): Promise<Skill[]> {
 }
 
 export async function getAllProjects(): Promise<Project[]> {
-  const rows = await query<ProjectRow[]>("projects", (supabase) =>
-    supabase
-      .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
-      .order("display_order", { ascending: true })
-  );
-  if (!rows || rows.length === 0) return FALLBACK_PROJECTS;
-  return rows.map(mapProject);
+  const { rows } = await listProjectsAdmin();
+  return rows;
+}
+
+/**
+ * Admin project listing that reports its data source. `live: false` means
+ * the rows are local fallback content — writes will fail until Supabase is
+ * configured and migrations 001/004/005 are applied.
+ */
+export async function listProjectsAdmin(): Promise<{ rows: Project[]; live: boolean }> {
+  if (!isSupabaseConfigured()) {
+    return { rows: FALLBACK_PROJECTS, live: false };
+  }
+  try {
+    const supabase = await createClient();
+    const { data, error } = await projectQuery(supabase, false);
+    if (error || !data) {
+      return { rows: FALLBACK_PROJECTS, live: false };
+    }
+    return { rows: (data as ProjectRow[]).map(mapProject), live: true };
+  } catch {
+    return { rows: FALLBACK_PROJECTS, live: false };
+  }
 }
 
 export async function getAllResumes(): Promise<Resume[]> {

@@ -9,5 +9,10 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const profile = await getPublishedProfile();
-  return <Contact profile={profile} deliveryConfigured={isContactConfigured()} />;
+  return (
+    <>
+      <h1 className="sr-only">Contact — Gautam Samdhiya, Data Analyst</h1>
+      <Contact profile={profile} deliveryConfigured={isContactConfigured()} />
+    </>
+  );
 }

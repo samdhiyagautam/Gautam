@@ -12,5 +12,10 @@ export default async function ResumePage() {
     getPublishedResume(),
     getPublishedExperiences(),
   ]);
-  return <Resume resume={resume} experiences={experiences} />;
+  return (
+    <>
+      <h1 className="sr-only">Resume — Gautam Samdhiya, Data Analyst</h1>
+      <Resume resume={resume} experiences={experiences} />
+    </>
+  );
 }

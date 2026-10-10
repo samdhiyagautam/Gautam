@@ -9,5 +9,10 @@ export const metadata: Metadata = {
 
 export default async function ProjectsPage() {
   const projects = await getPublishedProjects();
-  return <Projects projects={projects} />;
+  return (
+    <>
+      <h1 className="sr-only">Projects — Gautam Samdhiya, Data Analyst</h1>
+      <Projects projects={projects} />
+    </>
+  );
 }

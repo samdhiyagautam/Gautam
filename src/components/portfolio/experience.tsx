@@ -38,15 +38,15 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                       {exp.isCurrent ? 'Current' : formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}
                     </span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="text-sm text-muted-foreground">{exp.designation}</span>
+                    <span className="text-sm text-muted-foreground">{displayText(exp.designation, 'Role details available on request')}</span>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2 text-lg font-semibold mb-2">
                     <Building2 className="h-6 w-6 text-muted-foreground" />
                     <span>{exp.company}</span>
                   </div>
 
-                  <p className="text-muted-foreground mb-6">{exp.description}</p>
+                  <p className="text-muted-foreground mb-6">{displayText(exp.description, 'Professional history available on request.')}</p>
 
                   <div className="space-y-6">
                     <div>
@@ -55,7 +55,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                         <span>Key Responsibilities</span>
                       </h4>
                       <ul className="space-y-2 pl-4">
-                        {exp.responsibilities.map((resp, i) => (
+                        {realItems(exp.responsibilities, 'Details available on request.').map((resp, i) => (
                           <li key={i} className="relative pl-4 text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-primary">
                             {resp}
                           </li>
@@ -63,14 +63,14 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                       </ul>
                     </div>
 
-                    {exp.projects.length > 0 && (
+                    {realItems(exp.projects).length > 0 && (
                       <div>
                         <h4 className="font-semibold mb-3 flex items-center space-x-2">
                           <Code className="h-5 w-5 text-primary" />
                           <span>Key Projects</span>
                         </h4>
                         <ul className="space-y-2 pl-4">
-                          {exp.projects.map((proj, i) => (
+                          {realItems(exp.projects).map((proj, i) => (
                             <li key={i} className="relative pl-4 text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-primary">
                               {proj}
                             </li>
@@ -79,22 +79,24 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                       </div>
                     )}
 
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center space-x-2">
-                        <Database className="h-5 w-5 text-primary" />
-                        <span>Technologies</span>
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.technologies.map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20"
-                          >
-                            {tech}
-                          </span>
-                        ))}
+                    {realItems(exp.technologies).length > 0 && (
+                      <div>
+                        <h4 className="font-semibold mb-3 flex items-center space-x-2">
+                          <Database className="h-5 w-5 text-primary" />
+                          <span>Technologies</span>
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {realItems(exp.technologies).map((tech, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </article>
@@ -107,9 +109,24 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
   );
 }
 
+function isPlaceholderText(value: string | null | undefined): boolean {
+  return !value || value.includes('[ADD');
+}
+
+function displayText(value: string, fallback: string): string {
+  return isPlaceholderText(value) ? fallback : (value as string);
+}
+
+function realItems(list: string[], fallback?: string): string[] {
+  const clean = list.filter((item) => !isPlaceholderText(item));
+  if (clean.length > 0) return clean;
+  return fallback ? [fallback] : [];
+}
+
 function formatDateRange(startDate: string, endDate: string | null, isCurrent: boolean): string {
+  if (isPlaceholderText(startDate)) return 'Dates available on request';
   const format = (date: string) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
   const start = format(startDate);
-  const end = isCurrent ? 'Present' : (endDate ? format(endDate) : '');
-  return `${start} - ${end}`;
+  const end = isCurrent ? 'Present' : (endDate && !isPlaceholderText(endDate) ? format(endDate) : '');
+  return end ? `${start} - ${end}` : start;
 }

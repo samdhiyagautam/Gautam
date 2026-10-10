@@ -174,7 +174,12 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
         </CardContent>
       </Card>
 
-      <div className="flex items-center justify-end">
+      <div className="flex flex-col items-stretch sm:flex-row sm:items-center sm:justify-end gap-3">
+        {!state.ok && state.message && (
+          <p className="text-sm text-destructive sm:mr-auto" role="alert">
+            {state.message}
+          </p>
+        )}
         <SubmitButton>{initial ? "Save Changes" : "Create Project"}</SubmitButton>
       </div>
     </AdminForm>

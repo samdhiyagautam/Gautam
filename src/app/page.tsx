@@ -31,12 +31,12 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-background">
       <Navigation />
       <main className="flex-1" id="main-content">
-        <Hero profile={profile} />
+        <Hero profile={profile} hasResume={resume !== null} />
         <WhatIBring />
         <About profile={profile} />
         <Experience items={experiences} />
-        <Skills skills={skills} />
         <Projects projects={projects} />
+        <Skills skills={skills} />
         <AIWorkflow />
         <Resume resume={resume} experiences={experiences} />
         <Contact profile={profile} deliveryConfigured={isContactConfigured()} />
