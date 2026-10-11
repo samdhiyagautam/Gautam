@@ -148,8 +148,8 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
               <FieldError message={fields?.datasetUrl} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="attachmentFiles">Excel / CSV Files (max 5 MB each)</Label>
-              <Input id="attachmentFiles" name="attachmentFiles" type="file" multiple accept=".xlsx,.xls,.csv" />
+              <Label htmlFor="attachmentFiles">Data & Code Files — Excel, CSV, SQL, Python, TXT (max 25 MB each)</Label>
+              <Input id="attachmentFiles" name="attachmentFiles" type="file" multiple accept=".xlsx,.xls,.csv,.sql,.py,.txt" />
             </div>
           </div>
           {initial && initial.attachments.length > 0 && (

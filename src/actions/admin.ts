@@ -255,9 +255,11 @@ export async function deleteProject(id: string): Promise<ActionResult> {
 }
 
 // Project dataset attachments -------------------------------------------------
-// Excel/CSV files attached to a project. Stored under datasets/ in the
-// portfolio-assets bucket; URLs saved on the project row.
-const MAX_DATASET_BYTES = 5 * 1024 * 1024;
+// Excel/CSV/SQL/Python/text files attached to a project (max 25 MB each).
+// Stored under datasets/ in the portfolio-assets bucket; URLs saved on the
+// project row.
+const MAX_DATASET_BYTES = 25 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"] as const;
 
@@ -363,13 +365,28 @@ async function resolveImages(
 
   return { ok: true, thumbnail, screenshots: screenshots.slice(0, 20) };
 }
-const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const VIDEO_EXTENSIONS = [".mp4", ".webm"] as const;
-const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv"] as const;
+const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv", ".sql", ".py", ".txt"] as const;
+
+async function isTextFile(file: File): Promise<boolean> {
+  try {
+    const bytes = new Uint8Array(await file.slice(0, 4096).arrayBuffer());
+    // Reject binaries masquerading as text (NUL byte check), then require
+    // strictly valid UTF-8.
+    if (bytes.includes(0)) return false;
+    new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 async function isSpreadsheet(file: File): Promise<boolean> {
   const name = file.name.toLowerCase();
-  if (name.endsWith(".csv")) return true; // plain text, no magic bytes
+  // Plain-text formats: validated as UTF-8 instead of magic bytes.
+  if (name.endsWith(".csv") || name.endsWith(".sql") || name.endsWith(".py") || name.endsWith(".txt")) {
+    return isTextFile(file);
+  }
   try {
     const header = new Uint8Array(await file.slice(0, 4).arrayBuffer());
     if (name.endsWith(".xlsx")) {
@@ -476,20 +493,24 @@ async function resolveAttachments(
   for (const file of files) {
     const lower = file.name.toLowerCase();
     if (!DATASET_EXTENSIONS.some((ext) => lower.endsWith(ext))) {
-      return { ok: false, message: `File "${file.name}" is not an Excel or CSV file.` };
+      return { ok: false, message: `File "${file.name}" is not an Excel, CSV, SQL, Python, or text file.` };
     }
     if (file.size > MAX_DATASET_BYTES) {
-      return { ok: false, message: `File "${file.name}" exceeds the 5 MB limit.` };
+      return { ok: false, message: `File "${file.name}" exceeds the 25 MB limit.` };
     }
     if (!(await isSpreadsheet(file))) {
-      return { ok: false, message: `File "${file.name}" is not a valid spreadsheet.` };
+      return { ok: false, message: `File "${file.name}" failed content validation.` };
     }
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
     const safeName = lower.replace(/[^a-z0-9._-]+/g, "_");
     const path = `datasets/${stamp}-${safeName}`;
+    // Serve code/text files as plain text so browsers download or display
+    // them instead of sniffing executable content.
+    const isCodeText =
+      lower.endsWith(".sql") || lower.endsWith(".py") || lower.endsWith(".txt") || lower.endsWith(".csv");
     const { error: uploadError } = await supabase.storage
       .from("portfolio-assets")
-      .upload(path, file, { upsert: false });
+      .upload(path, file, { upsert: false, ...(isCodeText ? { contentType: "text/plain" } : {}) });
     if (uploadError) {
       console.error("[admin] dataset upload failed:", uploadError.message);
       return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
