@@ -87,7 +87,6 @@ export const projectSchema = z.object({
   githubUrl: optionalUrl,
   liveDemoUrl: optionalUrl,
   caseStudyUrl: optionalUrl,
-  thumbnail: z.string().trim().max(2048).default(""),
   datasetUrl: optionalUrl,
   videoUrl: optionalUrl,
   isFeatured: z.boolean().default(false),

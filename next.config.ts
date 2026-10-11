@@ -57,6 +57,12 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "@radix-ui/react-icons"],
+    serverActions: {
+      // Default is 1 MB — uploads (50 MB video, 25 MB dataset, 5 MB image)
+      // travel through server actions, so the limit must cover the largest
+      // file plus multipart overhead.
+      bodySizeLimit: "60mb",
+    },
   },
   headers: async () => [
     {

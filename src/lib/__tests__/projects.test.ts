@@ -22,8 +22,6 @@ const validDraft = {
   githubUrl: "",
   liveDemoUrl: "",
   caseStudyUrl: "",
-  thumbnail: "",
-  screenshotsText: "",
   datasetUrl: "",
   isFeatured: false,
   displayOrder: 3,

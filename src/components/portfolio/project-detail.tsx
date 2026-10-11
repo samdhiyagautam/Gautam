@@ -72,7 +72,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                   </div>
                 )}
                 {project.videos.map((url) => (
-                  <video key={url} controls preload="none" className="w-full rounded-xl border border-border">
+                  <video key={url} controls playsInline preload="none" className="w-full rounded-xl border border-border">
                     <source src={url} />
                     Your browser does not support video playback.
                   </video>
