@@ -210,8 +210,8 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
     github_url: d.githubUrl || "",
     live_demo_url: d.liveDemoUrl || "",
     case_study_url: d.caseStudyUrl || "",
-    thumbnail: d.thumbnail,
-    screenshots: splitList(d.screenshotsText),
+    thumbnail: "",
+    screenshots: [] as string[],
     dataset_url: d.datasetUrl || "",
     attachments: [] as string[],
     video_url: d.videoUrl || "",
@@ -227,6 +227,10 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
   const resolvedVideos = await resolveVideos(supabase, d.id, formData);
   if (!resolvedVideos.ok) return resolvedVideos;
   payload.videos = resolvedVideos.videos;
+  const resolvedImages = await resolveImages(supabase, d.id, formData);
+  if (!resolvedImages.ok) return resolvedImages;
+  payload.thumbnail = resolvedImages.thumbnail;
+  payload.screenshots = resolvedImages.screenshots;
 
   const { error } = d.id
     ? await supabase.from("projects").update(payload).eq("id", d.id)
@@ -254,6 +258,111 @@ export async function deleteProject(id: string): Promise<ActionResult> {
 // Excel/CSV files attached to a project. Stored under datasets/ in the
 // portfolio-assets bucket; URLs saved on the project row.
 const MAX_DATASET_BYTES = 5 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"] as const;
+
+async function isImage(file: File): Promise<boolean> {
+  const name = file.name.toLowerCase();
+  if (!IMAGE_EXTENSIONS.some((ext) => name.endsWith(ext))) return false;
+  try {
+    const header = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    // JPEG: FF D8 FF · PNG: 89 50 4E 47 · WebP: RIFF....WEBP
+    const isJpeg = header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff;
+    const isPng =
+      header[0] === 0x89 && header[1] === 0x50 && header[2] === 0x4e && header[3] === 0x47;
+    const isWebp =
+      header[0] === 0x52 &&
+      header[1] === 0x49 &&
+      header[2] === 0x46 &&
+      header[3] === 0x46 &&
+      header[8] === 0x57 &&
+      header[9] === 0x45 &&
+      header[10] === 0x42 &&
+      header[11] === 0x50;
+    if (name.endsWith(".jpg") || name.endsWith(".jpeg")) return isJpeg;
+    if (name.endsWith(".png")) return isPng;
+    return isWebp;
+  } catch {
+    return false;
+  }
+}
+
+async function uploadToBucket(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  folder: string,
+  file: File
+): Promise<{ ok: true; url: string } | { ok: false; message: string }> {
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
+  const path = `${folder}/${stamp}-${safeName}`;
+  const { error } = await supabase.storage.from("portfolio-assets").upload(path, file, { upsert: false });
+  if (error) {
+    console.error(`[admin] ${folder} upload failed:`, error.message);
+    return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
+  }
+  const { data } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+  return { ok: true, url: data.publicUrl };
+}
+
+type ImageResult = { ok: true; thumbnail: string; screenshots: string[] } | { ok: false; message: string };
+
+async function resolveImages(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  projectId: string | undefined,
+  formData: FormData
+): Promise<ImageResult> {
+  let thumbnail = "";
+  let screenshots: string[] = [];
+  if (projectId) {
+    const { data } = await supabase
+      .from("projects")
+      .select("thumbnail, screenshots")
+      .eq("id", projectId)
+      .maybeSingle();
+    const row = data as { thumbnail?: unknown; screenshots?: unknown } | null;
+    thumbnail = typeof row?.thumbnail === "string" ? row.thumbnail : "";
+    const removed = new Set(
+      formData.getAll("removeScreenshots").filter((v): v is string => typeof v === "string")
+    );
+    screenshots = Array.isArray(row?.screenshots)
+      ? row.screenshots.filter((u): u is string => typeof u === "string" && !removed.has(u))
+      : [];
+  }
+
+  const thumbFiles = formData
+    .getAll("thumbnailFile")
+    .filter((v): v is File => v instanceof File && v.size > 0);
+  // Single thumbnail: last chosen file wins.
+  const thumbFile = thumbFiles[thumbFiles.length - 1];
+  if (thumbFile) {
+    if (thumbFile.size > MAX_IMAGE_BYTES) {
+      return { ok: false, message: `Thumbnail "${thumbFile.name}" exceeds the 5 MB limit.` };
+    }
+    if (!(await isImage(thumbFile))) {
+      return { ok: false, message: `File "${thumbFile.name}" is not a valid JPG, PNG, or WebP image.` };
+    }
+    const uploaded = await uploadToBucket(supabase, "images", thumbFile);
+    if (!uploaded.ok) return uploaded;
+    thumbnail = uploaded.url;
+  }
+
+  const shotFiles = formData
+    .getAll("screenshotFiles")
+    .filter((v): v is File => v instanceof File && v.size > 0);
+  for (const file of shotFiles) {
+    if (file.size > MAX_IMAGE_BYTES) {
+      return { ok: false, message: `File "${file.name}" exceeds the 5 MB limit.` };
+    }
+    if (!(await isImage(file))) {
+      return { ok: false, message: `File "${file.name}" is not a valid JPG, PNG, or WebP image.` };
+    }
+    const uploaded = await uploadToBucket(supabase, "images", file);
+    if (!uploaded.ok) return uploaded;
+    screenshots.push(uploaded.url);
+  }
+
+  return { ok: true, thumbnail, screenshots: screenshots.slice(0, 20) };
+}
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const VIDEO_EXTENSIONS = [".mp4", ".webm"] as const;
 const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv"] as const;

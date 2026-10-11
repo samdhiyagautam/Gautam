@@ -115,14 +115,32 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="thumbnail">Thumbnail URL</Label>
-              <Input id="thumbnail" name="thumbnail" defaultValue={initial?.thumbnail ?? ""} placeholder="https://... or /uploads/..." />
+              <Label htmlFor="thumbnailFile">Thumbnail Image (JPG/PNG/WebP, max 5 MB)</Label>
+              <Input id="thumbnailFile" name="thumbnailFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
+              {initial?.thumbnail ? (
+                <p className="text-xs text-muted-foreground break-all">Current: {initial.thumbnail.split("/").pop()} — choose a file to replace it.</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">No thumbnail yet — cards show a category icon instead.</p>
+              )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="screenshotsText">Screenshots (one URL per line)</Label>
-              <Textarea id="screenshotsText" name="screenshotsText" rows={2} defaultValue={initial ? joinLines(initial.screenshots) : ""} />
+              <Label htmlFor="screenshotFiles">Screenshot Images (JPG/PNG/WebP, max 5 MB each)</Label>
+              <Input id="screenshotFiles" name="screenshotFiles" type="file" multiple accept=".jpg,.jpeg,.png,.webp" />
             </div>
           </div>
+          {initial && initial.screenshots.length > 0 && (
+            <div className="space-y-2">
+              <Label>Uploaded screenshots (check to remove)</Label>
+              <div className="space-y-1">
+                {initial.screenshots.map((url) => (
+                  <label key={url} className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="removeScreenshots" value={url} className="h-4 w-4" />
+                    <span className="truncate text-muted-foreground">{url.split("/").pop()}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="datasetUrl">Google Sheets / Dataset URL</Label>

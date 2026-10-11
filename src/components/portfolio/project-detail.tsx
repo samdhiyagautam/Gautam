@@ -122,6 +122,28 @@ export function ProjectDetailView({ project }: { project: Project }) {
               <p className="text-muted-foreground leading-relaxed">{project.outcome}</p>
             </CardContent>
           </Card>
+
+          {project.screenshots.length > 0 && (
+            <Card>
+              <CardContent className="p-6 pt-0 space-y-4">
+                <h2 className="text-2xl font-bold mb-4">Screenshots</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {project.screenshots.map((url, i) => (
+                    // Uploaded owner files with generated blob URLs — plain img
+                    // avoids baking a remote-pattern allowlist for user content.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={url}
+                      src={url}
+                      alt={`${project.name} — screenshot ${i + 1}`}
+                      className="w-full rounded-xl border border-border object-cover"
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         <div className="space-y-6">
