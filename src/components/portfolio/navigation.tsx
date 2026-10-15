@@ -91,7 +91,7 @@ export function Navigation() {
         </div>
 
         {isOpen && (
-          <div id="mobile-menu" className="md:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
+          <div id="mobile-menu" className="menu-drop md:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
             <div className="flex flex-col space-y-1">
               {NAV_ITEMS.map((item) => (
                 <Link

@@ -4,6 +4,7 @@ import { Download, FileText, Eye, Clock, Calendar, Award, TrendingUp, Mail } fro
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Reveal } from './reveal';
 import type { Resume as ResumeData, Experience } from '@/types';
 
 export function Resume({ resume, experiences }: { resume: ResumeData | null; experiences: Experience[] }) {
@@ -13,15 +14,16 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
   return (
     <section id="resume" className="py-20 sm:py-28 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <Reveal className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Resume</h2>
           <p className="text-lg text-muted-foreground">
             Download or view my professional resume.
           </p>
-        </div>
+        </Reveal>
 
         <div className="max-w-3xl mx-auto space-y-8">
-          <Card className="border-primary/20">
+          <Reveal variant="scale">
+          <Card className="cinematic-card border-primary/20">
             <CardHeader className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                 <FileText className="h-8 w-8" />
@@ -88,9 +90,11 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
               )}
             </CardContent>
           </Card>
+          </Reveal>
 
           {!resumeExists && (
-            <Card>
+            <Reveal delay={120}>
+            <Card className="cinematic-card">
               <CardContent className="pt-6">
                 <div className="flex items-start space-x-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
@@ -106,9 +110,11 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                 </div>
               </CardContent>
             </Card>
+            </Reveal>
           )}
 
-          <Card>
+          <Reveal delay={160}>
+          <Card className="cinematic-card">
             <CardHeader>
               <CardTitle className="text-xl">Quick Summary</CardTitle>
             </CardHeader>
@@ -161,6 +167,7 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
               </div>
             </CardContent>
           </Card>
+          </Reveal>
         </div>
       </div>
     </section>

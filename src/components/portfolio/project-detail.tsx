@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { isPlaceholderLink } from "@/lib/utils";
+import { Reveal } from "./reveal";
 import type { Project } from "@/types";
 
 const CATEGORY_ICONS = {
@@ -38,6 +39,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 lg:py-20">
+      <Reveal>
       <header className="mb-12">
         <div className="flex flex-wrap items-center gap-3 mb-4">
           <Badge variant="outline" className="gap-1">
@@ -52,9 +54,10 @@ export function ProjectDetailView({ project }: { project: Project }) {
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">{project.name}</h1>
         <p className="text-lg text-muted-foreground max-w-2xl">{project.problem}</p>
       </header>
+      </Reveal>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+        <Reveal className="lg:col-span-2 space-y-8" delay={80}>
           {(youTubeEmbed || project.videos.length > 0) && (
             <Card>
               <CardContent className="p-6 pt-0 space-y-4">
@@ -144,10 +147,10 @@ export function ProjectDetailView({ project }: { project: Project }) {
               </CardContent>
             </Card>
           )}
-        </div>
+        </Reveal>
 
-        <div className="space-y-6">
-          <Card>
+        <Reveal className="space-y-6" delay={160}>
+          <Card className="cinematic-card">
             <CardContent className="p-6 space-y-6">
               <h3 className="font-semibold">Project Details</h3>
 
@@ -234,7 +237,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
               </dl>
             </CardContent>
           </Card>
-        </div>
+        </Reveal>
       </div>
     </main>
   );

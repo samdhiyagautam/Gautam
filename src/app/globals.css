@@ -308,9 +308,46 @@ html {
   transform: scale(1.035);
 }
 
+/* Mobile menu — quick drop + fade, plays once */
+@keyframes menu-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-drop {
+  animation: menu-drop 0.35s var(--ease-cinematic) both;
+  transform-origin: top;
+}
+
+/* Inline status messages (form success/error) — fade in with a small rise */
+@keyframes status-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.status-in {
+  animation: status-in 0.5s var(--ease-cinematic) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-enter {
     opacity: 1;
+    animation: none;
+  }
+  .menu-drop,
+  .status-in {
     animation: none;
   }
   .hero-drift,

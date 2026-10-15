@@ -2,6 +2,7 @@
 
 import { Cpu, Brain, Zap, CheckCircle, GitBranch, User, Shield } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Reveal } from './reveal';
 
 const AI_WORKFLOW_STEPS = [
   {
@@ -97,7 +98,7 @@ export function AIWorkflow() {
   return (
     <section id="ai-workflow" className="py-20 sm:py-28 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <Reveal className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
             <Cpu className="h-4 w-4" />
             <span>HOW I WORK WITH AI</span>
@@ -106,7 +107,7 @@ export function AIWorkflow() {
           <p className="text-lg text-muted-foreground">
             A practical workflow combining AI acceleration with human judgment and technical expertise.
           </p>
-        </div>
+        </Reveal>
 
         <div className="relative mb-16">
           <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2 hidden lg:block" />
@@ -115,7 +116,8 @@ export function AIWorkflow() {
               const Icon = step.icon;
               const isLast = index === AI_WORKFLOW_STEPS.length - 1;
               return (
-                <div key={step.number} className="relative lg:pl-32 flex">
+                <Reveal key={step.number} delay={index * 70}>
+                  <div className="relative lg:pl-32 flex">
                   <div className="absolute left-1/2 top-4 -translate-x-1/2 z-10 hidden lg:block">
                     <div className="w-10 h-10 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary font-bold text-sm">
                       {step.number}
@@ -151,6 +153,7 @@ export function AIWorkflow() {
                     </Card>
                   </div>
                 </div>
+                </Reveal>
               );
             })}
           </div>
@@ -160,18 +163,21 @@ export function AIWorkflow() {
           <div>
             <h3 className="text-2xl font-bold mb-6 text-center">Core Principles</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {AI_PRINCIPLES.map((principle) => (
-                <Card key={principle.title} className="hover:border-primary/30 transition-colors">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold mb-2">{principle.title}</h4>
-                    <p className="text-muted-foreground text-sm">{principle.description}</p>
-                  </CardContent>
-                </Card>
+              {AI_PRINCIPLES.map((principle, index) => (
+                <Reveal key={principle.title} delay={(index % 3) * 90}>
+                  <Card className="h-full cinematic-card hover:border-primary/30 transition-colors">
+                    <CardContent className="p-6">
+                      <h4 className="font-semibold mb-2">{principle.title}</h4>
+                      <p className="text-muted-foreground text-sm">{principle.description}</p>
+                    </CardContent>
+                  </Card>
+                </Reveal>
               ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-8 text-center">
+          <Reveal variant="scale">
+            <div className="rounded-2xl border border-border bg-card p-8 text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <GitBranch className="h-8 w-8 text-primary" />
               <h3 className="text-2xl font-bold">AI + Human Judgment + Technical Skills = Practical Solutions</h3>
@@ -180,7 +186,8 @@ export function AIWorkflow() {
               This portfolio itself demonstrates the workflow: AI accelerated the scaffolding and boilerplate,
               but the architecture, content strategy, design decisions, and code review are entirely human-driven.
             </p>
-          </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

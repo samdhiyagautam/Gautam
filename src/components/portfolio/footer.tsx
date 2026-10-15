@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { GitBranch, Link2, Mail, Briefcase, Heart } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
+import { Reveal } from './reveal';
 import type { Profile } from '@/types';
 
 function isEmail(value: string): boolean {
@@ -16,6 +17,7 @@ export function Footer({ profile }: { profile: Profile }) {
   return (
     <footer className="border-t border-border bg-background/50 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <Reveal variant="fade">
         <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
           <div className="md:col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4" aria-label="Go to homepage">
@@ -91,6 +93,7 @@ export function Footer({ profile }: { profile: Profile }) {
             </ul>
           </div>
         </div>
+        </Reveal>
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">

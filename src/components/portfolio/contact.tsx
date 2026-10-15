@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { isPlaceholderLink } from '@/lib/utils';
+import { Reveal } from './reveal';
 import type { Profile } from '@/types';
 
 function isEmail(value: string): boolean {
@@ -112,16 +113,16 @@ export function Contact({
   return (
     <section id="contact" className="py-20 sm:py-28 bg-muted/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <Reveal className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Get In Touch</h2>
           <p className="text-lg text-muted-foreground">
             Have a project in mind or want to discuss opportunities? I&apos;d love to hear from you.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1 space-y-6">
-            <Card>
+          <Reveal className="lg:col-span-1 space-y-6" delay={80}>
+            <Card className="cinematic-card">
               <CardHeader>
                 <CardTitle className="text-xl">Let&apos;s Build Something Useful</CardTitle>
                 <p className="text-muted-foreground text-sm">
@@ -170,10 +171,10 @@ export function Contact({
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </Reveal>
 
-          <div className="lg:col-span-2">
-            <Card>
+          <Reveal className="lg:col-span-2" delay={160}>
+            <Card className="cinematic-card h-full">
               <CardHeader>
                 <CardTitle className="text-xl">Send a Message</CardTitle>
                 <p className="text-muted-foreground text-sm">
@@ -260,14 +261,14 @@ export function Contact({
                   </Button>
 
                   {submitStatus === 'success' && (
-                    <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
+                    <div className="status-in flex items-center space-x-2 text-green-600 dark:text-green-400">
                       <CheckCircle className="h-5 w-5" />
                       <span>Message sent successfully! I will respond within 24 hours.</span>
                     </div>
                   )}
 
                   {submitStatus === 'error' && (
-                    <div className="flex items-center space-x-2 text-destructive" role="alert">
+                    <div className="status-in flex items-center space-x-2 text-destructive" role="alert">
                       <AlertCircle className="h-5 w-5" />
                       <span>{formError || 'Failed to send. Please try again or email directly.'}</span>
                     </div>
@@ -297,7 +298,7 @@ export function Contact({
                 )}
               </CardContent>
             </Card>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
