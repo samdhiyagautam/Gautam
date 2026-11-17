@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-label="Total runs per IPL season">
+<text x="46" y="24" font-family="sans-serif" font-size="15" fill="#374151">Total runs per IPL season</text>
+<rect x="47.0" y="147.6" width="43.7" height="146.4" fill="#4b5563"><title>2007/08: 17937</title></rect>
+<text x="68.8" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">07/08</text>
+<rect x="92.7" y="160.8" width="43.7" height="133.2" fill="#4b5563"><title>2009: 16320</title></rect>
+<rect x="138.4" y="140.1" width="43.7" height="153.9" fill="#4b5563"><title>2009/10: 18864</title></rect>
+<text x="160.2" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">09/10</text>
+<rect x="184.1" y="121.4" width="43.7" height="172.6" fill="#4b5563"><title>2011: 21154</title></rect>
+<rect x="229.7" y="110.8" width="43.7" height="183.2" fill="#4b5563"><title>2012: 22453</title></rect>
+<text x="251.6" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">12</text>
+<rect x="275.4" y="110.1" width="43.7" height="183.9" fill="#4b5563"><title>2013: 22541</title></rect>
+<rect x="321.1" y="139.7" width="43.7" height="154.3" fill="#4b5563"><title>2014: 18909</title></rect>
+<text x="342.9" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">14</text>
+<rect x="366.8" y="144.4" width="43.7" height="149.6" fill="#4b5563"><title>2015: 18332</title></rect>
+<rect x="412.5" y="140.1" width="43.7" height="153.9" fill="#4b5563"><title>2016: 18862</title></rect>
+<text x="434.3" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">16</text>
+<rect x="458.2" y="140.8" width="43.7" height="153.2" fill="#4b5563"><title>2017: 18769</title></rect>
+<rect x="503.8" y="131.6" width="43.7" height="162.4" fill="#4b5563"><title>2018: 19901</title></rect>
+<text x="525.7" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">18</text>
+<rect x="549.5" y="135.7" width="43.7" height="158.3" fill="#4b5563"><title>2019: 19400</title></rect>
+<rect x="595.2" y="136.1" width="43.7" height="157.9" fill="#4b5563"><title>2020/21: 19352</title></rect>
+<text x="617.1" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">20/21</text>
+<rect x="640.9" y="142.0" width="43.7" height="152.0" fill="#4b5563"><title>2021: 18622</title></rect>
+<rect x="686.6" y="94.9" width="43.7" height="199.1" fill="#4b5563"><title>2022: 24395</title></rect>
+<text x="708.4" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">22</text>
+<rect x="732.3" y="84.4" width="43.7" height="209.6" fill="#4b5563"><title>2023: 25688</title></rect>
+<rect x="777.9" y="82.1" width="43.7" height="211.9" fill="#4b5563"><title>2024: 25971</title></rect>
+<text x="799.8" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">24</text>
+<rect x="823.6" y="77.7" width="43.7" height="216.3" fill="#4b5563"><title>2025: 26503</title></rect>
+<rect x="869.3" y="70.0" width="43.7" height="224.0" fill="#4b5563"><title>2026: 27450</title></rect>
+<text x="891.2" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">26</text>
+</svg>
