@@ -174,7 +174,7 @@ export function Contact({
           </Reveal>
 
           <Reveal className="lg:col-span-2" delay={160}>
-            <Card className="cinematic-card h-full">
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle className="text-xl">Send a Message</CardTitle>
                 <p className="text-muted-foreground text-sm">

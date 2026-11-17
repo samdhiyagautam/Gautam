@@ -31,7 +31,7 @@ export function WhatIBring() {
               <Reveal key={item.title} delay={(index % 3) * 90} className="h-full">
                 <Scroll3D variant={columnVariant(index)} className="h-full">
                 <article
-                  className="cinematic-card group relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                  className="cinematic-card group relative h-full rounded-2xl border border-border bg-card p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
                   <div className="absolute top-0 right-0 m-4 w-12 h-12 rounded-xl bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
