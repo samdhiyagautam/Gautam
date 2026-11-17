@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-label="Monthly revenue, 24 months">
+<text x="46" y="24" font-family="sans-serif" font-size="15" fill="#374151">Monthly revenue (INR)</text>
+<rect x="47.0" y="155.6" width="34.2" height="138.4" fill="#4b5563"><title>2024-01: 310226</title></rect>
+<text x="64.1" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">24-01</text>
+<rect x="83.2" y="184.0" width="34.2" height="110.0" fill="#4b5563"><title>2024-02: 246530</title></rect>
+<rect x="119.3" y="154.2" width="34.2" height="139.8" fill="#4b5563"><title>2024-03: 313466</title></rect>
+<rect x="155.5" y="154.9" width="34.2" height="139.1" fill="#4b5563"><title>2024-04: 311923</title></rect>
+<text x="172.6" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">24-04</text>
+<rect x="191.7" y="130.4" width="34.2" height="163.6" fill="#4b5563"><title>2024-05: 366752</title></rect>
+<rect x="227.8" y="170.2" width="34.2" height="123.8" fill="#4b5563"><title>2024-06: 277587</title></rect>
+<rect x="264.0" y="136.2" width="34.2" height="157.8" fill="#4b5563"><title>2024-07: 353667</title></rect>
+<text x="281.1" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">24-07</text>
+<rect x="300.2" y="164.6" width="34.2" height="129.4" fill="#4b5563"><title>2024-08: 290148</title></rect>
+<rect x="336.3" y="150.3" width="34.2" height="143.7" fill="#4b5563"><title>2024-09: 322226</title></rect>
+<rect x="372.5" y="143.2" width="34.2" height="150.8" fill="#4b5563"><title>2024-10: 338085</title></rect>
+<text x="389.6" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">24-10</text>
+<rect x="408.7" y="78.3" width="34.2" height="215.7" fill="#4b5563"><title>2024-11: 483457</title></rect>
+<rect x="444.8" y="70.0" width="34.2" height="224.0" fill="#4b5563"><title>2024-12: 502175</title></rect>
+<rect x="481.0" y="115.3" width="34.2" height="178.7" fill="#4b5563"><title>2025-01: 400523</title></rect>
+<text x="498.1" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">25-01</text>
+<rect x="517.2" y="189.4" width="34.2" height="104.6" fill="#4b5563"><title>2025-02: 234424</title></rect>
+<rect x="553.3" y="165.6" width="34.2" height="128.4" fill="#4b5563"><title>2025-03: 287813</title></rect>
+<rect x="589.5" y="128.0" width="34.2" height="166.0" fill="#4b5563"><title>2025-04: 372096</title></rect>
+<text x="606.6" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">25-04</text>
+<rect x="625.7" y="134.4" width="34.2" height="159.6" fill="#4b5563"><title>2025-05: 357811</title></rect>
+<rect x="661.8" y="154.8" width="34.2" height="139.2" fill="#4b5563"><title>2025-06: 312125</title></rect>
+<rect x="698.0" y="162.9" width="34.2" height="131.1" fill="#4b5563"><title>2025-07: 294007</title></rect>
+<text x="715.1" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">25-07</text>
+<rect x="734.2" y="165.0" width="34.2" height="129.0" fill="#4b5563"><title>2025-08: 289115</title></rect>
+<rect x="770.3" y="135.7" width="34.2" height="158.3" fill="#4b5563"><title>2025-09: 354972</title></rect>
+<rect x="806.5" y="145.9" width="34.2" height="148.1" fill="#4b5563"><title>2025-10: 332072</title></rect>
+<text x="823.6" y="324" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">25-10</text>
+<rect x="842.7" y="108.8" width="34.2" height="185.2" fill="#4b5563"><title>2025-11: 415174</title></rect>
+<rect x="878.8" y="72.9" width="34.2" height="221.1" fill="#4b5563"><title>2025-12: 495684</title></rect>
+</svg>
