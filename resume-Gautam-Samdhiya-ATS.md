@@ -2,7 +2,7 @@
 Data Analyst | SQL · Python · Power BI · Excel
 Phone: 8797918451 | Email: gautamsamdhiya2000@gmail.com
 LinkedIn: www.linkedin.com/in/connectwithgautam | GitHub: github.com/samdhiyagautam
-Location: [CITY, INDIA — FILL IN]
+Location: Ranchi, Jharkhand, India
 
 ## PROFESSIONAL SUMMARY
 Data Analyst with 2+ years of professional experience as an Assistant Manager, combining business understanding with hands-on data analytics. Work with SQL, Python (Pandas), Power BI (DAX, Power Query), and Excel to build operational dashboards, automate recurring reporting, and turn business requirements into practical data solutions. Experienced in AI-assisted analysis workflows with human validation of every output.
@@ -16,8 +16,8 @@ Data Analyst with 2+ years of professional experience as an Assistant Manager, c
 
 ## PROFESSIONAL EXPERIENCE
 
-**Assistant Manager — Dhuri Na Venture Private Limited**
-[START MONTH YEAR — FILL IN] – Present
+**Assistant Manager — Dhurina**
+October 2024 – Present
 - Lead data analytics initiatives supporting business decision-making across departments.
 - Design and maintain Power BI dashboards for operational reporting with DAX measures and automated data refresh.
 - Automate repetitive reporting workflows using Python and Excel, reducing manual compilation effort.
@@ -31,6 +31,10 @@ Data Analyst with 2+ years of professional experience as an Assistant Manager, c
 - Built an end-to-end analytics demo on a clearly-labeled synthetic retail dataset: SQLite schema with indexes, 11 business questions answered in SQL (joins, CTEs, CASE pivots, LAG window functions), and a zero-dependency Python pipeline that loads CSVs, runs every query, and exports results.
 - Published a monthly revenue trend chart (SVG) and one results file per question in a public GitHub repository, with documented Excel pivot-table and Power BI (DAX measures, star-style data model) workflows.
 
+## EDUCATION
+Bachelor of Science in Mathematics (B.Sc.)
+Ranchi University | 2024
+
 ## LANGUAGES
 - English (Professional)
 - Hindi (Native)
@@ -40,8 +44,4 @@ ATS notes (delete before sending): single-column layout, standard headings,
 no tables/graphics/text boxes, keywords match Data Analyst / BI Analyst /
 MIS / Reporting job descriptions. Export from Google Docs or Word as PDF.
 
-STILL MISSING before sending (keep this list in the draft only):
-- Location (city, state) — header line
-- Dhuri Na Venture start date (Month Year) — experience line
-- Education: degree, institution, passing year — add an EDUCATION section
-- (MAS Educative section dropped on request — add back later if wanted)
+All sections filled — verified content only. Ready to export/send.
