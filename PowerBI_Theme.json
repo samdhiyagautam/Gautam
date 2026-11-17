@@ -1,0 +1,25 @@
+{
+  "name": "Retail Sales Theme",
+  "dataColors": ["#2563eb", "#16a34a", "#f59e0b", "#dc2626", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#ea580c", "#4f46e5"],
+  "background": "#ffffff",
+  "foreground": "#0f172a",
+  "tableAccent": "#2563eb",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [{ "fontFamily": "Segoe UI", "fontSize": 14, "bold": true, "fontColor": "#0f172a" }],
+        "background": [{ "color": "#ffffff", "transparency": 0 }],
+        "border": [{ "show": true, "color": "#e2e8f0", "radius": 10 }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": "#f1f5f9", "transparency": 0 }],
+        "outspace": [{ "color": "#f1f5f9" }]
+      }
+    },
+    "card": {
+      "*": { "labels": [{ "fontSize": 24, "bold": true, "color": "#0f172a" }], "categoryLabels": [{ "fontSize": 10, "color": "#64748b" }] }
+    }
+  }
+}

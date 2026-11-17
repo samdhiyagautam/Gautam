@@ -1,0 +1,16 @@
+Check,Value,Rule
+Rows,5000.0,"Expected 5,000"
+Duplicate Order_IDs,0.0,Must be 0
+Missing Order_Date,0.0,Fatal if > 0
+Missing Region,40.0,Filled as 'Unknown' in reports
+Missing Payment_Mode,60.0,Filled as 'Unknown' in reports
+Missing Customer_Rating,583.0,Left blank; excluded from averages
+Non-delivered orders without rating,583.0,Ratings exist only for delivered orders
+Quantity <= 0,0.0,Must be 0
+Discount outside 0-1,0.0,Must be 0
+Rating outside 1-5,0.0,Must be 0
+Negative Sales,0.0,Must be 0
+Sales != Qty x Price x (1-Discount),0.0,Tolerance: ₹1 per row
+Loss-making orders,48.0,Expected; see KPI
+Unknown region sales,830248.59,Included in totals
+Unknown payment sales,1039274.49,Included in totals

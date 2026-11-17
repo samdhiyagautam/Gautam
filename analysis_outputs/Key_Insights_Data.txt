@@ -1,0 +1,16 @@
+Date range: 2024-01-01 to 2026-10-31 (34 months, 5,000 orders)
+Gross sales: ₹121,379,792 | profit ₹32,820,561 (27.0%)
+Net delivered sales: ₹107,326,781 | profit ₹28,897,137 (26.9%)
+Cancelled/returned: 583 orders (11.7%) = ₹14,053,011 gross sales
+Best month (sales): 2024-01 = ₹4,255,434 | weakest: 2024-11 = ₹2,896,383
+Best category: Electronics (₹44,665,379, 27.3% margin) | lowest margin: Apparel (26.7%)
+Top region: South (₹28,617,084) | lowest margin: North (26.3%)
+Top product: 4K Monitor = ₹30,213,729 (24.9% of sales)
+Loss-making orders: 48 of 5000 (1.0%) | total loss ₹24,262
+Discount margin: 0% band 32.7% vs >20% band 10.1% | recovery if capped at 11-20%: ₹387,359
+Top 10 customers = 3.4% of sales | 852 customers (39.3%) make 80%
+Avg rating: 4.00 from 4,417 rated (delivered) orders; 463 low ratings (10.5% of rated)
+Lowest shipping rating: Same Day (3.91)
+Data quality: 0 sales-formula mismatches | 40 unknown region orders (₹830,249) | 60 unknown payment orders
+2025 growth: 8.6% | 2026 annualized: ₹42,744,787
+Yearly rows: 3 | status rows: 3

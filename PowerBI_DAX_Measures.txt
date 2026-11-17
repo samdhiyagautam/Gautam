@@ -1,0 +1,121 @@
+// ============================================================
+// Retail Sales Power BI — DAX Measures
+// Paste each measure into Power BI (Modeling > New Measure)
+// Table: 'Fact_Sales' (from Retail_Sales_Cleaned_For_PowerBI.csv)
+// ============================================================
+
+Total Sales = SUM ( Fact_Sales[Sales] )
+
+Total Profit = SUM ( Fact_Sales[Profit] )
+
+Total Orders = COUNTROWS ( Fact_Sales )
+
+Total Units = SUM ( Fact_Sales[Quantity] )
+
+Total Customers = DISTINCTCOUNT ( Fact_Sales[Customer_ID] )
+
+Profit Margin % = DIVIDE ( [Total Profit], [Total Sales] )
+
+Avg Order Value = AVERAGE ( Fact_Sales[Sales] )
+
+Avg Discount % = AVERAGE ( Fact_Sales[Discount_%] )
+
+Avg Rating = AVERAGE ( Fact_Sales[Customer_Rating] )
+// Note: 583 blank ratings are all Cancelled/Returned orders, so AVERAGE
+// ignores them automatically. Do not replace blanks with 0.
+
+// Row-level average of margins (unweighted). Use Profit Margin % for the
+// headline: this measure treats a ₹100 and a ₹1,00,000 order equally.
+Avg Profit Margin per Order = AVERAGE ( Fact_Sales[Profit_Margin_%] )
+
+// ---- Delivered / net revenue (excludes Cancelled + Returned) ----
+Net Sales (Delivered) =
+CALCULATE ( [Total Sales], Fact_Sales[Order_Status] = "Delivered" )
+
+Net Profit (Delivered) =
+CALCULATE ( [Total Profit], Fact_Sales[Order_Status] = "Delivered" )
+
+Net Margin % (Delivered) =
+DIVIDE ( [Net Profit (Delivered)], [Net Sales (Delivered)] )
+
+Leakage Sales (Cancelled/Returned) =
+CALCULATE ( [Total Sales], Fact_Sales[Order_Status] IN { "Cancelled", "Returned" } )
+
+// ---- Formatted labels for cards ----
+Sales Label = "₹ " & FORMAT ( [Total Sales], "#,##0,,.0M" )
+
+Profit Label = "₹ " & FORMAT ( [Total Profit], "#,##0,,.0M" )
+
+AOV Label = "₹ " & FORMAT ( [Avg Order Value], "#,##0" )
+
+// ---- Time intelligence (needs a Date/Calendar table marked as Date) ----
+Sales LY =
+CALCULATE ( [Total Sales], SAMEPERIODLASTYEAR ( 'Date_Table'[Date] ) )
+
+Sales YoY % =
+VAR prev = [Sales LY]
+RETURN DIVIDE ( [Total Sales] - prev, prev )
+
+Sales MoM % =
+VAR prev =
+    CALCULATE ( [Total Sales],
+        DATEADD ( 'Date_Table'[Date], -1, MONTH ) )
+RETURN DIVIDE ( [Total Sales] - prev, prev )
+
+Sales YTD =
+TOTALYTD ( [Total Sales], 'Date_Table'[Date] )
+
+Running Total Sales =
+CALCULATE ( [Total Sales],
+    FILTER ( ALLSELECTED ( 'Date_Table'[Date] ),
+        'Date_Table'[Date] <= MAX ( 'Date_Table'[Date] ) ) )
+
+// ---- Quality / leakage KPIs ----
+Loss-Making Orders =
+CALCULATE ( [Total Orders], Fact_Sales[Loss_Flag] = TRUE () )
+
+Cancelled or Returned % =
+VAR cancelled = CALCULATE ( [Total Orders], Fact_Sales[Order_Status] = "Cancelled" )
+VAR returned  = CALCULATE ( [Total Orders], Fact_Sales[Order_Status] = "Returned" )
+RETURN DIVIDE ( cancelled + returned, [Total Orders] )
+
+// Low ratings are measured against RATED orders only (4,417), not all 5,000.
+Low Rating % of Rated =
+VAR rated =
+    CALCULATE ( [Total Orders], NOT ISBLANK ( Fact_Sales[Customer_Rating] ) )
+RETURN
+    DIVIDE (
+        CALCULATE ( [Total Orders], Fact_Sales[Customer_Rating] <= 2 ),
+        rated
+    )
+
+// ---- Pareto / concentration ----
+Customer Rank =
+RANKX ( ALL ( Fact_Sales[Customer_ID] ), [Total Sales], , DESC, DENSE )
+
+Cum Sales % of Total =
+VAR custSales =
+    ADDCOLUMNS ( ALL ( Fact_Sales[Customer_ID] ), "@S", CALCULATE ( [Total Sales] ) )
+VAR thisSales = [Total Sales]
+VAR totalAll  = CALCULATE ( [Total Sales], ALL ( Fact_Sales[Customer_ID] ) )
+VAR cum =
+    SUMX ( FILTER ( custSales, [@S] >= thisSales ), [@S] )
+RETURN DIVIDE ( cum, totalAll )
+
+Top-80% Customers Count =
+COUNTROWS (
+    FILTER ( ALL ( Fact_Sales[Customer_ID] ),
+        [Cum Sales % of Total] <= 0.80 ) )
+
+// ---- Discount band helper (if not using the column) ----
+Discount Band (calc) =
+SWITCH ( TRUE (),
+    Fact_Sales[Discount] = 0, "0%",
+    Fact_Sales[Discount] <= 0.05, "1-5%",
+    Fact_Sales[Discount] <= 0.10, "6-10%",
+    Fact_Sales[Discount] <= 0.20, "11-20%",
+    ">20%" )
+
+// ---- Conditional color for profit visuals ----
+Profit Color =
+IF ( [Total Profit] >= 0, "#16A34A", "#DC2626" )
