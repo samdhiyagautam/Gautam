@@ -35,8 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
   const title = clean(seo?.pageTitle) ?? FALLBACK_TITLE;
   const description = clean(seo?.metaDescription) ?? FALLBACK_DESCRIPTION;
-  // No image is advertised until one is set in Admin → SEO: a missing file would 404 in every link preview.
-  const ogImage = clean(seo?.ogImage);
+  // A default OG image now ships in public/ — fall back to it when Admin → SEO
+  // has none set, so every link preview renders correctly.
+  const ogImage = clean(seo?.ogImage) ?? "/og-image.png";
   const siteUrl = getSiteUrl();
   // Optional identifiers: omitted entirely when unset so metadata never
   // emits a placeholder value.

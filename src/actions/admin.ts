@@ -14,6 +14,7 @@ import {
   zodErrors,
   type ActionResult,
 } from "@/lib/validators";
+import { BUCKET, safeStorageName, storagePathFromUrl } from "@/lib/storage";
 
 const PUBLIC_PATHS = ["/", "/about", "/experience", "/skills", "/projects", "/resume"];
 
@@ -57,6 +58,26 @@ function formValues(formData: FormData, booleans: string[] = []): Record<string,
 function dbError(error: unknown, message: string): ActionResult {
   console.error(`[admin] ${message}`, error);
   return { ok: false, message };
+}
+
+/**
+ * Best-effort storage cleanup: delete bucket objects for the given public
+ * URLs. Foreign URLs are ignored, failures are logged but never thrown —
+ * cleanup must not mask the primary operation's result.
+ */
+async function removeObjects(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  urls: (string | null | undefined)[]
+): Promise<void> {
+  const paths = urls
+    .filter((u): u is string => typeof u === "string" && u !== "")
+    .map(storagePathFromUrl)
+    .filter((p): p is string => p !== null);
+  if (paths.length === 0) return;
+  const { error } = await supabase.storage.from(BUCKET).remove(paths);
+  if (error) {
+    console.error("[admin] storage cleanup failed:", error.message);
+  }
 }
 
 // Profile ---------------------------------------------------------------------
@@ -221,24 +242,48 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
     status: d.status,
   };
 
-  const resolved = await resolveAttachments(supabase, d.id, formData);
-  if (!resolved.ok) return resolved;
+  // Every successful upload is recorded in `uploaded` so a later failure can
+  // remove the files from storage — no orphans when the database write fails.
+  const uploaded: string[] = [];
+  // URLs dropped during this save (removed/replaced media) are deleted from
+  // storage only after the row is safely written.
+  const orphaned: string[] = [];
+
+  const resolved = await resolveAttachments(supabase, d.id, formData, uploaded);
+  if (!resolved.ok) {
+    await removeObjects(supabase, uploaded);
+    return resolved;
+  }
   payload.attachments = resolved.attachments;
-  const resolvedVideos = await resolveVideos(supabase, d.id, formData);
-  if (!resolvedVideos.ok) return resolvedVideos;
+  orphaned.push(...resolved.orphaned);
+
+  const resolvedVideos = await resolveVideos(supabase, d.id, formData, uploaded);
+  if (!resolvedVideos.ok) {
+    await removeObjects(supabase, uploaded);
+    return resolvedVideos;
+  }
   payload.videos = resolvedVideos.videos;
-  const resolvedImages = await resolveImages(supabase, d.id, formData);
-  if (!resolvedImages.ok) return resolvedImages;
+  orphaned.push(...resolvedVideos.orphaned);
+
+  const resolvedImages = await resolveImages(supabase, d.id, formData, uploaded);
+  if (!resolvedImages.ok) {
+    await removeObjects(supabase, uploaded);
+    return resolvedImages;
+  }
   payload.thumbnail = resolvedImages.thumbnail;
   payload.screenshots = resolvedImages.screenshots;
+  orphaned.push(...resolvedImages.orphaned);
 
   const { error } = d.id
     ? await supabase.from("projects").update(payload).eq("id", d.id)
     : await supabase.from("projects").insert(payload);
 
   if (error) {
+    await removeObjects(supabase, uploaded);
     return dbError(error, "Could not save project. Please try again.");
   }
+
+  await removeObjects(supabase, orphaned);
   revalidateSite(["/", "/projects", "/resume"]);
   return { ok: true, message: d.status === "published" ? "Project published." : "Project saved as draft." };
 }
@@ -246,10 +291,34 @@ export async function saveProject(_prev: ActionResult, formData: FormData): Prom
 export async function deleteProject(id: string): Promise<ActionResult> {
   const gate = await adminClient();
   if (!gate.ok) return gate;
-  const { error } = await gate.supabase.from("projects").delete().eq("id", id);
+  const { supabase } = gate;
+
+  // Fetch the stored media first — once the row is gone, so are its URLs.
+  const { data: row } = await supabase
+    .from("projects")
+    .select("thumbnail, screenshots, attachments, videos")
+    .eq("id", id)
+    .maybeSingle();
+  const media = row as {
+    thumbnail?: unknown;
+    screenshots?: unknown;
+    attachments?: unknown;
+    videos?: unknown;
+  } | null;
+
+  const { error } = await supabase.from("projects").delete().eq("id", id);
   if (error) {
     return dbError(error, "Could not delete project. Please try again.");
   }
+
+  const mediaUrls = [
+    ...(typeof media?.thumbnail === "string" && media.thumbnail ? [media.thumbnail] : []),
+    ...(Array.isArray(media?.screenshots) ? media.screenshots : []),
+    ...(Array.isArray(media?.attachments) ? media.attachments : []),
+    ...(Array.isArray(media?.videos) ? media.videos : []),
+  ];
+  await removeObjects(supabase, mediaUrls);
+
   revalidateSite(["/", "/projects", "/resume"]);
   return { ok: true, message: "Project deleted." };
 }
@@ -293,28 +362,35 @@ async function uploadToBucket(
   supabase: Awaited<ReturnType<typeof createClient>>,
   folder: string,
   file: File
-): Promise<{ ok: true; url: string } | { ok: false; message: string }> {
+): Promise<{ ok: true; url: string; path: string } | { ok: false; message: string }> {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
-  const path = `${folder}/${stamp}-${safeName}`;
-  const { error } = await supabase.storage.from("portfolio-assets").upload(path, file, { upsert: false });
+  const path = `${folder}/${stamp}-${safeStorageName(file.name)}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { upsert: false });
   if (error) {
     console.error(`[admin] ${folder} upload failed:`, error.message);
     return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
   }
-  const { data } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
-  return { ok: true, url: data.publicUrl };
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return { ok: true, url: data.publicUrl, path };
 }
 
-type ImageResult = { ok: true; thumbnail: string; screenshots: string[] } | { ok: false; message: string };
+type ImageResult = {
+  ok: true;
+  thumbnail: string;
+  screenshots: string[];
+  /** URLs removed/replaced in this save — deleted from storage after the DB write. */
+  orphaned: string[];
+} | { ok: false; message: string };
 
 async function resolveImages(
   supabase: Awaited<ReturnType<typeof createClient>>,
   projectId: string | undefined,
-  formData: FormData
+  formData: FormData,
+  uploaded: string[]
 ): Promise<ImageResult> {
   let thumbnail = "";
   let screenshots: string[] = [];
+  const orphaned: string[] = [];
   if (projectId) {
     const { data } = await supabase
       .from("projects")
@@ -329,6 +405,9 @@ async function resolveImages(
     screenshots = Array.isArray(row?.screenshots)
       ? row.screenshots.filter((u): u is string => typeof u === "string" && !removed.has(u))
       : [];
+    // Screenshots the user unticked are dropped from the row; track their
+    // files so they don't linger in storage as orphans.
+    orphaned.push(...removed);
   }
 
   const thumbFiles = formData
@@ -343,9 +422,14 @@ async function resolveImages(
     if (!(await isImage(thumbFile))) {
       return { ok: false, message: `File "${thumbFile.name}" is not a valid JPG, PNG, or WebP image.` };
     }
-    const uploaded = await uploadToBucket(supabase, "images", thumbFile);
-    if (!uploaded.ok) return uploaded;
-    thumbnail = uploaded.url;
+    const up = await uploadToBucket(supabase, "images", thumbFile);
+    if (!up.ok) return up;
+    uploaded.push(up.path);
+    if (thumbnail && thumbnail !== up.url) {
+      // Replaced thumbnail — the old file is no longer referenced by the row.
+      orphaned.push(thumbnail);
+    }
+    thumbnail = up.url;
   }
 
   const shotFiles = formData
@@ -358,12 +442,13 @@ async function resolveImages(
     if (!(await isImage(file))) {
       return { ok: false, message: `File "${file.name}" is not a valid JPG, PNG, or WebP image.` };
     }
-    const uploaded = await uploadToBucket(supabase, "images", file);
-    if (!uploaded.ok) return uploaded;
-    screenshots.push(uploaded.url);
+    const up = await uploadToBucket(supabase, "images", file);
+    if (!up.ok) return up;
+    uploaded.push(up.path);
+    screenshots.push(up.url);
   }
 
-  return { ok: true, thumbnail, screenshots: screenshots.slice(0, 20) };
+  return { ok: true, thumbnail, screenshots: screenshots.slice(0, 20), orphaned };
 }
 const VIDEO_EXTENSIONS = [".mp4", ".webm"] as const;
 const DATASET_EXTENSIONS = [".xlsx", ".xls", ".csv", ".sql", ".py", ".txt"] as const;
@@ -403,7 +488,12 @@ async function isSpreadsheet(file: File): Promise<boolean> {
   return false;
 }
 
-type AttachmentResult = { ok: true; attachments: string[] } | { ok: false; message: string };
+type AttachmentResult = {
+  ok: true;
+  attachments: string[];
+  /** URLs removed in this save — deleted from storage after the DB write. */
+  orphaned: string[];
+} | { ok: false; message: string };
 
 async function isVideo(file: File): Promise<boolean> {
   const name = file.name.toLowerCase();
@@ -421,14 +511,21 @@ async function isVideo(file: File): Promise<boolean> {
   }
 }
 
-type VideoResult = { ok: true; videos: string[] } | { ok: false; message: string };
+type VideoResult = {
+  ok: true;
+  videos: string[];
+  /** URLs removed in this save — deleted from storage after the DB write. */
+  orphaned: string[];
+} | { ok: false; message: string };
 
 async function resolveVideos(
   supabase: Awaited<ReturnType<typeof createClient>>,
   projectId: string | undefined,
-  formData: FormData
+  formData: FormData,
+  uploaded: string[]
 ): Promise<VideoResult> {
   let videos: string[] = [];
+  const orphaned: string[] = [];
   if (projectId) {
     const { data } = await supabase.from("projects").select("videos").eq("id", projectId).maybeSingle();
     const current = (data as { videos?: unknown } | null)?.videos;
@@ -438,6 +535,7 @@ async function resolveVideos(
     videos = Array.isArray(current)
       ? current.filter((u): u is string => typeof u === "string" && !removed.has(u))
       : [];
+    orphaned.push(...removed);
   }
 
   const files = formData
@@ -452,29 +550,31 @@ async function resolveVideos(
       return { ok: false, message: `File "${file.name}" is not a valid MP4 or WebM video.` };
     }
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "_");
-    const path = `videos/${stamp}-${safeName}`;
+    const path = `videos/${stamp}-${safeStorageName(file.name)}`;
     const { error: uploadError } = await supabase.storage
-      .from("portfolio-assets")
+      .from(BUCKET)
       .upload(path, file, { upsert: false });
     if (uploadError) {
       console.error("[admin] video upload failed:", uploadError.message);
       return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
     }
-    const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+    uploaded.push(path);
+    const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
     videos.push(urlData.publicUrl);
   }
 
-  return { ok: true, videos: videos.slice(0, 10) };
+  return { ok: true, videos: videos.slice(0, 10), orphaned };
 }
 
 async function resolveAttachments(
   supabase: Awaited<ReturnType<typeof createClient>>,
   projectId: string | undefined,
-  formData: FormData
+  formData: FormData,
+  uploaded: string[]
 ): Promise<AttachmentResult> {
   // Start from the project's current attachments (edit flow), minus removals.
   let attachments: string[] = [];
+  const orphaned: string[] = [];
   if (projectId) {
     const { data } = await supabase.from("projects").select("attachments").eq("id", projectId).maybeSingle();
     const current = (data as { attachments?: unknown } | null)?.attachments;
@@ -484,6 +584,7 @@ async function resolveAttachments(
     attachments = Array.isArray(current)
       ? current.filter((u): u is string => typeof u === "string" && !removed.has(u))
       : [];
+    orphaned.push(...removed);
   }
 
   const files = formData
@@ -502,24 +603,24 @@ async function resolveAttachments(
       return { ok: false, message: `File "${file.name}" failed content validation.` };
     }
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const safeName = lower.replace(/[^a-z0-9._-]+/g, "_");
-    const path = `datasets/${stamp}-${safeName}`;
+    const path = `datasets/${stamp}-${safeStorageName(file.name)}`;
     // Serve code/text files as plain text so browsers download or display
     // them instead of sniffing executable content.
     const isCodeText =
       lower.endsWith(".sql") || lower.endsWith(".py") || lower.endsWith(".txt") || lower.endsWith(".csv");
     const { error: uploadError } = await supabase.storage
-      .from("portfolio-assets")
+      .from(BUCKET)
       .upload(path, file, { upsert: false, ...(isCodeText ? { contentType: "text/plain" } : {}) });
     if (uploadError) {
       console.error("[admin] dataset upload failed:", uploadError.message);
       return { ok: false, message: `Could not upload "${file.name}". Please try again.` };
     }
-    const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+    uploaded.push(path);
+    const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
     attachments.push(urlData.publicUrl);
   }
 
-  return { ok: true, attachments: attachments.slice(0, 20) };
+  return { ok: true, attachments: attachments.slice(0, 20), orphaned };
 }
 
 // Publish toggle ---------------------------------------------------------------
@@ -580,14 +681,14 @@ export async function uploadResume(_prev: ActionResult, formData: FormData): Pro
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const path = `resumes/resume-${stamp}.pdf`;
   const { error: uploadError } = await supabase.storage
-    .from("portfolio-assets")
+    .from(BUCKET)
     .upload(path, file, { contentType: "application/pdf", upsert: false });
 
   if (uploadError) {
     return dbError(uploadError, "Resume upload failed. Please try again.");
   }
 
-  const { data: urlData } = supabase.storage.from("portfolio-assets").getPublicUrl(path);
+  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
   const { count } = await supabase.from("resumes").select("id", { count: "exact", head: true });
   const version = `v${(count ?? 0) + 1}.0`;
 
@@ -642,11 +743,9 @@ export async function deleteResume(id: string): Promise<ActionResult> {
   }
 
   const fileUrl = (row as { file_url?: string } | null)?.file_url ?? "";
-  const marker = "/portfolio-assets/";
-  const markerIndex = fileUrl.indexOf(marker);
-  if (markerIndex !== -1) {
-    const objectPath = decodeURIComponent(fileUrl.slice(markerIndex + marker.length).split("?")[0]);
-    const { error: removeError } = await gate.supabase.storage.from("portfolio-assets").remove([objectPath]);
+  const objectPath = fileUrl ? storagePathFromUrl(fileUrl) : null;
+  if (objectPath) {
+    const { error: removeError } = await gate.supabase.storage.from(BUCKET).remove([objectPath]);
     if (removeError) {
       revalidateSite(["/", "/resume"]);
       return { ok: true, message: "Resume record deleted, but the stored file could not be removed. Delete it from Supabase Storage." };
