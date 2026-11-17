@@ -111,7 +111,7 @@ export function Scroll3D({
       if (!inView) return;
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 1;
-      const k = window.innerWidth < 768 ? 0.55 : 1; // gentler on phones
+      const k = window.innerWidth < 768 ? 0.4 : 1; // much gentler on phones
       const amount = intensity * k;
 
       if (variant === "parallax") {

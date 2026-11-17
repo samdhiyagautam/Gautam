@@ -39,7 +39,7 @@ export function Navigation() {
             <span className="text-xl font-bold tracking-tight">Portfolio</span>
           </Link>
 
-          <div className="hidden md:flex md:items-center md:space-x-7">
+          <div className="hidden lg:flex lg:items-center lg:space-x-6">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
@@ -69,7 +69,7 @@ export function Navigation() {
             <ThemeToggle />
           </div>
 
-          <div className="flex md:hidden items-center space-x-4">
+          <div className="flex lg:hidden items-center space-x-4">
             <ThemeToggle />
             <Button variant="premium" size="sm" asChild>
               <Link href="/resume" className="flex items-center space-x-2">
@@ -91,7 +91,7 @@ export function Navigation() {
         </div>
 
         {isOpen && (
-          <div id="mobile-menu" className="menu-drop md:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
+          <div id="mobile-menu" className="menu-drop lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
             <div className="flex flex-col space-y-1">
               {NAV_ITEMS.map((item) => (
                 <Link
