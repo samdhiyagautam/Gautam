@@ -6,6 +6,7 @@ import { SKILL_CATEGORIES, PROFICIENCY_LEVELS } from '@/lib/constants';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Reveal } from './reveal';
+import { Scroll3D } from './scroll-3d';
 import { SectionHeading } from './section-heading';
 import type { Skill } from '@/types';
 
@@ -41,6 +42,7 @@ export function Skills({ skills: allSkills }: { skills: Skill[] }) {
             
             return (
               <Reveal key={category.value}>
+                <Scroll3D variant="tilt" intensity={0.6}>
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -64,6 +66,7 @@ export function Skills({ skills: allSkills }: { skills: Skill[] }) {
                     </div>
                   ))}
                 </div>
+                </Scroll3D>
               </Reveal>
             );
           })}

@@ -2,6 +2,7 @@
 
 import { Building2, CheckCircle, Code, Database } from 'lucide-react';
 import { Reveal } from './reveal';
+import { Scroll3D } from './scroll-3d';
 import { SectionHeading } from './section-heading';
 import type { Experience as ExperienceItem } from '@/types';
 
@@ -21,6 +22,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
           <div className="space-y-12">
             {items.map((exp, expIndex) => (
               <Reveal key={exp.id} delay={expIndex * 100}>
+              <Scroll3D variant={expIndex % 2 === 0 ? 'flip-right' : 'flip-left'} intensity={0.7}>
               <article
                 className="relative pl-20"
               >
@@ -100,6 +102,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                   </div>
                 </div>
               </article>
+              </Scroll3D>
               </Reveal>
             ))}
           </div>

@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { isPlaceholderLink } from '@/lib/utils';
 import { Reveal } from './reveal';
+import { Scroll3D, columnVariant } from './scroll-3d';
 import { SectionHeading } from './section-heading';
 import type { Project } from '@/types';
 
@@ -79,7 +80,8 @@ export function Projects({ projects }: { projects: Project[] }) {
               </Reveal>
               <div className="grid sm:grid-cols-2 gap-6">
                 {REPRESENTATIVE_WORK.map((item, i) => (
-                  <Reveal key={item.title} delay={(i % 2) * 90}>
+                  <Reveal key={item.title} delay={(i % 2) * 90} className="h-full">
+                    <Scroll3D variant={columnVariant(i, 2)} className="h-full">
                     <Card className="cinematic-card h-full">
                       <CardContent className="p-6 space-y-4">
                         <div className="flex items-center justify-between">
@@ -99,6 +101,7 @@ export function Projects({ projects }: { projects: Project[] }) {
                         </div>
                       </CardContent>
                     </Card>
+                    </Scroll3D>
                   </Reveal>
                 ))}
               </div>
@@ -120,8 +123,10 @@ export function Projects({ projects }: { projects: Project[] }) {
             </Reveal>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredProjects.map((project, i) => (
-                <Reveal key={project.id} delay={(i % 3) * 90}>
-                  <ProjectCard project={project} />
+                <Reveal key={project.id} delay={(i % 3) * 90} className="h-full">
+                  <Scroll3D variant={columnVariant(i)} className="h-full">
+                    <ProjectCard project={project} />
+                  </Scroll3D>
                 </Reveal>
               ))}
             </div>
@@ -136,8 +141,10 @@ export function Projects({ projects }: { projects: Project[] }) {
               </Reveal>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {otherProjects.map((project, i) => (
-                  <Reveal key={project.id} delay={(i % 3) * 90}>
-                    <ProjectCard project={project} />
+                  <Reveal key={project.id} delay={(i % 3) * 90} className="h-full">
+                    <Scroll3D variant={columnVariant(i)} className="h-full">
+                      <ProjectCard project={project} />
+                    </Scroll3D>
                   </Reveal>
                 ))}
               </div>

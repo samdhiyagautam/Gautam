@@ -3,6 +3,7 @@
 import { Cpu, Brain, Zap, CheckCircle, GitBranch, User, Shield } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Reveal } from './reveal';
+import { Scroll3D, columnVariant } from './scroll-3d';
 
 const AI_WORKFLOW_STEPS = [
   {
@@ -117,6 +118,7 @@ export function AIWorkflow() {
               const isLast = index === AI_WORKFLOW_STEPS.length - 1;
               return (
                 <Reveal key={step.number} delay={index * 70}>
+                  <Scroll3D variant={index % 2 === 0 ? 'flip-right' : 'flip-left'} intensity={0.7}>
                   <div className="relative lg:pl-32 flex">
                   <div className="absolute left-1/2 top-4 -translate-x-1/2 z-10 hidden lg:block">
                     <div className="w-10 h-10 rounded-full border-4 border-background bg-primary flex items-center justify-center text-primary font-bold text-sm">
@@ -153,6 +155,7 @@ export function AIWorkflow() {
                     </Card>
                   </div>
                 </div>
+                  </Scroll3D>
                 </Reveal>
               );
             })}
@@ -164,13 +167,15 @@ export function AIWorkflow() {
             <h3 className="text-2xl font-bold mb-6 text-center">Core Principles</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {AI_PRINCIPLES.map((principle, index) => (
-                <Reveal key={principle.title} delay={(index % 3) * 90}>
+                <Reveal key={principle.title} delay={(index % 3) * 90} className="h-full">
+                  <Scroll3D variant={columnVariant(index)} className="h-full">
                   <Card className="h-full cinematic-card hover:border-primary/30 transition-colors">
                     <CardContent className="p-6">
                       <h4 className="font-semibold mb-2">{principle.title}</h4>
                       <p className="text-muted-foreground text-sm">{principle.description}</p>
                     </CardContent>
                   </Card>
+                  </Scroll3D>
                 </Reveal>
               ))}
             </div>

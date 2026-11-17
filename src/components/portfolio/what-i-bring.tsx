@@ -3,6 +3,7 @@
 import { Briefcase, BarChart2, Cpu, Code, Puzzle } from 'lucide-react';
 import { WHAT_I_BRING } from '@/lib/constants';
 import { Reveal } from './reveal';
+import { Scroll3D, columnVariant } from './scroll-3d';
 
 const ICONS = {
   briefcase: Briefcase,
@@ -27,7 +28,8 @@ export function WhatIBring() {
           {WHAT_I_BRING.map((item, index) => {
             const Icon = ICONS[item.icon as keyof typeof ICONS];
             return (
-              <Reveal key={item.title} delay={(index % 3) * 90}>
+              <Reveal key={item.title} delay={(index % 3) * 90} className="h-full">
+                <Scroll3D variant={columnVariant(index)} className="h-full">
                 <article
                   className="cinematic-card group relative h-full rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
                 >
@@ -38,6 +40,7 @@ export function WhatIBring() {
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                   <p className="text-muted-foreground">{item.description}</p>
                 </article>
+                </Scroll3D>
               </Reveal>
             );
           })}

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { Scroll3D } from './scroll-3d';
 import { ArrowRight, ArrowUpRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
 import { PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
@@ -16,16 +17,18 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
     <section className="relative overflow-hidden pt-16" aria-label="Introduction">
       {/* Layered cinematic backdrop: wash + grid + grain + vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.06] via-background to-background" aria-hidden="true" />
-      <div className="cinematic-grid" aria-hidden="true" />
-      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <Scroll3D variant="parallax" speed={0.12} className="absolute inset-0" aria-hidden="true">
+        <div className="cinematic-grid" />
+      </Scroll3D>
+      <Scroll3D variant="parallax" speed={0.3} className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="hero-drift absolute -top-32 left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-primary/[0.07] blur-3xl" />
-      </div>
+      </Scroll3D>
       <div className="cinematic-grain" aria-hidden="true" />
       <div className="cinematic-vignette" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 pt-14 sm:pt-20 lg:pt-24">
         <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-end">
-          <div className="text-center lg:text-left">
+          <Scroll3D variant="exit" className="text-center lg:text-left">
             <div className="hero-enter inline-flex items-center gap-2.5 rounded-full border border-border bg-background/70 px-4 py-1.5 text-xs font-medium tracking-wide text-muted-foreground backdrop-blur-sm" style={{ animationDelay: '0ms' }}>
               <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-500" aria-hidden="true" />
               <span className="uppercase tracking-[0.18em]">Open to new opportunities</span>
@@ -110,8 +113,9 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
                 </a>
               )}
             </div>
-          </div>
+          </Scroll3D>
 
+          <Scroll3D variant="exit-right">
           <div className="hero-enter" style={{ animationDelay: '220ms' }}>
             <aside className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm" aria-label="Professional snapshot">
               <div className="flex items-center justify-between border-b border-border px-6 py-4">
@@ -133,6 +137,7 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
               </div>
             </aside>
           </div>
+          </Scroll3D>
         </div>
       </div>
 
