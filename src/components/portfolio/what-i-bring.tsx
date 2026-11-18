@@ -30,16 +30,15 @@ export function WhatIBring() {
             return (
               <Reveal key={item.title} delay={(index % 3) * 90} className="h-full">
                 <Scroll3D variant={columnVariant(index)} className="h-full">
-                <article
-                  className="cinematic-card group relative h-full rounded-2xl border border-border bg-card p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
-                >
-                  <div className="absolute top-0 right-0 m-4 w-12 h-12 rounded-xl bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </article>
+                  <article
+                    className="cinematic-card group relative h-full rounded-2xl border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] p-6 hover:border-t-2 hover:border-t-[#F20B18] transition-all"
+                  >
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-[rgba(8,8,8,0.05)] dark:bg-[rgba(247,247,245,0.08)] text-[#F20B18] mb-4 group-hover:bg-[#F20B18] group-hover:text-[#080808] transition-colors">
+                      <Icon className="h-6 w-6" aria-hidden="true" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{item.description}</p>
+                  </article>
                 </Scroll3D>
               </Reveal>
             );

@@ -51,7 +51,7 @@ export default async function AdminProjects() {
 
       <Card>
         {!live && (
-          <div className="border-b border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-muted-foreground" role="status">
+          <div className="border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-muted/20 px-4 py-3 text-sm text-muted-foreground" role="status">
             Showing local content — Supabase is not reachable or migrations are missing.
             Run migrations <code className="rounded bg-background px-1">001</code>, <code className="rounded bg-background px-1">004</code> and{" "}
             <code className="rounded bg-background px-1">005</code>, then refresh. Saves will fail until then.
@@ -85,7 +85,7 @@ export default async function AdminProjects() {
                     </td>
                     <td className="p-4">
                       {project.isFeatured ? (
-                        <Star className="h-5 w-5 text-yellow-500 fill-current" aria-label="Featured" />
+                        <Star className="h-5 w-5 text-[#F20B18] fill-current" aria-label="Featured" />
                       ) : (
                         <StarOff className="h-5 w-5 text-muted-foreground" aria-label="Not featured" />
                       )}

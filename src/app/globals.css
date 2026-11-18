@@ -1,13 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  /* Design Tokens — Light Theme */
-  --bg: #F8FAFC;
-  --surface: #FFFFFF;
-  --text: #0F172A;
-  --muted: #64748B;
-  --accent: #2563EB;
-  --accent-2: #0D9488;
+  /* Design Tokens — Restricted 3-Color Palette */
+  --offwhite: #F7F7F5;
+  --black: #080808;
+  --red: #F20B18;
+
+  /* Opacity helpers */
+  --black-65: rgba(8, 8, 8, 0.65);
+  --black-12: rgba(8, 8, 8, 0.12);
+  --offwhite-70: rgba(247, 247, 245, 0.70);
+  --offwhite-08: rgba(247, 247, 245, 0.08);
+
+  /* Light Theme (Default) */
+  --bg: var(--offwhite);
+  --surface: var(--offwhite);
+  --text: var(--black);
+  --muted: var(--black-65);
+  --accent: var(--red);
 
   /* Semantic mappings */
   --background: var(--bg);
@@ -16,59 +26,70 @@
   --card-foreground: var(--text);
   --popover: var(--surface);
   --popover-foreground: var(--text);
-  --primary: var(--accent);
-  --primary-foreground: #FFFFFF;
-  --secondary: #F1F5F9;
+  --primary: var(--black);
+  --primary-foreground: var(--offwhite);
+  --secondary: var(--offwhite-08);
   --secondary-foreground: var(--text);
-  --muted-surface: #F1F5F9;
+  --muted-surface: rgba(8, 8, 8, 0.04);
   --muted-foreground: var(--muted);
-  --accent-surface: #EFF6FF;
+  --accent-surface: rgba(242, 11, 24, 0.08);
   --accent-foreground: var(--accent);
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: var(--accent);
+  --destructive: var(--red);
+  --destructive-foreground: var(--offwhite);
+  --border: var(--black-12);
+  --input: var(--black-12);
+  --ring: var(--red);
   --radius: 0.5rem;
+
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --cinematic-line: var(--black-12);
 }
 
 .dark {
-  /* Design Tokens — Dark Theme ("Pro Navy") */
-  --bg: #0B1220;
-  --surface: #121B2E;
-  --text: #E8EEF7;
-  --muted: #94A3B8;
-  --accent: #2DD4BF;
-  --accent-2: #3B82F6;
+  /* Dark Theme */
+  --bg: var(--black);
+  --surface: var(--black);
+  --text: var(--offwhite);
+  --muted: var(--offwhite-70);
+  --accent: var(--red);
 
   /* Semantic mappings */
   --background: var(--bg);
   --foreground: var(--text);
-  --card: var(--surface);
+  --card: var(--offwhite-08);
   --card-foreground: var(--text);
-  --popover: var(--surface);
+  --popover: var(--black);
   --popover-foreground: var(--text);
-  --primary: var(--accent);
-  --primary-foreground: #0B1220;
-  --secondary: #1E293B;
+  --primary: var(--offwhite);
+  --primary-foreground: var(--black);
+  --secondary: var(--offwhite-08);
   --secondary-foreground: var(--text);
-  --muted-surface: #121B2E;
+  --muted-surface: rgba(247, 247, 245, 0.04);
   --muted-foreground: var(--muted);
-  --accent-surface: #1E293B;
+  --accent-surface: rgba(242, 11, 24, 0.12);
   --accent-foreground: var(--accent);
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  --border: #1E293B;
-  --input: #1E293B;
-  --ring: var(--accent);
+  --destructive: var(--red);
+  --destructive-foreground: var(--offwhite);
+  --border: rgba(247, 247, 245, 0.12);
+  --input: rgba(247, 247, 245, 0.12);
+  --ring: var(--red);
+
+  --cinematic-line: rgba(247, 247, 245, 0.12);
 }
 
 @theme inline {
+  --color-offwhite: var(--offwhite);
+  --color-black: var(--black);
+  --color-red: var(--red);
+  --color-black-65: var(--black-65);
+  --color-black-12: var(--black-12);
+  --color-offwhite-70: var(--offwhite-70);
+  --color-offwhite-08: var(--offwhite-08);
+
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-text: var(--text);
   --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -86,8 +107,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -107,11 +129,17 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   max-width: 100%;
   overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -129,13 +157,13 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 2px solid var(--red);
   outline-offset: 2px;
 }
 
 ::selection {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
+  background-color: var(--red);
+  color: var(--offwhite);
 }
 
 ::-webkit-scrollbar {
@@ -144,24 +172,19 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
+  background: var(--border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground);
+  background: var(--red);
 }
 
-/* ——— Cinematic system: restrained, editorial, performant ——— */
-
-:root {
-  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
-  --cinematic-line: color-mix(in srgb, var(--foreground) 12%, transparent);
-}
+/* ——— Cinematic Restrained System ——— */
 
 .text-balance {
   text-wrap: balance;
@@ -171,25 +194,26 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--muted-foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .cinematic-eyebrow-rule {
   display: inline-block;
   width: 2.25rem;
-  height: 1px;
-  background: var(--cinematic-line);
+  height: 2px;
+  background: var(--red);
 }
 
 .cinematic-grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.45;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
 }
@@ -198,11 +222,11 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 10%, transparent 55%, rgb(0 0 0 / 0.08) 100%);
+  background: radial-gradient(120% 90% at 50% 10%, transparent 55%, rgba(8, 8, 8, 0.08) 100%);
 }
 
 .dark .cinematic-vignette {
-  background: radial-gradient(120% 90% at 50% 10%, transparent 50%, rgb(0 0 0 / 0.42) 100%);
+  background: radial-gradient(120% 90% at 50% 10%, transparent 50%, rgba(8, 8, 8, 0.5) 100%);
 }
 
 .cinematic-grid {
@@ -217,7 +241,7 @@ body {
   opacity: 0.35;
 }
 
-/* Scroll reveal — subtle, single play, GPU friendly */
+/* Scroll reveal */
 .reveal {
   opacity: 0;
   will-change: opacity, transform;
@@ -243,7 +267,7 @@ body {
     transform 0.9s var(--ease-cinematic);
 }
 
-/* Hero entrance — plays once on mount */
+/* Hero entrance */
 @keyframes cinematic-rise {
   from {
     opacity: 0;
@@ -289,7 +313,7 @@ body {
   animation: cinematic-pulse-dot 2.2s ease-in-out infinite;
 }
 
-/* Scroll cue — thin line, no bounce */
+/* Scroll cue */
 @keyframes cinematic-cue {
   0% {
     transform: scaleY(0);
@@ -313,16 +337,17 @@ body {
   animation: cinematic-cue 2.4s var(--ease-cinematic) infinite;
 }
 
-/* Card hover — lift + image drift, restrained */
+/* Card hover: 1px border, on hover red top border */
 .cinematic-card {
   transition:
     transform 0.5s var(--ease-cinematic),
-    border-color 0.5s var(--ease-cinematic),
-    box-shadow 0.5s var(--ease-cinematic);
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .cinematic-card:hover {
   transform: translateY(-4px);
+  border-top-color: var(--red) !important;
 }
 
 .cinematic-card .cinematic-media {
@@ -333,7 +358,7 @@ body {
   transform: scale(1.035);
 }
 
-/* Mobile menu — quick drop + fade, plays once */
+/* Mobile menu */
 @keyframes menu-drop {
   from {
     opacity: 0;
@@ -350,7 +375,7 @@ body {
   transform-origin: top;
 }
 
-/* Inline status messages (form success/error) — fade in with a small rise */
+/* Inline status messages */
 @keyframes status-in {
   from {
     opacity: 0;

@@ -77,8 +77,8 @@ function AdminAuthForm() {
         </CardHeader>
         <CardContent className="space-y-6">
           {!authConfigured && (
-            <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-sm" role="status">
-              <TriangleAlert className="h-4 w-4 mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+            <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/20 border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] text-sm" role="status">
+              <TriangleAlert className="h-4 w-4 mt-0.5 shrink-0 text-[#F20B18]" aria-hidden="true" />
               <span className="text-muted-foreground">
                 Auth backend is not configured. Set <code className="rounded bg-background px-1">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
                 <code className="rounded bg-background px-1">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to enable sign-in.

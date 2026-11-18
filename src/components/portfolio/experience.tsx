@@ -17,48 +17,48 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
         />
 
         <div className="relative">
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-border" />
+          <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-border" />
           
           <div className="space-y-12">
             {items.map((exp, expIndex) => (
               <Reveal key={exp.id} delay={expIndex * 100}>
               <Scroll3D variant={expIndex % 2 === 0 ? 'flip-right' : 'flip-left'} intensity={0.7}>
-              <article
-                className="relative pl-20"
-              >
-                <div className="absolute left-0 top-2 flex h-12 w-12 items-center justify-center rounded-full border-4 border-background bg-primary z-10">
+              <article className="relative pl-14 sm:pl-20">
+                <div className="absolute left-0 top-2 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-border bg-background z-10">
                   {exp.isCurrent ? (
-                    <span className="h-3 w-3 rounded-full bg-primary animate-pulse" />
+                    <span className="h-3 w-3 rounded-full bg-[#F20B18] animate-pulse" />
                   ) : (
-                    <CheckCircle className="h-6 w-6 text-primary" />
+                    <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-[#F20B18]" />
                   )}
                 </div>
                 
-                <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 hover:border-primary/30 transition-colors">
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
-                    <span className="text-sm font-medium text-primary">
+                <div className="cinematic-card bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] rounded-2xl p-6 sm:p-8 hover:border-t-2 hover:border-t-[#F20B18] transition-all">
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <span className="text-sm font-bold text-foreground">
                       {exp.isCurrent ? 'Current' : formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}
                     </span>
                     <span className="text-muted-foreground">·</span>
                     <span className="text-sm text-muted-foreground">{displayText(exp.designation, 'Role details available on request')}</span>
                   </div>
 
-                  <div className="flex items-center space-x-2 text-lg font-semibold mb-2">
-                    <Building2 className="h-6 w-6 text-muted-foreground" />
+                  <div className="flex items-center space-x-2 text-xl font-bold mb-3 text-foreground">
+                    <Building2 className="h-5 w-5 text-[#F20B18]" />
                     <span>{exp.company}</span>
                   </div>
 
-                  <p className="text-muted-foreground mb-6">{displayText(exp.description, 'Professional history available on request.')}</p>
+                  <p className="text-muted-foreground text-sm sm:text-base mb-6 leading-relaxed">
+                    {displayText(exp.description, 'Professional history available on request.')}
+                  </p>
 
                   <div className="space-y-6">
                     <div>
-                      <h4 className="font-semibold mb-3 flex items-center space-x-2">
-                        <CheckCircle className="h-5 w-5 text-primary" />
+                      <h4 className="font-bold mb-3 flex items-center space-x-2 text-foreground">
+                        <CheckCircle className="h-4 w-4 text-[#F20B18]" />
                         <span>Key Achievements &amp; Impact</span>
                       </h4>
                       <ul className="space-y-2 pl-4">
                         {realItems(exp.responsibilities, 'Details available on request.').map((resp, i) => (
-                          <li key={i} className="relative pl-4 text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-primary">
+                          <li key={i} className="relative pl-4 text-xs sm:text-sm text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-[#F20B18] leading-relaxed">
                             {resp}
                           </li>
                         ))}
@@ -67,13 +67,13 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
 
                     {realItems(exp.projects).length > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-3 flex items-center space-x-2">
-                          <Code className="h-5 w-5 text-primary" />
+                        <h4 className="font-bold mb-3 flex items-center space-x-2 text-foreground">
+                          <Code className="h-4 w-4 text-[#F20B18]" />
                           <span>Key Projects</span>
                         </h4>
                         <ul className="space-y-2 pl-4">
                           {realItems(exp.projects).map((proj, i) => (
-                            <li key={i} className="relative pl-4 text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-primary">
+                            <li key={i} className="relative pl-4 text-xs sm:text-sm text-muted-foreground before:content-['•'] before:absolute before:left-0 before:text-[#F20B18] leading-relaxed">
                               {proj}
                             </li>
                           ))}
@@ -83,15 +83,15 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
 
                     {realItems(exp.technologies).length > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-3 flex items-center space-x-2">
-                          <Database className="h-5 w-5 text-primary" />
+                        <h4 className="font-bold mb-3 flex items-center space-x-2 text-foreground">
+                          <Database className="h-4 w-4 text-[#F20B18]" />
                           <span>Technologies</span>
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {realItems(exp.technologies).map((tech, i) => (
                             <span
                               key={i}
-                              className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary border border-primary/20"
+                              className="px-3 py-1 text-xs font-semibold rounded-full border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] text-foreground bg-transparent"
                             >
                               {tech}
                             </span>

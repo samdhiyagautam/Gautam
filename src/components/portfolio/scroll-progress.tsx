@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 /**
- * Top thin scroll progress bar.
+ * Top thin scroll progress bar in solid red (#F20B18).
  * Uses requestAnimationFrame for GPU-accelerated scaleX updates (0 CLS, 0 repaint).
  * Respects prefers-reduced-motion.
  */
@@ -53,7 +53,7 @@ export function ScrollProgress() {
     >
       <div
         ref={barRef}
-        className="h-full w-full bg-gradient-to-r from-[var(--accent)] via-blue-500 to-[var(--accent-2)] origin-left transition-transform duration-75 ease-out shadow-[0_0_8px_var(--accent)]"
+        className="h-full w-full bg-[#F20B18] origin-left transition-transform duration-75 ease-out"
         style={{ transform: 'scaleX(0)' }}
       />
     </div>

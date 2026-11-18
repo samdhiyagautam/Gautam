@@ -16,6 +16,9 @@ export function SectionHeading({
   align = "center",
   className,
 }: SectionHeadingProps) {
+  // Extract section numbers like "01 —", "02 -", etc. to accent the number in red
+  const match = eyebrow.match(/^(\d{2}\s*[-—]\s*)(.*)$/);
+
   return (
     <Reveal
       className={cn(
@@ -26,13 +29,20 @@ export function SectionHeading({
     >
       <p className="cinematic-eyebrow mb-4">
         <span aria-hidden="true" className="cinematic-eyebrow-rule" />
-        {eyebrow}
+        {match ? (
+          <>
+            <span className="text-[#F20B18] font-mono font-bold tracking-normal">{match[1]}</span>
+            <span>{match[2]}</span>
+          </>
+        ) : (
+          <span>{eyebrow}</span>
+        )}
       </p>
-      <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-[-0.02em] leading-[1.05] text-balance">
+      <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight leading-[1.08] text-balance">
         {title}
       </h2>
       {lede ? (
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed text-balance">
+        <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed text-balance">
           {lede}
         </p>
       ) : null}

@@ -72,7 +72,7 @@ export default async function AdminExperience() {
                       <div className="flex items-center gap-1 text-sm text-muted-foreground">
                         <Calendar className="h-3 w-3" />
                         <span>{formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}</span>
-                        {exp.isCurrent && <CheckCircle className="h-3 w-3 text-green-500" />}
+                        {exp.isCurrent && <CheckCircle className="h-3 w-3 text-[#F20B18]" />}
                       </div>
                     </td>
                     <td className="p-4">

@@ -110,11 +110,11 @@ export function Contact({
   };
 
   return (
-    <section id="contact" className="py-20 sm:py-28 bg-muted/30">
+    <section id="contact" className="py-20 sm:py-28 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Get In Touch</h2>
-          <p className="text-lg text-muted-foreground">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4 text-foreground">Get In Touch</h2>
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
             Have a project in mind or want to discuss opportunities? I&apos;d love to hear from you.
           </p>
         </Reveal>
@@ -124,46 +124,46 @@ export function Contact({
             <Card className="cinematic-card">
               <CardHeader>
                 <CardTitle className="text-xl">Let&apos;s Build Something Useful</CardTitle>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   Whether it&apos;s a data project, web application, AI automation, or just a conversation — I&apos;m open to discussing how I can help.
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
                 {CONTACT_INFO.map((item) => (
                   <div key={item.label} className="flex items-start space-x-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(8,8,8,0.05)] dark:bg-[rgba(247,247,245,0.08)] text-[#F20B18] shrink-0">
                       <item.icon className="h-5 w-5" aria-hidden="true" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium">{item.label}</div>
+                      <div className="font-bold text-foreground text-sm">{item.label}</div>
                       {item.href && !isPlaceholderLink(item.href) ? (
                         <a
                           href={item.href}
                           target={item.external ? '_blank' : undefined}
                           rel={item.external ? 'noopener noreferrer' : undefined}
-                          className="text-sm text-primary hover:underline break-all"
+                          className="text-sm text-foreground font-semibold hover:text-[#F20B18] transition-colors break-all"
                         >
                           {item.value}
                         </a>
                       ) : (
                         <div className="text-sm text-muted-foreground break-all">{item.value}</div>
                       )}
-                      <div className="text-xs text-muted-foreground/70">{item.description}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{item.description}</div>
                     </div>
                   </div>
                 ))}
               </CardContent>
             </Card>
 
-            <Card className="bg-primary/5 border-primary/20">
+            <Card className="bg-muted/20 border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)]">
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgba(8,8,8,0.05)] dark:bg-[rgba(247,247,245,0.08)] text-[#F20B18]">
                     <CheckCircle className="h-6 w-6" />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Open to Opportunities</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <h4 className="font-bold text-foreground">Open to Opportunities</h4>
+                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                       Currently seeking Data Analyst, BI Analyst, or Business Analyst roles. Available for immediate start.
                     </p>
                   </div>
@@ -185,7 +185,7 @@ export function Contact({
               <CardContent>
                 {deliveryConfigured ? (
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-                  {/* Honeypot anti-spam field — visually hidden off-screen from human users */}
+                  {/* Honeypot anti-spam field */}
                   <div
                     className="absolute -left-[9999px] -top-[9999px] h-0 w-0 opacity-0 overflow-hidden pointer-events-none select-none"
                     aria-hidden="true"
@@ -257,7 +257,7 @@ export function Contact({
                     />
                   </div>
 
-                  <Button type="submit" size="lg" variant="premium" disabled={isSubmitting} className="w-full sm:w-auto">
+                  <Button type="submit" size="lg" variant="default" disabled={isSubmitting} className="w-full sm:w-auto">
                     {isSubmitting ? (
                       <>
                         <Loader2 className="h-5 w-5 animate-spin" />
@@ -272,15 +272,15 @@ export function Contact({
                   </Button>
 
                   {submitStatus === 'success' && (
-                    <div className="status-in flex items-center space-x-2 text-green-600 dark:text-green-400">
-                      <CheckCircle className="h-5 w-5" />
+                    <div className="status-in flex items-center space-x-2 text-foreground font-semibold">
+                      <CheckCircle className="h-5 w-5 text-[#F20B18]" />
                       <span>Message sent successfully! I will respond within 24 hours.</span>
                     </div>
                   )}
 
                   {submitStatus === 'error' && (
-                    <div className="status-in flex items-center space-x-2 text-destructive" role="alert">
-                      <AlertCircle className="h-5 w-5" />
+                    <div className="status-in flex items-center space-x-2 text-foreground font-semibold" role="alert">
+                      <AlertCircle className="h-5 w-5 text-[#F20B18]" />
                       <span>{formError || 'Failed to send. Please try again or email directly.'}</span>
                     </div>
                   )}
@@ -291,7 +291,7 @@ export function Contact({
                       Prefer email — I respond within 24 hours.
                     </p>
                     {isEmail(contactEmail) ? (
-                      <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
+                      <Button size="lg" variant="default" asChild className="w-full sm:w-auto">
                         <a href={`mailto:${contactEmail}`} className="flex items-center space-x-2">
                           <Mail className="h-5 w-5" />
                           <span>Email Me</span>

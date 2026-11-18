@@ -35,11 +35,11 @@ function StatusRow({ label, ok, detail }: { label: string; ok: boolean; detail?:
       <span
         className={
           ok
-            ? "flex items-center gap-1 text-sm text-green-600 dark:text-green-400 shrink-0"
+            ? "flex items-center gap-1 text-sm text-foreground font-semibold shrink-0"
             : "flex items-center gap-1 text-sm text-destructive shrink-0"
         }
       >
-        {ok ? <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> : <XCircle className="h-4 w-4" aria-hidden="true" />}
+        {ok ? <CheckCircle2 className="h-4 w-4 text-[#F20B18]" aria-hidden="true" /> : <XCircle className="h-4 w-4" aria-hidden="true" />}
         {ok ? "OK" : "Not set"}
       </span>
     </div>

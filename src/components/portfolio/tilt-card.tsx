@@ -9,8 +9,8 @@ interface TiltCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * 3D Tilt Card with dynamic radial glow border that tracks the mouse pointer.
- * - On desktop: subtle 3D tilt (rotateX, rotateY) and spotlight border.
+ * 3D Tilt Card with dynamic radial glow border and red top hover state.
+ * - On desktop: subtle 3D tilt (rotateX, rotateY) and restrained spotlight.
  * - On touch/mobile or prefers-reduced-motion: clean standard card layout without tilt.
  */
 export function TiltCard({
@@ -65,7 +65,7 @@ export function TiltCard({
         transform,
         transition: 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
       }}
-      className={`relative group rounded-2xl ${className}`}
+      className={`relative group rounded-2xl border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] hover:border-t-2 hover:border-t-[#F20B18] transition-colors duration-300 ${className}`}
       {...props}
     >
       {/* Interactive Radial Glow Border */}
@@ -74,7 +74,7 @@ export function TiltCard({
           className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-300"
           style={{
             opacity: glowPos.opacity,
-            background: `radial-gradient(450px circle at ${glowPos.x}px ${glowPos.y}px, var(--accent), transparent 60%)`,
+            background: `radial-gradient(450px circle at ${glowPos.x}px ${glowPos.y}px, rgba(242, 11, 24, 0.22), transparent 60%)`,
             zIndex: 0,
           }}
           aria-hidden="true"
@@ -82,7 +82,7 @@ export function TiltCard({
       )}
 
       {/* Card Content Shell */}
-      <div className="relative z-10 h-full w-full rounded-2xl bg-card">
+      <div className="relative z-10 h-full w-full rounded-2xl bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)]">
         {children}
       </div>
     </div>

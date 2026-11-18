@@ -9,7 +9,7 @@ import {
   BarChart2,
   Zap,
   Layout,
-  Image,
+  Image as ImageIcon,
   CheckCircle,
   CheckCircle2,
   Table,
@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { isPlaceholderLink, cn } from '@/lib/utils';
 import { Reveal } from './reveal';
 import type { Project } from '@/types';
@@ -30,7 +29,7 @@ const CATEGORY_ICONS = {
   'data-analytics': BarChart2,
   'ai-automation': Zap,
   'web-applications': Layout,
-  'creative-technology': Image,
+  'creative-technology': ImageIcon,
 } as const;
 
 const CATEGORY_LABELS = {
@@ -59,7 +58,7 @@ interface TimelineStep {
 }
 
 /**
- * Connected vertical timeline that fills with a gradient rail as the user scrolls.
+ * Connected vertical timeline that fills with a red rail as the user scrolls.
  * Respects prefers-reduced-motion by rendering full height without animation.
  */
 function CaseStudyTimeline({ steps }: { steps: TimelineStep[] }) {
@@ -114,9 +113,9 @@ function CaseStudyTimeline({ steps }: { steps: TimelineStep[] }) {
         className="absolute left-[11px] sm:left-[17px] top-6 bottom-6 w-0.5 bg-border rounded-full"
         aria-hidden="true"
       />
-      {/* Glowing Fill Line */}
+      {/* Red Fill Line */}
       <div
-        className="absolute left-[11px] sm:left-[17px] top-6 w-0.5 bg-gradient-to-b from-[var(--accent)] to-[var(--accent-2)] origin-top rounded-full transition-all duration-150 ease-out shadow-[0_0_10px_var(--accent)]"
+        className="absolute left-[11px] sm:left-[17px] top-6 w-0.5 bg-[#F20B18] origin-top rounded-full transition-all duration-150 ease-out shadow-[0_0_8px_rgba(242,11,24,0.3)]"
         style={{ height: `${fillHeight}%` }}
         aria-hidden="true"
       />
@@ -131,9 +130,9 @@ function CaseStudyTimeline({ steps }: { steps: TimelineStep[] }) {
             {/* Milestone Node Badge */}
             <div
               className={cn(
-                'absolute -left-6 sm:-left-10 top-3 flex h-6 w-6 sm:h-9 sm:w-9 items-center justify-center rounded-full border-2 bg-card text-xs font-mono font-bold transition-all duration-300 z-10',
+                'absolute -left-6 sm:-left-10 top-3 flex h-6 w-6 sm:h-9 sm:w-9 items-center justify-center rounded-full border-2 bg-background text-xs font-mono font-bold transition-all duration-300 z-10',
                 isPassed
-                  ? 'border-[var(--accent)] text-[var(--accent)] shadow-[0_0_12px_rgba(45,212,191,0.35)] scale-105'
+                  ? 'border-[#F20B18] text-[#F20B18] scale-105'
                   : 'border-border text-muted-foreground'
               )}
               aria-hidden="true"
@@ -144,9 +143,9 @@ function CaseStudyTimeline({ steps }: { steps: TimelineStep[] }) {
 
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <span className="text-[var(--accent)] font-mono">{step.num}</span>
+                <span className="text-[#F20B18] font-mono font-bold">{step.num}</span>
                 <span>/</span>
-                <span>{step.label}</span>
+                <span className="text-foreground">{step.label}</span>
               </div>
               {step.content}
             </div>
@@ -169,7 +168,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
       label: 'Problem',
       icon: AlertCircle,
       content: (
-        <Card className="border-border/80 bg-card/90 shadow-sm">
+        <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
           <CardContent className="p-6 pt-0">
             <h2 className="text-2xl font-bold mb-4">Problem Statement</h2>
             <p className="text-muted-foreground leading-relaxed">{project.problem}</p>
@@ -184,10 +183,10 @@ export function ProjectDetailView({ project }: { project: Project }) {
             label: 'Data Used',
             icon: Database,
             content: (
-              <Card className="border-border/80 bg-card/90 shadow-sm">
+              <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
                 <CardContent className="p-6 pt-0">
                   <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <Table className="h-5 w-5 text-primary" />
+                    <Table className="h-5 w-5 text-[#F20B18]" />
                     <span>Data Used</span>
                   </h2>
                   <p className="text-muted-foreground leading-relaxed">
@@ -197,7 +196,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                     <div className="mt-4">
                       <Button variant="outline" size="sm" asChild>
                         <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                          <Table className="h-4 w-4" />
+                          <Table className="h-4 w-4 text-[#F20B18]" />
                           <span>Source Dataset / Reference</span>
                         </a>
                       </Button>
@@ -215,14 +214,14 @@ export function ProjectDetailView({ project }: { project: Project }) {
       icon: Layers,
       content: (
         <div className="space-y-6">
-          <Card className="border-border/80 bg-card/90 shadow-sm">
+          <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
             <CardContent className="p-6 pt-0">
               <h2 className="text-2xl font-bold mb-4">Approach &amp; Methodology</h2>
               <p className="text-muted-foreground leading-relaxed">{project.approach}</p>
             </CardContent>
           </Card>
           {project.solution && project.solution !== project.approach && (
-            <Card className="border-border/80 bg-card/90 shadow-sm">
+            <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
               <CardContent className="p-6 pt-0">
                 <h2 className="text-2xl font-bold mb-4">Solution Architecture</h2>
                 <p className="text-muted-foreground leading-relaxed">{project.solution}</p>
@@ -237,15 +236,15 @@ export function ProjectDetailView({ project }: { project: Project }) {
       label: 'Key Insights',
       icon: TrendingUp,
       content: (
-        <Card className="border-border/80 bg-card/90 shadow-sm">
+        <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
           <CardContent className="p-6 pt-0">
             <h2 className="text-2xl font-bold mb-4">Key Insights &amp; Analytical Findings</h2>
             <ul className="space-y-3">
               {(project.keyInsights && project.keyInsights.length > 0 ? project.keyInsights : project.keyFeatures).map(
                 (feature: string, i: number) => (
                   <li key={i} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <span className="text-muted-foreground">{feature}</span>
+                    <CheckCircle className="h-5 w-5 text-[#F20B18] shrink-0 mt-0.5" />
+                    <span className="text-muted-foreground leading-relaxed">{feature}</span>
                   </li>
                 )
               )}
@@ -259,10 +258,13 @@ export function ProjectDetailView({ project }: { project: Project }) {
       label: 'Result',
       icon: CheckCircle2,
       content: (
-        <Card className="border-primary/30 bg-primary/5 shadow-sm">
+        <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-muted/20 shadow-sm">
           <CardContent className="p-6 pt-0">
-            <h2 className="text-2xl font-bold mb-2 text-primary">Result &amp; Business Impact</h2>
-            <p className="text-foreground font-medium leading-relaxed">{project.outcome}</p>
+            <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-[#F20B18]" />
+              <span>Result &amp; Business Impact</span>
+            </h2>
+            <p className="text-foreground font-semibold leading-relaxed">{project.outcome}</p>
           </CardContent>
         </Card>
       ),
@@ -274,15 +276,21 @@ export function ProjectDetailView({ project }: { project: Project }) {
       <Reveal>
         <header className="mb-12">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <Badge variant="outline" className="gap-1">
-              <Icon className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] px-3 py-1 text-xs font-semibold text-foreground">
+              <Icon className="h-3.5 w-3.5 text-[#F20B18]" />
               {getCategoryLabel(project.category)}
-            </Badge>
-            {project.isFeatured && <Badge variant="premium">Featured</Badge>}
-            <Badge variant="outline">{project.status}</Badge>
+            </span>
+            {project.isFeatured && (
+              <span className="rounded-full border border-[#F20B18] px-3 py-1 text-xs font-semibold text-foreground">
+                Featured
+              </span>
+            )}
+            <span className="rounded-full border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] px-3 py-1 text-xs font-semibold text-foreground">
+              {project.status}
+            </span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 text-foreground">{project.name}</h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl">{project.problem}</p>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl leading-relaxed">{project.problem}</p>
         </header>
       </Reveal>
 
@@ -317,13 +325,13 @@ export function ProjectDetailView({ project }: { project: Project }) {
           {/* Connected Vertical Timeline */}
           <CaseStudyTimeline steps={steps} />
 
-          {/* Optional Power BI Screenshot Slot — Renders ONLY if a Power BI screenshot exists */}
+          {/* Optional Power BI Screenshot Slot */}
           {project.id === 'case-study-retail-sales-analysis' &&
             project.screenshots.some((s) => s.toLowerCase().includes('powerbi') || s.toLowerCase().includes('power-bi')) && (
-              <Card className="border-border/80 bg-card/90 shadow-sm">
+              <Card className="border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] shadow-sm">
                 <CardContent className="p-6 pt-0 space-y-4">
                   <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                    <BarChart2 className="h-5 w-5 text-primary" />
+                    <BarChart2 className="h-5 w-5 text-[#F20B18]" />
                     <span>Power BI Dashboard</span>
                   </h2>
                   <p className="text-sm text-muted-foreground">Interactive reporting views and DAX KPI visualizations.</p>
@@ -331,7 +339,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                     {project.screenshots
                       .filter((s) => s.toLowerCase().includes('powerbi') || s.toLowerCase().includes('power-bi'))
                       .map((pbiUrl, i) => (
-                        <div key={pbiUrl} className="group/pbi relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/30">
+                        <div key={pbiUrl} className="group/pbi relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/20">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={pbiUrl}
@@ -353,7 +361,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                 <h2 className="text-2xl font-bold mb-4">Screenshots</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {project.screenshots.map((url, i) => (
-                    <div key={url} className="group/screen relative aspect-video overflow-hidden rounded-xl border border-border bg-muted/30">
+                    <div key={url} className="group/screen relative aspect-video overflow-hidden rounded-xl border border-border bg-muted/20">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={url}
@@ -372,36 +380,38 @@ export function ProjectDetailView({ project }: { project: Project }) {
         <Reveal className="space-y-6" delay={160}>
           <Card className="cinematic-card">
             <CardContent className="p-6 space-y-6">
-              <h3 className="font-semibold text-foreground">Project Details</h3>
+              <h3 className="font-bold text-xl text-foreground">Project Details</h3>
 
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">My Role</p>
-                  <p className="text-sm font-medium text-foreground">{project.role}</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">My Role</p>
+                  <p className="text-sm font-semibold text-foreground">{project.role}</p>
                 </div>
 
                 <div>
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Technologies</p>
-                  <div className="flex flex-wrap gap-2">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Technologies</p>
+                  <div className="flex flex-wrap gap-1.5">
                     {project.technologies.map((tech: string, i: number) => (
-                      <Badge key={i} variant="outline" className="bg-muted/50">{tech}</Badge>
+                      <span key={i} className="rounded-md border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] px-2.5 py-1 text-xs font-semibold text-foreground bg-transparent">
+                        {tech}
+                      </span>
                     ))}
                   </div>
                 </div>
 
                 <div className="pt-4 border-t border-border">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Links</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Links</p>
                   <div className="flex flex-col gap-2">
                     {project.githubUrl && !isPlaceholderLink(project.githubUrl) && (
                       <Button variant="outline" asChild className="w-full justify-start">
                         <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
-                          <GitBranch className="h-4 w-4" />
+                          <GitBranch className="h-4 w-4 text-[#F20B18]" />
                           <span>View on GitHub</span>
                         </a>
                       </Button>
                     )}
                     {project.liveDemoUrl && !isPlaceholderLink(project.liveDemoUrl) && (
-                      <Button variant="outline" asChild className="w-full justify-start">
+                      <Button variant="default" asChild className="w-full justify-start">
                         <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
                           <ExternalLink className="h-4 w-4" />
                           <span>Live Demo</span>
@@ -419,7 +429,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                     {project.datasetUrl && !isPlaceholderLink(project.datasetUrl) && (
                       <Button variant="outline" asChild className="w-full justify-start">
                         <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
-                          <Table className="h-4 w-4" />
+                          <Table className="h-4 w-4 text-[#F20B18]" />
                           <span>Open Spreadsheet</span>
                         </a>
                       </Button>
@@ -427,7 +437,7 @@ export function ProjectDetailView({ project }: { project: Project }) {
                     {project.attachments.map((url, i) => (
                       <Button key={url} variant="ghost" asChild className="w-full justify-start">
                         <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
-                          <FileSpreadsheet className="h-4 w-4" />
+                          <FileSpreadsheet className="h-4 w-4 text-[#F20B18]" />
                           <span className="truncate">{url.split('/').pop() || `Dataset ${i + 1}`}</span>
                         </a>
                       </Button>
@@ -440,19 +450,23 @@ export function ProjectDetailView({ project }: { project: Project }) {
 
           <Card>
             <CardContent className="p-6 space-y-4">
-              <h3 className="font-semibold text-foreground">Quick Facts</h3>
+              <h3 className="font-bold text-xl text-foreground">Quick Facts</h3>
               <dl className="space-y-3 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <dt className="text-muted-foreground">Category</dt>
-                  <dd className="font-medium text-foreground">{getCategoryLabel(project.category)}</dd>
+                  <dd className="font-semibold text-foreground">{getCategoryLabel(project.category)}</dd>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <dt className="text-muted-foreground">Status</dt>
-                  <dd><Badge variant={project.status === 'published' ? 'premium' : 'outline'}>{project.status}</Badge></dd>
+                  <dd>
+                    <span className="rounded-full border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] px-2.5 py-0.5 text-xs font-semibold text-foreground">
+                      {project.status}
+                    </span>
+                  </dd>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <dt className="text-muted-foreground">Featured</dt>
-                  <dd className="text-foreground">{project.isFeatured ? 'Yes' : 'No'}</dd>
+                  <dd className="font-semibold text-foreground">{project.isFeatured ? 'Yes' : 'No'}</dd>
                 </div>
               </dl>
             </CardContent>
@@ -465,9 +479,9 @@ export function ProjectDetailView({ project }: { project: Project }) {
 
 export function DetailTopNav({ href, label }: { href: string; label: string }) {
   return (
-    <nav className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-50">
+    <nav className="border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5]/95 dark:bg-[#080808]/95 backdrop-blur-sm sticky top-0 z-50">
       <div className="mx-auto max-w-5xl px-4 py-4">
-        <Link href={href} className="inline-flex items-center space-x-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+        <Link href={href} className="inline-flex items-center space-x-2 text-sm font-semibold text-muted-foreground hover:text-[#F20B18] transition-colors">
           <ChevronLeft className="h-4 w-4" />
           <span>{label}</span>
         </Link>

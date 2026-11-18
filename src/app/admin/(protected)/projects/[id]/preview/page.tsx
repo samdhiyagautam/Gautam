@@ -26,7 +26,7 @@ export default async function ProjectPreviewPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-xl border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-muted/20 p-4">
         <div>
           <h1 className="text-xl font-bold tracking-tight">Preview — {project.name}</h1>
           <p className="text-sm text-muted-foreground">

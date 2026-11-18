@@ -8,11 +8,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const badgeVariants = {
-  default: 'bg-primary text-primary-foreground hover:bg-primary/80',
-  secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-  destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/80',
-  outline: 'text-foreground border border-input',
-  premium: 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-sm shadow-primary/20',
+  default: 'text-[#080808] dark:text-[#F7F7F5] border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] bg-transparent',
+  secondary: 'text-[rgba(8,8,8,0.65)] dark:text-[rgba(247,247,245,0.70)] border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-transparent',
+  destructive: 'text-[#F20B18] border border-[#F20B18] bg-transparent',
+  outline: 'text-[#080808] dark:text-[#F7F7F5] border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] bg-transparent',
+  premium: 'text-[#080808] dark:text-[#F7F7F5] border border-[#F20B18] bg-transparent',
 };
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
@@ -21,7 +21,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
       <div
         ref={ref}
         className={cn(
-          'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+          'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--red)] focus:ring-offset-2',
           badgeVariants[variant],
           className
         )}

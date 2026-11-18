@@ -17,8 +17,8 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Header & Quick Action Bar */}
         <Reveal className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary mb-3">
-            <Award className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(8,8,8,0.25)] dark:border-[rgba(247,247,245,0.25)] px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-foreground mb-3">
+            <Award className="h-3.5 w-3.5 text-[#F20B18]" />
             <span>ATS-Friendly Data Analyst Resume</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
@@ -29,7 +29,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Button size="lg" variant="premium" asChild className="gap-2 shadow-sm">
+            <Button size="lg" variant="default" asChild className="gap-2">
               <a href={resumeUrl} download="Gautam-Samdhiya-Data-Analyst-Resume.pdf">
                 <Download className="h-4 w-4" />
                 <span>Download PDF</span>
@@ -50,37 +50,37 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
         {/* ATS-Friendly One-Page Printable Resume Container */}
         <Reveal delay={80}>
-          <article className="mx-auto max-w-4xl rounded-2xl border border-border bg-card p-6 sm:p-12 lg:p-14 shadow-md text-foreground transition-all">
+          <article className="mx-auto max-w-4xl rounded-2xl border border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] bg-[#F7F7F5] dark:bg-[rgba(247,247,245,0.08)] p-6 sm:p-12 lg:p-14 shadow-sm text-foreground transition-all">
             {/* 1. Header & Contact Information */}
-            <header className="border-b border-border pb-6 text-center sm:text-left">
+            <header className="border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] pb-6 text-center sm:text-left">
               <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
                 <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
                   Gautam Samdhiya
                 </h1>
-                <p className="text-sm sm:text-base font-semibold text-primary">
+                <p className="text-sm sm:text-base font-semibold text-foreground">
                   Data Analyst | SQL · Power BI · Excel · Python
                 </p>
               </div>
 
               <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-primary" />
+                  <MapPin className="h-3.5 w-3.5 text-[#F20B18]" />
                   Ranchi, Jharkhand, India
                 </span>
-                <a href="mailto:gautamsamdhiya2000@gmail.com" className="inline-flex items-center gap-1.5 hover:text-foreground">
-                  <Mail className="h-3.5 w-3.5 text-primary" />
+                <a href="mailto:gautamsamdhiya2000@gmail.com" className="inline-flex items-center gap-1.5 hover:text-[#F20B18] transition-colors">
+                  <Mail className="h-3.5 w-3.5 text-[#F20B18]" />
                   gautamsamdhiya2000@gmail.com
                 </a>
                 <span className="inline-flex items-center gap-1.5">
-                  <Phone className="h-3.5 w-3.5 text-primary" />
+                  <Phone className="h-3.5 w-3.5 text-[#F20B18]" />
                   Available on request
                 </span>
-                <a href="https://www.linkedin.com/in/connectwithgautam" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
-                  <Link2 className="h-3.5 w-3.5 text-primary" />
+                <a href="https://www.linkedin.com/in/connectwithgautam" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-[#F20B18] transition-colors">
+                  <Link2 className="h-3.5 w-3.5 text-[#F20B18]" />
                   LinkedIn
                 </a>
-                <a href="https://github.com/samdhiyagautam" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground">
-                  <GitBranch className="h-3.5 w-3.5 text-primary" />
+                <a href="https://github.com/samdhiyagautam" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-[#F20B18] transition-colors">
+                  <GitBranch className="h-3.5 w-3.5 text-[#F20B18]" />
                   GitHub
                 </a>
               </div>
@@ -88,7 +88,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
             {/* 2. Professional Summary */}
             <section className="mt-6 space-y-2">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/80 pb-1">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] pb-1">
                 Professional Summary
               </h2>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -98,7 +98,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
             {/* 3. Technical Skills */}
             <section className="mt-6 space-y-2.5">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/80 pb-1">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] pb-1">
                 Technical Skills
               </h2>
               <div className="grid gap-2 text-xs sm:text-sm">
@@ -137,14 +137,14 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
             {/* 4. Professional Experience */}
             <section className="mt-6 space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/80 pb-1">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] pb-1">
                 Professional Experience
               </h2>
 
               <div className="space-y-2">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
                   <div className="font-bold text-foreground">
-                    Assistant Manager — <span className="font-semibold text-primary">Dhurina</span>
+                    Assistant Manager — <span className="font-semibold text-foreground">Dhurina</span>
                   </div>
                   <div className="text-xs text-muted-foreground font-medium">
                     October 2024 – Present | Ranchi, India
@@ -173,7 +173,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
             {/* 5. Key Analytics Projects */}
             <section className="mt-6 space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border/80 pb-1">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-foreground border-b border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] pb-1">
                 Key Analytics Projects
               </h2>
 
@@ -188,7 +188,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
                       href="https://github.com/samdhiyagautam/Gautam/tree/main/demo-projects/ipl-analysis"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-primary hover:underline"
+                      className="text-xs text-foreground font-semibold hover:text-[#F20B18] underline"
                     >
                       GitHub Repository
                     </a>
@@ -213,7 +213,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
                       href="https://github.com/samdhiyagautam/Gautam/tree/main/demo-projects/retail-sales-analysis"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-primary hover:underline"
+                      className="text-xs text-foreground font-semibold hover:text-[#F20B18] underline"
                     >
                       GitHub Repository
                     </a>
@@ -231,9 +231,9 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
             </section>
 
             {/* 6. Education & Languages */}
-            <section className="mt-6 pt-2 border-t border-border grid sm:grid-cols-2 gap-4">
+            <section className="mt-6 pt-2 border-t border-[rgba(8,8,8,0.12)] dark:border-[rgba(247,247,245,0.12)] grid sm:grid-cols-2 gap-4">
               <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-foreground mb-1">
                   Education
                 </h2>
                 <div className="text-xs sm:text-sm">
@@ -243,7 +243,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
               </div>
 
               <div>
-                <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                <h2 className="text-xs font-bold uppercase tracking-wider text-foreground mb-1">
                   Languages
                 </h2>
                 <div className="text-xs sm:text-sm text-muted-foreground">

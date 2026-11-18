@@ -15,90 +15,90 @@ export function Footer({ profile }: { profile: Profile }) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-background/50 backdrop-blur-sm">
+    <footer className="border-t border-[rgba(247,247,245,0.12)] bg-[#080808] text-[#F7F7F5]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <Reveal variant="fade">
-        <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
-          <div className="md:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2.5 mb-4" aria-label="Gautam Samdhiya homepage">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shrink-0" aria-hidden="true">
-                GS
+          <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
+            <div className="md:col-span-2 lg:col-span-1">
+              <Link href="/" className="flex items-center space-x-2.5 mb-4" aria-label="Gautam Samdhiya homepage">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F7F7F5] text-[#080808] font-bold text-xs tracking-wider shrink-0" aria-hidden="true">
+                  GS
+                </div>
+                <span className="text-xl font-bold tracking-tight text-[#F7F7F5]">{profile.name}</span>
+              </Link>
+              <p className="text-[rgba(247,247,245,0.70)] text-sm mb-6 max-w-xs leading-relaxed">
+                {profile.headline}
+                <br />
+                I turn business problems into practical solutions using data, AI and modern technology.
+              </p>
+              <div className="flex items-center space-x-4">
+                {!isPlaceholderLink(profile.linkedin) && (
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors" aria-label="LinkedIn">
+                    <Link2 className="h-5 w-5" />
+                  </a>
+                )}
+                {!isPlaceholderLink(profile.github) && (
+                  <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors" aria-label="GitHub">
+                    <GitBranch className="h-5 w-5" />
+                  </a>
+                )}
+                {isEmail(profile.email) && (
+                  <a href={`mailto:${profile.email}`} className="text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors" aria-label="Email">
+                    <Mail className="h-5 w-5" />
+                  </a>
+                )}
               </div>
-              <span className="text-xl font-bold tracking-tight">{profile.name}</span>
-            </Link>
-            <p className="text-muted-foreground text-sm mb-6 max-w-xs">
-              {profile.headline}
-              <br />
-              I turn business problems into practical solutions using data, AI and modern technology.
-            </p>
-            <div className="flex items-center space-x-4">
-              {!isPlaceholderLink(profile.linkedin) && (
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
-                  <Link2 className="h-5 w-5" />
-                </a>
-              )}
-              {!isPlaceholderLink(profile.github) && (
-                <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="GitHub">
-                  <GitBranch className="h-5 w-5" />
-                </a>
-              )}
-              {isEmail(profile.email) && (
-                <a href={`mailto:${profile.email}`} className="text-muted-foreground hover:text-primary transition-colors" aria-label="Email">
-                  <Mail className="h-5 w-5" />
-                </a>
-              )}
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4 text-[#F7F7F5]">Navigation</h4>
+              <nav aria-label="Footer navigation">
+                <ul className="space-y-2">
+                  {NAV_ITEMS.map((item) => (
+                    <li key={item.href}>
+                      <Link href={item.href} className="text-sm text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors">
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4 text-[#F7F7F5]">Connect</h4>
+              <ul className="space-y-2">
+                {!isPlaceholderLink(profile.linkedin) && (
+                  <li>
+                    <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors flex items-center space-x-2">
+                      <Link2 className="h-4 w-4" />
+                      <span>LinkedIn</span>
+                    </a>
+                  </li>
+                )}
+                {!isPlaceholderLink(profile.github) && (
+                  <li>
+                    <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-sm text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors flex items-center space-x-2">
+                      <GitBranch className="h-4 w-4" />
+                      <span>GitHub</span>
+                    </a>
+                  </li>
+                )}
+                {isEmail(profile.email) && (
+                  <li>
+                    <a href={`mailto:${profile.email}`} className="text-sm text-[rgba(247,247,245,0.70)] hover:text-[#F20B18] transition-colors flex items-center space-x-2">
+                      <Mail className="h-4 w-4" />
+                      <span>Email</span>
+                    </a>
+                  </li>
+                )}
+              </ul>
             </div>
           </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Navigation</h4>
-            <nav aria-label="Footer navigation">
-              <ul className="space-y-2">
-                {NAV_ITEMS.map((item) => (
-                  <li key={item.href}>
-                    <Link href={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4">Connect</h4>
-            <ul className="space-y-2">
-              {!isPlaceholderLink(profile.linkedin) && (
-                <li>
-                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                    <Link2 className="h-4 w-4" />
-                    <span>LinkedIn</span>
-                  </a>
-                </li>
-              )}
-              {!isPlaceholderLink(profile.github) && (
-                <li>
-                  <a href={profile.github} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                    <GitBranch className="h-4 w-4" />
-                    <span>GitHub</span>
-                  </a>
-                </li>
-              )}
-              {isEmail(profile.email) && (
-                <li>
-                  <a href={`mailto:${profile.email}`} className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center space-x-2">
-                    <Mail className="h-4 w-4" />
-                    <span>Email</span>
-                  </a>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
         </Reveal>
 
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground text-center sm:text-left">
+        <div className="mt-12 pt-8 border-t border-[rgba(247,247,245,0.12)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-[rgba(247,247,245,0.70)] text-center sm:text-left">
             © {currentYear} {profile.name}. All rights reserved.
           </p>
         </div>
