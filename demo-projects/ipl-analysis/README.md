@@ -65,7 +65,7 @@ top-8 team win rates, five headline findings and six charts.
 | Sheet group | Sheets |
 |---|---|
 | Dashboard | `Dashboard`, `KPI Summary` |
-| The 12 SQL analyses | `Season Summary`, `Top Run Scorers`, `Top Wicket Takers`, `Best Economy`, `Toss Impact`, `Chase vs Defend`, `Venue Averages`, `Team Wins`, `Head to Head`, `Highest Totals` |
+| Analysis sheets | `Season Summary`, `Top Run Scorers`, `Top Wicket Takers`, `Best Economy`, `Toss Impact`, `Chase vs Defend`, `Venue Averages`, `Team Wins`, `Head to Head`, `Highest Totals` |
 | Pivot sources | `Team Season` (166 rows), `Batting Stats` (739), `Bowling Stats` (407), `Wicket Types` |
 | Raw grain | `Matches` — all 1,243 matches with live Result / Toss Winner Won columns |
 | Guide | `How To Use` — import steps, pivots, Power Query, definitions, limitations |
