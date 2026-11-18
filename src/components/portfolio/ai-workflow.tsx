@@ -62,7 +62,7 @@ export function AIWorkflow() {
                       </div>
                       <div className="pt-2 text-xs font-medium text-primary flex items-center gap-1.5">
                         <Sparkles className="h-3.5 w-3.5" />
-                        <span>Analyst Co-Pilot</span>
+                        <span>AI Tools</span>
                       </div>
                     </CardContent>
                   </Card>
