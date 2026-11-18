@@ -8,8 +8,8 @@ A premium, recruiter-first personal portfolio and professional brand system buil
 
 | Project | What it is | Stack |
 |---|---|---|
-| [IPL Cricket Analytics](demo-projects/ipl-analysis/) | Real ball-by-ball IPL data (cricsheet.org, ODC-By licensed): 1,243 matches, 295,732 deliveries, 12 SQL business questions, dependency-free Python pipeline, results + charts | SQL (SQLite), Python |
-| [Retail Sales Analysis](demo-projects/retail-sales-analysis/) | End-to-end analytics demo on a clearly-labeled synthetic retail dataset: 11 SQL queries (CTEs, window functions), Python pipeline, Excel/Power BI guides | SQL (SQLite), Python |
+| [IPL Cricket Analytics](https://github.com/samdhiyagautam/ipl-cricket-analytics) ([copy in this repo](demo-projects/ipl-analysis/)) | Real ball-by-ball IPL data (cricsheet.org, ODC-By licensed): 1,243 matches, 295,732 deliveries, 12 SQL business questions, dependency-free Python pipeline, results + charts | SQL (SQLite), Python |
+| [Retail Sales Analysis](https://github.com/samdhiyagautam/retail-sales-analysis) ([copy in this repo](demo-projects/retail-sales-analysis/)) | End-to-end analytics demo on a clearly-labeled synthetic retail dataset: 11 SQL queries (CTEs, window functions), Python pipeline, Excel/Power BI guides | SQL (SQLite), Python |
 
 ## Features
 
