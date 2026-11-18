@@ -6,8 +6,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { isPlaceholderLink, cn } from '@/lib/utils';
 import { Reveal } from './reveal';
-import { Scroll3D } from './scroll-3d';
 import { SectionHeading } from './section-heading';
+import { TiltCard } from './tilt-card';
+import { AnimatedCounter } from './animated-counter';
 import { FALLBACK_PROJECTS } from '@/lib/constants';
 import type { Project } from '@/types';
 
@@ -63,8 +64,8 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
 
   return (
     <Reveal delay={index * 100}>
-      <Scroll3D variant="tilt" intensity={0.5}>
-        <article className="cinematic-card rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:border-primary/40 shadow-sm">
+      <TiltCard className="cinematic-card rounded-2xl border border-border bg-card overflow-hidden transition-colors duration-300 hover:border-primary/50 shadow-sm">
+        <article>
           {/* Top Bar / Header */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-muted/40 px-6 py-4 sm:px-8">
             <div className="flex items-center gap-3">
@@ -94,10 +95,59 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
               {/* Left Column: Narrative Details */}
               <div className={cn("space-y-6", hasScreenshot ? "lg:col-span-7" : "max-w-4xl")}>
                 <div>
-                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                    {project.name}
+                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground transition-colors hover:text-primary">
+                    <Link href={`/projects/${project.id}`}>
+                      {project.name}
+                    </Link>
                   </h3>
                 </div>
+
+                {/* Verified Real Metrics Bar (Animated Counter) */}
+                {project.id === 'case-study-ipl-cricket-analytics' && (
+                  <div className="grid grid-cols-3 gap-3 p-3.5 rounded-xl border border-border/80 bg-muted/20">
+                    <div className="text-center sm:text-left">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-[var(--accent)]">
+                        <AnimatedCounter value={295732} />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Deliveries</div>
+                    </div>
+                    <div className="text-center sm:text-left border-x border-border/60 px-3">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-foreground">
+                        <AnimatedCounter value={1243} />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Matches</div>
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-[var(--accent)]">
+                        <AnimatedCounter value={54.7} decimals={1} suffix="%" />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Toss-Field Win %</div>
+                    </div>
+                  </div>
+                )}
+
+                {project.id === 'case-study-retail-sales-analysis' && (
+                  <div className="grid grid-cols-3 gap-3 p-3.5 rounded-xl border border-border/80 bg-muted/20">
+                    <div className="text-center sm:text-left">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-[var(--accent)]">
+                        <AnimatedCounter value={8262058} prefix="$" />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Revenue Analyzed</div>
+                    </div>
+                    <div className="text-center sm:text-left border-x border-border/60 px-3">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-foreground">
+                        <AnimatedCounter value={84.4} decimals={1} suffix="%" />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Repeat Buyers</div>
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <div className="text-lg sm:text-xl font-bold font-mono text-[var(--accent)]">
+                        <AnimatedCounter value={50.9} decimals={1} suffix="%" />
+                      </div>
+                      <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Top 20% Share</div>
+                    </div>
+                  </div>
+                )}
 
                 {/* 1. Problem */}
                 <div className="space-y-1.5">
@@ -213,29 +263,31 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
                 </div>
               </div>
 
-              {/* Right Column: Dashboard Screenshot (rendered only when image exists) */}
+              {/* Right Column: Dashboard Screenshot with Camera Focus Effect */}
               {hasScreenshot && (
                 <div className="lg:col-span-5 flex flex-col justify-start">
                   <div className="sticky top-24 space-y-3">
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/40 shadow-inner group">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={screenshot}
-                        alt={`${project.name} dashboard screenshot`}
-                        className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
-                        loading="lazy"
-                      />
-                    </div>
+                    <Link href={`/projects/${project.id}`} className="block group/media">
+                      <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/40 shadow-inner">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={screenshot}
+                          alt={`${project.name} dashboard screenshot`}
+                          className="h-full w-full object-contain p-2 transition-all duration-700 ease-out group-hover/media:scale-105 group-hover/media:contrast-[1.04]"
+                          loading="lazy"
+                        />
+                      </div>
+                    </Link>
 
                     {project.screenshots && project.screenshots.length > 1 && (
                       <div className="grid grid-cols-2 gap-2 pt-2">
                         {project.screenshots.slice(1, 3).map((shotUrl, i) => (
-                          <div key={i} className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted/30">
+                          <div key={i} className="group/submedia relative aspect-video overflow-hidden rounded-lg border border-border bg-muted/30">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={shotUrl}
                               alt={`${project.name} secondary visual ${i + 1}`}
-                              className="h-full w-full object-contain p-1"
+                              className="h-full w-full object-contain p-1 transition-transform duration-500 ease-out group-hover/submedia:scale-105"
                               loading="lazy"
                             />
                           </div>
@@ -248,7 +300,7 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
             </div>
           </div>
         </article>
-      </Scroll3D>
+      </TiltCard>
     </Reveal>
   );
 }

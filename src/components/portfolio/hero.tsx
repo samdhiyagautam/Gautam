@@ -1,18 +1,28 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { Scroll3D } from './scroll-3d';
 import { ArrowRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
 import { PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
+import { DataMeshStatic } from './data-mesh-3d';
 import type { Profile } from '@/types';
+
+// Lazy-load Three.js 3D element with SSR disabled and static SVG fallback
+const DataMesh3D = dynamic(
+  () => import('./data-mesh-3d').then((mod) => mod.DataMesh3D),
+  {
+    ssr: false,
+    loading: () => <DataMeshStatic className="h-[200px] sm:h-[240px]" />,
+  }
+);
 
 function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 export function Hero({ profile, hasResume }: { profile: Profile; hasResume: boolean }) {
-
   return (
     <section className="relative overflow-hidden pt-16" aria-label="Introduction">
       {/* Layered cinematic backdrop: wash + grid + grain + vignette */}
@@ -27,10 +37,10 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
       <div className="cinematic-vignette" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 pt-14 sm:pt-20 lg:pt-24">
-        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-end">
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-16 items-center">
           <Scroll3D variant="exit" className="text-center lg:text-left">
             <div className="hero-enter inline-flex items-center gap-2.5 rounded-full border border-border bg-background/70 px-4 py-1.5 text-xs font-medium tracking-wide text-muted-foreground backdrop-blur-sm" style={{ animationDelay: '0ms' }}>
-              <span className="status-dot h-1.5 w-1.5 rounded-full bg-green-500" aria-hidden="true" />
+              <span className="status-dot h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
               <span className="uppercase tracking-[0.18em]">Open to new opportunities</span>
               <span aria-hidden="true" className="text-border">/</span>
               <span className="text-foreground">Data Analyst · SQL · Python · Power BI</span>
@@ -101,22 +111,32 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
           </Scroll3D>
 
           <Scroll3D variant="exit-right">
-          <div className="hero-enter" style={{ animationDelay: '220ms' }}>
-            <aside className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm" aria-label="Professional snapshot">
-              <div className="flex items-center justify-between border-b border-border px-6 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Snapshot</p>
-                <p className="text-xs text-muted-foreground">Evidence over claims</p>
+            <div className="hero-enter space-y-6" style={{ animationDelay: '220ms' }}>
+              {/* Subtle 3D Data Element Container */}
+              <div className="relative mx-auto max-w-md h-[210px] sm:h-[240px] overflow-hidden rounded-2xl border border-border/80 bg-card/60 backdrop-blur-sm shadow-sm flex items-center justify-center">
+                <div className="absolute top-3 left-4 flex items-center gap-2 z-10">
+                  <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">3D Analytics Model</span>
+                </div>
+                <DataMesh3D className="h-full w-full" />
               </div>
-              <dl className="divide-y divide-border">
-                {PROFESSIONAL_SNAPSHOT.map((item) => (
-                  <div key={item.label} className="flex items-baseline justify-between gap-6 px-6 py-4 transition-colors hover:bg-muted/40">
-                    <dt className="text-sm text-muted-foreground">{item.value}</dt>
-                    <dd className="text-right text-lg font-semibold tracking-tight">{item.label}</dd>
-                  </div>
-                ))}
-              </dl>
-            </aside>
-          </div>
+
+              {/* Professional Snapshot Card */}
+              <aside className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm" aria-label="Professional snapshot">
+                <div className="flex items-center justify-between border-b border-border px-6 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Snapshot</p>
+                  <p className="text-xs text-muted-foreground">Evidence over claims</p>
+                </div>
+                <dl className="divide-y divide-border">
+                  {PROFESSIONAL_SNAPSHOT.map((item) => (
+                    <div key={item.label} className="flex items-baseline justify-between gap-6 px-6 py-4 transition-colors hover:bg-muted/40">
+                      <dt className="text-sm text-muted-foreground">{item.value}</dt>
+                      <dd className="text-right text-lg font-semibold tracking-tight">{item.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </aside>
+            </div>
           </Scroll3D>
         </div>
       </div>
