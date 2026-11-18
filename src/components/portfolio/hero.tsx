@@ -125,7 +125,6 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
               <aside className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-border bg-card/80 backdrop-blur-sm" aria-label="Professional snapshot">
                 <div className="flex items-center justify-between border-b border-border px-6 py-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Snapshot</p>
-                  <p className="text-xs text-muted-foreground">Evidence over claims</p>
                 </div>
                 <dl className="divide-y divide-border">
                   {PROFESSIONAL_SNAPSHOT.map((item) => (

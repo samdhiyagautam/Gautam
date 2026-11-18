@@ -229,7 +229,7 @@ HTML = """<!DOCTYPE html>
       </div>
       <ul>
         <li>Constructed star-schema analytical model with 11 production SQL queries using CTEs, CASE conditional pivots, and LAG window functions to evaluate customer concentration and MoM growth.</li>
-        <li>Verified Pareto principle (top 20% accounts drove 50.9% / $4.20M of $8.26M revenue); analyzed Q4 seasonal revenue spikes ($1.32M in 2024, $1.24M in 2025) and repeat buyer metrics (84.4%).</li>
+        <li>Verified Pareto principle (top 20% accounts drove 50.9% (synthetic data) / $4.20M of $8.26M (synthetic data) revenue); analyzed Q4 seasonal revenue spikes ($1.32M in 2024, $1.24M in 2025) and repeat buyer metrics (84.4% (synthetic data)).</li>
       </ul>
     </div>
   </section>

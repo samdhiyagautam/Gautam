@@ -317,6 +317,35 @@ export function ProjectDetailView({ project }: { project: Project }) {
           {/* Connected Vertical Timeline */}
           <CaseStudyTimeline steps={steps} />
 
+          {/* Optional Power BI Screenshot Slot — Renders ONLY if a Power BI screenshot exists */}
+          {project.id === 'case-study-retail-sales-analysis' &&
+            project.screenshots.some((s) => s.toLowerCase().includes('powerbi') || s.toLowerCase().includes('power-bi')) && (
+              <Card className="border-border/80 bg-card/90 shadow-sm">
+                <CardContent className="p-6 pt-0 space-y-4">
+                  <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <BarChart2 className="h-5 w-5 text-primary" />
+                    <span>Power BI Dashboard</span>
+                  </h2>
+                  <p className="text-sm text-muted-foreground">Interactive reporting views and DAX KPI visualizations.</p>
+                  <div className="grid gap-4">
+                    {project.screenshots
+                      .filter((s) => s.toLowerCase().includes('powerbi') || s.toLowerCase().includes('power-bi'))
+                      .map((pbiUrl, i) => (
+                        <div key={pbiUrl} className="group/pbi relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/30">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={pbiUrl}
+                            alt={`${project.name} — Power BI Dashboard ${i + 1}`}
+                            className="h-full w-full object-contain p-2 transition-transform duration-700 ease-out group-hover/pbi:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
           {/* Screenshots Gallery with Camera Focus Zoom */}
           {project.screenshots.length > 0 && (
             <Card>

@@ -35,7 +35,7 @@ export function AIWorkflow() {
     <section id="ai-workflow" className="py-16 sm:py-20 bg-background border-t border-border/40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="04 — AI as a Co-Pilot"
+          eyebrow="04 — AI Tools"
           title="How I work with AI"
           lede="AI is a productivity multiplier for drafting and exploration — guided and rigorously verified by human analytical judgment."
         />

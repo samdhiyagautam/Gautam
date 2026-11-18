@@ -12,7 +12,8 @@ interface AnimatedCounterProps {
 }
 
 /**
- * Animated counter that counts up to a target number when scrolled into view.
+ * Animated counter that renders the FINAL value on SSR for crawlers and ATS,
+ * and executes a smooth count-up animation as progressive enhancement when scrolled into view.
  * - Tabular numbers ensure zero layout shift.
  * - Disables animation when prefers-reduced-motion is active.
  * - Single-play trigger on viewport entry via IntersectionObserver.
@@ -25,12 +26,8 @@ export function AnimatedCounter({
   suffix = '',
   className = '',
 }: AnimatedCounterProps) {
-  const [displayValue, setDisplayValue] = React.useState(() => {
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return value;
-    }
-    return 0;
-  });
+  // Always initialize with final value so server-rendered HTML contains the real number
+  const [displayValue, setDisplayValue] = React.useState(value);
   const containerRef = React.useRef<HTMLSpanElement>(null);
   const hasAnimated = React.useRef(false);
 
@@ -54,6 +51,9 @@ export function AnimatedCounter({
           const startTime = performance.now();
           const startValue = 0;
           const endValue = value;
+
+          // Start count-up animation as progressive enhancement
+          setDisplayValue(0);
 
           const step = (currentTime: number) => {
             const progress = Math.min((currentTime - startTime) / duration, 1);

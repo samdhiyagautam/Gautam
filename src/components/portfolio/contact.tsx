@@ -185,10 +185,22 @@ export function Contact({
               <CardContent>
                 {deliveryConfigured ? (
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-                  {/* Honeypot anti-spam field — hidden from human users */}
-                  <div className="hidden" aria-hidden="true">
+                  {/* Honeypot anti-spam field — visually hidden off-screen from human users */}
+                  <div
+                    className="absolute -left-[9999px] -top-[9999px] h-0 w-0 opacity-0 overflow-hidden pointer-events-none select-none"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                  >
                     <Label htmlFor="website">Website</Label>
-                    <Input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" disabled={isSubmitting} />
+                    <Input
+                      id="website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      disabled={isSubmitting}
+                    />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div className="space-y-2">

@@ -19,7 +19,7 @@ export function About({ profile }: { profile: Profile }) {
           eyebrow="01 — Profile"
           title="About me"
           align="left"
-          lede="Business understanding first, then data, AI, and technology — in that order."
+          lede="Business understanding first, then data and dashboards."
         />
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <Reveal>
