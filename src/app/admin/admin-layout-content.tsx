@@ -55,9 +55,11 @@ export default function AdminLayoutContent({ children }: { children: React.React
       >
         <div className="flex h-16 items-center justify-between px-4 border-b border-border">
           {!sidebarCollapsed && (
-            <Link href="/admin" className="flex items-center space-x-2" onClick={() => setSidebarOpen(false)}>
-              <Briefcase className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">Admin</span>
+            <Link href="/admin" className="flex items-center space-x-2.5" onClick={() => setSidebarOpen(false)}>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shrink-0 shadow-sm" aria-hidden="true">
+                GS
+              </div>
+              <span className="text-xl font-bold tracking-tight">Admin</span>
             </Link>
           )}
           <Button

@@ -101,14 +101,14 @@ export async function POST(request: NextRequest) {
   let emailSent = false;
 
   if (apiKey && toEmail) {
-    const from = process.env.CONTACT_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
+    const from = process.env.CONTACT_FROM_EMAIL || "Gautam Samdhiya <onboarding@resend.dev>";
     try {
       const resend = new Resend(apiKey);
       const { error: resendError } = await resend.emails.send({
         from,
         to: [toEmail],
         replyTo: email,
-        subject: `[Portfolio Inquiry] ${subject}`,
+        subject: `[Gautam Samdhiya Inquiry] ${subject}`,
         text: `From: ${name} <${email}>\nIP: ${ip}\n\n${message}`,
         html: `<p><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p><p><strong>Subject:</strong> ${escapeHtml(subject)}</p><p><strong>IP:</strong> ${escapeHtml(ip)}</p><hr /><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>`,
       });

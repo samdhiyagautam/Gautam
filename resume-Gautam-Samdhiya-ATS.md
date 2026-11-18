@@ -17,23 +17,22 @@ Data Analyst with 2+ years of professional experience as an Assistant Manager, c
 ## PROFESSIONAL EXPERIENCE
 
 **Assistant Manager — Dhurina**
-October 2024 – Present
-- Lead data analytics initiatives supporting business decision-making across departments.
-- Design and maintain Power BI dashboards for operational reporting with DAX measures and automated data refresh.
-- Automate repetitive reporting workflows using Python and Excel, reducing manual compilation effort.
-- Collaborate with cross-functional teams to define data requirements and translate them into practical reports and analyses.
-- Build and maintain internal web applications (Next.js, React, Supabase, PostgreSQL) supporting daily operations.
-- Apply AI-assisted workflows for research, analysis, and documentation, with human validation of all outputs.
+October 2024 – Present | Ranchi, India
+- Designed and deployed operational Power BI dashboards with custom DAX measures and automated data refresh, enabling leadership to track departmental KPIs with self-service reporting.
+- Automated recurring cross-departmental reporting pipelines using Python (Pandas) and SQL, eliminating manual spreadsheet consolidation across teams.
+- Engineered standardized SQL queries and analytical views across operational PostgreSQL databases to consolidate fragmented data sources, resolving metric discrepancies across teams.
+- Partnered with departmental stakeholders to translate operational pain points into structured reporting specifications and actionable visual analytics.
+- Developed and maintained internal operations web applications using Next.js, Supabase, and PostgreSQL, supporting daily staff workflow and structured data intake.
 
 ## PROJECTS
 
-**IPL Cricket Analytics — SQL + Python** | github.com/samdhiyagautam/Gautam/tree/main/demo-projects/ipl-analysis
-- Analyzed real ball-by-ball data of 1,243 IPL matches (295,732 deliveries, 2008–2026) sourced from cricsheet.org (ODC-By licensed): designed a two-table SQLite schema with indexes and answered 12 business questions in SQL — top run scorers/wicket takers, economy rates, toss impact, chase-vs-defend trends by season, and venue scoring patterns.
-- Built a dependency-free Python pipeline (download → consolidate → SQLite → export) that parses query markers from the SQL file, publishes one results CSV per question plus a season runs chart (SVG), with documented data conventions (legal balls, bowler-credited wickets, super-over exclusion).
+**IPL Cricket Analytics (SQL + Python Pipeline)** | github.com/samdhiyagautam/Gautam/tree/main/demo-projects/ipl-analysis
+- Analyzed ball-by-ball data of 1,243 IPL matches (295,732 deliveries, 2008–2026) sourced from cricsheet.org: designed 2-table indexed SQLite schema and answered 12 SQL questions (54.7% toss-field advantage, Jaipur 64.7% chase win rate, death-over economy).
+- Built dependency-free Python automated ingestion pipeline (download → SQLite → export) executing in ~4.2 seconds, outputting 12 query CSVs and SVG trend charts.
 
-**Retail Sales Analysis — SQL + Python** | github.com/samdhiyagautam/Gautam/tree/main/demo-projects/retail-sales-analysis
-- Built an end-to-end analytics demo on a clearly-labeled synthetic retail dataset: SQLite schema with indexes, 11 business questions answered in SQL (joins, CTEs, CASE pivots, LAG window functions), and a zero-dependency Python pipeline that loads CSVs, runs every query, and exports results.
-- Published a monthly revenue trend chart (SVG) and one results file per question in a public GitHub repository, with documented Excel pivot-table and Power BI (DAX measures, star-style data model) workflows.
+**Retail Sales Analysis & Customer KPI Modeling (SQL + Power BI + Python)** | github.com/samdhiyagautam/Gautam/tree/main/demo-projects/retail-sales-analysis
+- Constructed star-schema analytical model with 11 production SQL queries using CTEs, CASE conditional pivots, and LAG window functions to evaluate customer concentration and MoM growth.
+- Verified Pareto principle (top 20% accounts drove 50.9% / $4.20M of $8.26M revenue); analyzed Q4 seasonal revenue spikes ($1.32M in 2024, $1.24M in 2025) and repeat buyer metrics (84.4%).
 
 ## EDUCATION
 Bachelor of Science in Mathematics (B.Sc.)

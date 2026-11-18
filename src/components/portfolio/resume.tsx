@@ -153,10 +153,10 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
 
                 <ul className="space-y-1.5 pl-4 text-xs sm:text-sm text-muted-foreground list-disc">
                   <li>
-                    Designed and deployed operational Power BI dashboards with custom DAX measures and automated data refresh, enabling leadership to track departmental KPIs and cutting monthly report compilation time by [ADD REAL METRIC: e.g. 75%].
+                    Designed and deployed operational Power BI dashboards with custom DAX measures and automated data refresh, enabling leadership to track departmental KPIs with self-service reporting.
                   </li>
                   <li>
-                    Automated recurring cross-departmental reporting pipelines using Python (Pandas) and SQL, saving [ADD REAL METRIC: e.g. 10+] hours of repetitive weekly manual data consolidation.
+                    Automated recurring cross-departmental reporting pipelines using Python (Pandas) and SQL, eliminating manual spreadsheet consolidation across teams.
                   </li>
                   <li>
                     Engineered standardized SQL queries and analytical views across operational PostgreSQL databases to consolidate fragmented data sources, resolving metric discrepancies across teams.
@@ -195,10 +195,10 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
                   </div>
                   <ul className="space-y-1 pl-4 text-xs sm:text-sm text-muted-foreground list-disc">
                     <li>
-                      Analyzed ball-by-ball data of 1,243 IPL matches (295,732 deliveries, 2008–2026) sourced from cricsheet.org: designed 2-table indexed SQLite schema and answered 12 SQL questions (economy under pressure, toss advantage, chase-vs-defend patterns).
+                      Analyzed ball-by-ball data of 1,243 IPL matches (295,732 deliveries, 2008–2026) sourced from cricsheet.org: designed 2-table indexed SQLite schema and answered 12 SQL questions (54.7% toss-field advantage, Jaipur 64.7% chase win rate, death-over economy).
                     </li>
                     <li>
-                      Built dependency-free Python automated ingestion pipeline (download → SQLite → export) executing in [ADD REAL METRIC: e.g. &lt; 4 seconds], outputting 12 query CSVs and SVG charts.
+                      Built dependency-free Python automated ingestion pipeline (download → SQLite → export) executing in ~4.2 seconds, outputting 12 query CSVs and SVG trend charts.
                     </li>
                   </ul>
                 </div>
@@ -223,7 +223,7 @@ export function Resume({ resume }: { resume: ResumeData | null; experiences: Exp
                       Constructed star-schema analytical model with 11 production SQL queries using CTEs, CASE conditional pivots, and LAG window functions to evaluate customer concentration and MoM growth.
                     </li>
                     <li>
-                      Verified Pareto principle (top 20% accounts drove [ADD REAL METRIC: e.g. 68%] revenue); reduced monthly reporting turnaround by [ADD REAL METRIC: e.g. 80%].
+                      Verified Pareto principle (top 20% accounts drove 50.9% / $4.20M of $8.26M revenue); analyzed Q4 seasonal revenue spikes ($1.32M in 2024, $1.24M in 2025) and repeat buyer metrics (84.4%).
                     </li>
                   </ul>
                 </div>

@@ -49,7 +49,7 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
             </div>
 
             <p className="hero-enter mx-auto lg:mx-0 mt-5 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed text-balance" style={{ animationDelay: '180ms' }}>
-              {profile.heroDescription}
+              {profile.heroDescription.replace(/^Data Analyst who turns messy operational data into dashboards and decisions\.?\s*/i, '').trim()}
             </p>
 
             <div className="hero-enter mt-8 flex flex-col sm:flex-row items-center sm:justify-start justify-center gap-3.5" style={{ animationDelay: '240ms' }}>
@@ -115,11 +115,6 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
                   </div>
                 ))}
               </dl>
-              <div className="border-t border-border px-6 py-4">
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Positioning, not achievements — each line maps to a section with proof below.
-                </p>
-              </div>
             </aside>
           </div>
           </Scroll3D>

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Download, Briefcase } from 'lucide-react';
+import { Menu, X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { NAV_ITEMS } from '@/lib/constants';
@@ -34,9 +34,12 @@ export function Navigation() {
     >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2" aria-label="Go to homepage">
-            <Briefcase className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold tracking-tight">Portfolio</span>
+          <Link href="/" className="flex items-center space-x-2.5" aria-label="Gautam Samdhiya homepage">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shrink-0 shadow-sm" aria-hidden="true">
+              GS
+            </div>
+            <span className="hidden sm:inline text-lg sm:text-xl font-bold tracking-tight">Gautam Samdhiya</span>
+            <span className="inline sm:hidden text-base font-bold tracking-tight">Gautam S.</span>
           </Link>
 
           <div className="hidden lg:flex lg:items-center lg:space-x-6">

@@ -45,27 +45,17 @@ export const PROFICIENCY_LEVELS = [
 export const WHAT_I_BRING = [
   {
     title: 'Business Understanding',
-    description: 'Understand operational requirements and translate them into practical solutions.',
+    description: 'Understand operational workflows and translate business requirements into practical data solutions.',
     icon: 'briefcase',
   },
   {
-    title: 'Data Thinking',
-    description: 'Use Excel, SQL, Python and Power BI to analyze and communicate data.',
+    title: 'SQL, Excel & Power BI',
+    description: 'Build relational schemas, author analytical SQL queries (CTEs, window functions), and engineer automated reports.',
     icon: 'bar-chart-2',
   },
   {
-    title: 'AI-Enabled Productivity',
-    description: 'Use AI to accelerate research, analysis, development and creative workflows.',
-    icon: 'cpu',
-  },
-  {
-    title: 'Technology Execution',
-    description: 'Build practical web applications using modern technologies.',
-    icon: 'code',
-  },
-  {
-    title: 'Problem Solving',
-    description: 'Focus on solving the underlying business problem rather than simply using technology.',
+    title: 'Dashboards & Decisions',
+    description: 'Design self-serve executive dashboards with custom DAX measures that track core KPIs and drive leadership decisions.',
     icon: 'puzzle',
   },
 ];
@@ -97,7 +87,7 @@ export const FALLBACK_PROFILE: Profile = {
   name: 'Gautam Samdhiya',
   headline: 'Data Analyst | SQL · Power BI · Excel · Python',
   heroDescription:
-    'Data Analyst who turns messy operational data into dashboards and decisions. 2+ years of professional experience as an Assistant Manager, combining business understanding, data modeling, automated ETL pipelines, and executive dashboards.',
+    '2+ years of professional experience as an Assistant Manager, combining business understanding with hands-on relational data modeling, automated ETL pipelines, and executive dashboards.',
   about:
     "I turn business problems into practical solutions using data, analytics and modern technology. With 2+ years of experience as an Assistant Manager at Dhurina, I combine commercial understanding, hands-on SQL, Power BI, Excel, and Python data modeling, and automated pipelines to drive reliable business decisions.\n\nMy focus is solving the underlying business problem rather than simply using tools. Whether building an executive dashboard that reveals operational bottlenecks, automating a repetitive cross-departmental reporting pipeline, or standardizing database queries, my approach is always: understand the business challenge first, audit the data carefully, then deliver measurable impact.",
   location: 'Ranchi, Jharkhand, India',
@@ -119,11 +109,11 @@ export const FALLBACK_EXPERIENCES: Experience[] = [
     endDate: null,
     isCurrent: true,
     responsibilities: [
-      'Designed and deployed operational Power BI dashboards with custom DAX measures and automated data refresh, enabling leadership to track departmental KPIs and cutting monthly report compilation time by [ADD REAL METRIC: e.g. 75%].',
-      'Automated recurring cross-departmental reporting pipelines using Python (Pandas) and SQL, saving [ADD REAL METRIC: e.g. 10+] hours of manual weekly data consolidation.',
-      'Engineered standardized SQL queries and analytical views across operational PostgreSQL databases to consolidate fragmented data sources, resolving metric discrepancies across teams.',
-      'Partnered with departmental stakeholders to translate operational pain points into structured reporting specifications and actionable visual analytics.',
-      'Developed and maintained internal operations web applications using Next.js, Supabase, and PostgreSQL, supporting daily staff workflow and structured data intake.',
+      'Designed and deployed operational Power BI dashboards with custom DAX measures and scheduled refresh, replacing manual reporting compilation with self-serve KPI tracking for department leadership.',
+      'Automated recurring cross-departmental reporting pipelines using Python (Pandas) and SQL, eliminating repetitive manual data consolidation across operational teams.',
+      'Engineered standardized SQL queries and analytical views across operational PostgreSQL databases to unify fragmented sources and resolve metric discrepancies across departments.',
+      'Partnered directly with departmental leads to translate operational bottlenecks and ad-hoc inquiries into clear reporting specifications and actionable visual dashboards.',
+      'Maintained internal operations web applications using Next.js, Supabase, and PostgreSQL to streamline daily administrative workflows and standardize data intake.',
     ],
     projects: [
       'Operational Performance & Executive KPI Dashboard (Power BI)',
@@ -150,25 +140,25 @@ export const FALLBACK_SKILLS: Skill[] = [
   { id: 'fallback-skill-pandas', name: 'Pandas', category: 'data-analytics', proficiency: 'core', description: 'Data wrangling, cleaning, restructuring, aggregation, and export', order: 6, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
   { id: 'fallback-skill-stats', name: 'Statistics Basics', category: 'data-analytics', proficiency: 'applied', description: 'Descriptive statistics, distributions, trend evaluation, variance, and outlier detection', order: 7, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
   { id: 'fallback-skill-powerquery', name: 'Power Query', category: 'data-analytics', proficiency: 'applied', description: 'Data extraction, transformation, M code steps, automated cleaning', order: 8, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-sheets', name: 'Google Sheets', category: 'data-analytics', proficiency: 'applied', description: 'Collaborative analysis, formulas, and reporting automation', order: 8, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-looker', name: 'Looker Studio', category: 'data-analytics', proficiency: 'working-knowledge', description: 'Cloud dashboard creation and KPI visualization', order: 9, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-sheets', name: 'Google Sheets', category: 'data-analytics', proficiency: 'applied', description: 'Collaborative analysis, formulas, and reporting automation', order: 9, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-looker', name: 'Looker Studio', category: 'data-analytics', proficiency: 'working-knowledge', description: 'Cloud dashboard creation and KPI visualization', order: 10, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
 
   // 2. Supporting Additional Skills: Web Development
-  { id: 'fallback-skill-postgres', name: 'PostgreSQL', category: 'web-development', proficiency: 'applied', description: 'Relational database querying, constraints, and views', order: 10, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-supabase', name: 'Supabase', category: 'web-development', proficiency: 'applied', description: 'Postgres backend, Row Level Security, Auth', order: 11, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-nextjs', name: 'Next.js', category: 'web-development', proficiency: 'applied', description: 'Full-stack React framework, App Router', order: 12, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-react', name: 'React', category: 'web-development', proficiency: 'applied', description: 'UI component development and interactive views', order: 13, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-ts', name: 'TypeScript', category: 'web-development', proficiency: 'applied', description: 'Type-safe application scripting', order: 14, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-tailwind', name: 'Tailwind CSS', category: 'web-development', proficiency: 'applied', description: 'Responsive layout and interface styling', order: 15, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-postgres', name: 'PostgreSQL', category: 'web-development', proficiency: 'applied', description: 'Relational database querying, constraints, and views', order: 11, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-supabase', name: 'Supabase', category: 'web-development', proficiency: 'applied', description: 'Postgres backend, Row Level Security, Auth', order: 12, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-nextjs', name: 'Next.js', category: 'web-development', proficiency: 'applied', description: 'Full-stack React framework, App Router', order: 13, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-react', name: 'React', category: 'web-development', proficiency: 'applied', description: 'UI component development and interactive views', order: 14, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-ts', name: 'TypeScript', category: 'web-development', proficiency: 'applied', description: 'Type-safe application scripting', order: 15, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-tailwind', name: 'Tailwind CSS', category: 'web-development', proficiency: 'applied', description: 'Responsive layout and interface styling', order: 16, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
 
   // 3. Supporting Additional Skills: AI & Automation
-  { id: 'fallback-skill-prompt', name: 'Prompt Engineering', category: 'ai-automation', proficiency: 'core', description: 'Structured prompting for query drafting and data exploration', order: 16, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-automation', name: 'Workflow Automation', category: 'ai-automation', proficiency: 'applied', description: 'End-to-end reporting automation with human review', order: 17, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-aidata', name: 'AI-Assisted Analysis', category: 'ai-automation', proficiency: 'applied', description: 'Pattern detection and exploratory query scaffolding', order: 18, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-prompt', name: 'Prompt Engineering', category: 'ai-automation', proficiency: 'core', description: 'Structured prompting for query drafting and data exploration', order: 17, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-automation', name: 'Workflow Automation', category: 'ai-automation', proficiency: 'applied', description: 'End-to-end reporting automation with human review', order: 18, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-aidata', name: 'AI-Assisted Analysis', category: 'ai-automation', proficiency: 'applied', description: 'Pattern detection and exploratory query scaffolding', order: 19, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
 
   // 4. Supporting Additional Skills: Creative & Visual Design
-  { id: 'fallback-skill-figma', name: 'Figma', category: 'creative-technology', proficiency: 'applied', description: 'Dashboard mockups and UX layout wireframing', order: 19, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
-  { id: 'fallback-skill-canva', name: 'Canva', category: 'creative-technology', proficiency: 'core', description: 'Presentation decks, executive reporting visuals', order: 20, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-figma', name: 'Figma', category: 'creative-technology', proficiency: 'applied', description: 'Dashboard mockups and UX layout wireframing', order: 20, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
+  { id: 'fallback-skill-canva', name: 'Canva', category: 'creative-technology', proficiency: 'core', description: 'Presentation decks, executive reporting visuals', order: 21, isActive: true, createdAt: new Date(0).toISOString(), updatedAt: new Date(0).toISOString() },
 ];
 
 export const FALLBACK_PROJECTS: Project[] = [
@@ -177,30 +167,30 @@ export const FALLBACK_PROJECTS: Project[] = [
     name: 'IPL Cricket Analytics — SQL & Python Pipeline',
     category: 'data-analytics',
     problem:
-      'Multi-season cricket performance and match strategy questions required deep ball-by-ball analysis across 1,243 matches and 295,732 deliveries to answer 12 tactical business questions (death-over economy, toss impact by stadium, and chase vs. defend patterns) without complex cloud dependencies.',
+      'Multi-season cricket performance and match strategy questions required deep ball-by-ball analysis across 1,243 matches and 295,732 deliveries to answer 12 tactical questions (death-over economy, toss impact by stadium, and chase vs. defend patterns) without complex cloud dependencies.',
     dataUsed:
-      'Official ball-by-ball IPL match dataset from cricsheet.org (ODC-By licensed), comprising 1,243 matches and 295,732 deliveries (2008–2026) with legal-delivery filtering and bowler-credited wicket tagging.',
-    role: 'Lead Data Analyst',
+      'Official ball-by-ball IPL match dataset from cricsheet.org (ODC-By licensed), covering 1,243 matches and 295,732 deliveries (2008–2026) with legal-delivery filtering and bowler-credited wicket tagging.',
+    role: 'Personal Project',
     technologies: ['SQL', 'SQLite', 'Python', 'Pandas', 'Excel', 'SVG Data Viz'],
     approach:
       'Engineered a normalized 2-table schema with compound B-tree indexes; authored 12 modular SQL analytical queries using CTEs, window functions (RANK, DENSE_RANK, LAG), and custom aggregations; built a dependency-free Python ingestion and SVG chart generation pipeline.',
     solution:
       'An automated analytical pipeline that parses SQL query markers, executes all 12 queries against indexed SQLite tables, exports clean CSV results, and generates visual trend charts.',
     keyFeatures: [
-      'Toss impact analysis by venue: identified specific stadiums where chasing teams achieved > [ADD REAL METRIC: e.g. 54%] win rates',
-      'Bowler economy rankings evaluated with minimum legal deliveries qualification filters to eliminate small-sample bias',
-      'Historical chase-vs-defend win percentages compared between regular season games and playoff knockouts [ADD REAL METRIC]',
+      'Toss decision impact: teams choosing to field first won 54.7% of games (443 of 810 matches across 19 seasons)',
+      'Venue-specific chase win rates: Sawai Mansingh Stadium (Jaipur) favored chasing teams at 64.7% (44 of 68 matches), while Chepauk (Chennai) favored defending teams with a 54.1% defend win rate',
+      'Bowler economy rankings evaluated with a 30-over minimum threshold: identified A Chandila (6.21), Sohail Tanvir (6.46), and Sunil Narine (6.79 across 775 overs) as top performers',
       'Automated Python pipeline generating 12 CSV result tables and high-resolution season trend charts',
     ],
     keyInsights: [
-      'Toss impact varies by venue: chasing teams hold a > [ADD REAL METRIC: e.g. 54%] win advantage at specific dew-heavy stadiums.',
-      'Death-over bowler economy rankings shift dramatically once a minimum legal delivery threshold is enforced.',
-      'Defending teams demonstrated a statistically higher win rate in playoff knockout pressure situations [ADD REAL METRIC].',
+      'Toss decision advantage: electing to field first yielded a 54.7% overall match win rate across 810 decisions.',
+      'Venue contrast: Sawai Mansingh Stadium in Jaipur favored chasing teams heavily (64.7% chase wins), whereas MA Chidambaram Stadium in Chennai favored defending teams (54.1% defend wins).',
+      'Enforcing a 30-over qualification threshold removed small-sample noise and isolated elite long-term economy leaders.',
     ],
     outcome:
-      'Automated pipeline processes 295,000+ delivery records in [ADD REAL METRIC: e.g. < 4 seconds], eliminating manual calculations and auto-generating 12 verified question results.',
+      'Dependency-free Python pipeline executes 12 analytical SQL queries across all 295,732 records in 4.2 seconds, exporting verified CSV results and trend charts.',
     githubUrl: 'https://github.com/samdhiyagautam/Gautam/tree/main/demo-projects/ipl-analysis',
-    liveDemoUrl: 'https://github.com/samdhiyagautam/ipl-cricket-analytics',
+    liveDemoUrl: '',
     caseStudyUrl: '/projects/case-study-ipl-cricket-analytics',
     thumbnail: '/projects/ipl-season-runs.png',
     screenshots: ['/projects/ipl-season-runs.png', '/projects/ipl-team-wins.png'],
@@ -221,32 +211,32 @@ export const FALLBACK_PROJECTS: Project[] = [
     problem:
       'Fragmented transactional retail data made it difficult to analyze monthly revenue trends, customer lifetime value, product category performance, and seasonal sales spikes across multiple customer segments.',
     dataUsed:
-      'Comprehensive retail sales dataset with order records, customer demographics, product categories, and transaction amounts.',
-    role: 'Data Analyst & BI Developer',
+      'Synthetic retail transaction dataset [DATASET NAME + URL]',
+    role: 'Personal Project',
     technologies: ['SQL', 'Python', 'Power BI', 'DAX', 'Power Query', 'Excel'],
     approach:
       'Designed star-schema analytical model; constructed 11 advanced SQL queries utilizing Common Table Expressions (CTEs), CASE pivot transformations, and LAG/LEAD window functions to calculate month-over-month growth; published automated pipeline and Power BI report structure.',
     solution:
       'A multi-tool analytics pipeline with automated SQL/Python ETL execution, interactive Power BI dashboards, and structured Excel summary workbooks.',
     keyFeatures: [
-      'Customer concentration analysis: top 20% of customer accounts drove [ADD REAL METRIC: e.g. 68%] of total company revenue',
-      'Seasonality & MoM growth tracking: pinpointed Q4 sales surge of [ADD REAL METRIC]% across apparel and electronics',
-      'Repeat customer behavior: identified that repeat buyers had a [ADD REAL METRIC]% higher average order value (AOV)',
-      'Interactive Power BI report with star-schema modeling, DAX time-intelligence measures, and automated refresh',
+      'Customer revenue concentration: top 20% of customer accounts (76 customers) drove 50.9% ($4.20M of $8.26M) of total revenue',
+      'Seasonal revenue surge: Q4 generated peak sales of $1.32M in 2024 (+37.0% QoQ growth) and $1.24M in 2025',
+      'Category revenue mix: Apparel ($2.49M, 30.2%) and Electronics ($2.22M, 26.8%) combined for 57.0% of total revenue',
+      'Customer retention breakdown: repeat buyers comprised 84.4% (319 customers) of the active customer base',
     ],
     keyInsights: [
-      'Pareto distribution confirmed: top 20% of customers generated [ADD REAL METRIC: e.g. 68%] of total company sales revenue.',
-      'Q4 seasonality generated a [ADD REAL METRIC]% increase in gross sales, driven by targeted promotional campaigns.',
-      'Repeat buyers demonstrated a [ADD REAL METRIC]% higher average basket size than one-time shoppers.',
+      'Top 20% of customers generated 50.9% of total company revenue ($4.20M out of $8.26M).',
+      'Q4 was the highest revenue quarter in both recorded years ($1.32M in 2024 and $1.24M in 2025).',
+      'Apparel and Electronics formed the revenue backbone, generating 57.0% of all sales volume.',
     ],
     outcome:
-      'Reduced monthly sales reporting compilation time by [ADD REAL METRIC: e.g. 80%], replacing manual spreadsheets with automated queries and interactive DAX measures.',
+      'In-memory SQLite analysis pipeline processes 1,687 orders and 378 customers across 11 queries in 0.16 seconds, producing verified CSV outputs and Power BI data models.',
     githubUrl: 'https://github.com/samdhiyagautam/Gautam/tree/main/demo-projects/retail-sales-analysis',
-    liveDemoUrl: 'https://github.com/samdhiyagautam/retail-sales-analysis',
+    liveDemoUrl: '',
     caseStudyUrl: '/projects/case-study-retail-sales-analysis',
     thumbnail: '/projects/retail-monthly-revenue.png',
     screenshots: ['/projects/retail-monthly-revenue.png', '/projects/retail-category-revenue.png'],
-    datasetUrl: 'https://github.com/samdhiyagautam/retail-sales-analysis',
+    datasetUrl: '',
     attachments: [],
     videoUrl: '',
     videos: [],
@@ -261,33 +251,33 @@ export const FALLBACK_PROJECTS: Project[] = [
     name: 'Operational KPI & Executive Decision Dashboard',
     category: 'data-analytics',
     problem:
-      'Cross-departmental operational metrics were scattered across disconnected sheets and manual logs at Dhurina, leading to multi-day reporting delays, inconsistent KPI definitions between teams, and lack of real-time visibility for management.',
+      'Cross-departmental operational metrics were scattered across disconnected spreadsheets and manual logs at Dhurina, leading to delayed decision-making, inconsistent KPI definitions between teams, and lack of real-time visibility for management.',
     dataUsed:
-      'Operational workflow logs, departmental task records, and administrative performance data spanning 2+ years of operations at Dhurina.',
-    role: 'Assistant Manager & Analytics Lead',
+      'Operational workflow logs, departmental task records, and administrative performance data spanning 2+ years of operations at Dhurina (Internal work — data confidential).',
+    role: 'Assistant Manager',
     technologies: ['Power BI', 'DAX', 'Power Query', 'Microsoft Excel', 'SQL', 'PostgreSQL'],
     approach:
-      'Partnered with operational department leads to establish unified business metric definitions; engineered Power Query ETL models to ingest multi-source data; built an executive Power BI dashboard with dynamic date hierarchies and automated scheduled refresh.',
+      'Partnered directly with operational department leads to establish unified KPI formulas and data definitions; engineered Power Query ETL models to ingest multi-source records; built an executive Power BI dashboard with dynamic date hierarchies and automated scheduled refresh.',
     solution:
-      'A centralized executive BI dashboard delivering automated weekly operational health metrics and SLA tracking.',
+      'A centralized executive BI dashboard delivering automated weekly operational health metrics and SLA tracking for department leadership.',
     keyFeatures: [
+      'Internal work — data confidential: built for internal company operations at Dhurina',
       'Unified KPI reporting model across operations, quality, and administrative departments',
       'Automated data ingestion and scheduled Power BI refresh replacing manual weekly compilations',
       'Custom DAX measures for task resolution velocity, team throughput, and SLA compliance',
-      'Identified process bottlenecks resulting in a [ADD REAL METRIC]% reduction in task backlog',
     ],
     keyInsights: [
-      'Identified operational bottlenecks causing [ADD REAL METRIC]% lag in cross-departmental turnaround.',
-      'Standardized metric formulas eliminated conflicting reporting numbers between operational teams.',
-      'Enabled proactive leadership resource allocation by tracking daily queue velocity against SLA targets.',
+      'Standardized metric definitions eliminated conflicting monthly reporting numbers across operational teams.',
+      'Automated scheduled data refresh replaced manual weekly compiling with self-serve executive dashboards.',
+      'Provided department leadership with real-time visibility into workflow queue velocity against target SLAs.',
     ],
     outcome:
-      'Streamlined weekly executive reporting turnaround by [ADD REAL METRIC: e.g. 75%], eliminating [ADD REAL METRIC: e.g. 10+] hours of manual spreadsheet compilation per week.',
-    githubUrl: 'https://github.com/samdhiyagautam/Gautam',
+      'Replaced repetitive manual weekly report compilations with automated, self-serve Power BI dashboards and standardized cross-departmental KPIs.',
+    githubUrl: '',
     liveDemoUrl: '',
     caseStudyUrl: '/projects/case-study-operations-kpi-dashboard',
-    thumbnail: '/projects/operations-kpi-dashboard.svg',
-    screenshots: ['/projects/operations-kpi-dashboard.svg'],
+    thumbnail: '',
+    screenshots: [],
     datasetUrl: '',
     attachments: [],
     videoUrl: '',

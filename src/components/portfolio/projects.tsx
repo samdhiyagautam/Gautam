@@ -1,10 +1,10 @@
 'use client';
 
-import { GitBranch, ExternalLink, BarChart2, CheckCircle2, ArrowRight, ArrowUpRight, Database, TrendingUp, Layers } from 'lucide-react';
+import { GitBranch, ExternalLink, CheckCircle2, ArrowRight, ArrowUpRight, Database, TrendingUp, Layers } from 'lucide-react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { isPlaceholderLink } from '@/lib/utils';
+import { isPlaceholderLink, cn } from '@/lib/utils';
 import { Reveal } from './reveal';
 import { Scroll3D } from './scroll-3d';
 import { SectionHeading } from './section-heading';
@@ -58,6 +58,8 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
   const caseNumber = String(index + 1).padStart(2, '0');
   const insights = project.keyInsights && project.keyInsights.length > 0 ? project.keyInsights : project.keyFeatures;
   const screenshot = project.thumbnail || (project.screenshots && project.screenshots[0]) || '';
+  const isConfidential = project.id === 'case-study-operations-kpi-dashboard' || project.role === 'Assistant Manager';
+  const hasScreenshot = Boolean(screenshot && !isPlaceholderLink(screenshot));
 
   return (
     <Reveal delay={index * 100}>
@@ -75,16 +77,22 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
               <Badge variant="outline" className="bg-background text-xs font-medium">
                 {project.role}
               </Badge>
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold">
-                Data Analytics
-              </Badge>
+              {isConfidential ? (
+                <Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold">
+                  Internal work — data confidential
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold">
+                  Data Analytics
+                </Badge>
+              )}
             </div>
           </div>
 
           <div className="p-6 sm:p-8 lg:p-10">
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
-              {/* Left Column: Narrative Details (7 cols) */}
-              <div className="lg:col-span-7 space-y-6">
+            <div className={cn("grid gap-8 lg:gap-10", hasScreenshot ? "lg:grid-cols-12" : "lg:grid-cols-1")}>
+              {/* Left Column: Narrative Details */}
+              <div className={cn("space-y-6", hasScreenshot ? "lg:col-span-7" : "max-w-4xl")}>
                 <div>
                   <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
                     {project.name}
@@ -111,6 +119,12 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     {project.dataUsed || 'Production and transactional dataset structured for analytical modeling.'}
                   </p>
+                  {project.id === 'case-study-retail-sales-analysis' && (
+                    <div className="pt-2 border-t border-border/50 text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground">Data source: </span>
+                      <span>Synthetic Retail Transactions Dataset ([DATASET NAME + URL])</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* 3. Tools */}
@@ -176,7 +190,7 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
                     <Button variant="outline" size="sm" asChild className="gap-2">
                       <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                         <GitBranch className="h-4 w-4 text-primary" />
-                        <span>View SQL &amp; Pipeline Code</span>
+                        <span>GitHub Repository</span>
                       </a>
                     </Button>
                   )}
@@ -184,7 +198,7 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
                     <Button variant="premium" size="sm" asChild className="gap-2">
                       <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-4 w-4" />
-                        <span>Live Repo / Dashboard</span>
+                        <span>Live Dashboard</span>
                       </a>
                     </Button>
                   )}
@@ -199,54 +213,38 @@ function CaseStudyCard({ project, index }: { project: Project; index: number }) 
                 </div>
               </div>
 
-              {/* Right Column: Dashboard Screenshot Slot (5 cols) */}
-              <div className="lg:col-span-5 flex flex-col justify-start">
-                <div className="sticky top-24 space-y-3">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
-                    <span className="font-semibold uppercase tracking-wider">Dashboard / Visual Slot</span>
-                    <span>Interactive View</span>
-                  </div>
-
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/40 shadow-inner group">
-                    {screenshot && !isPlaceholderLink(screenshot) ? (
-                      // eslint-disable-next-line @next/next/no-img-element
+              {/* Right Column: Dashboard Screenshot (rendered only when image exists) */}
+              {hasScreenshot && (
+                <div className="lg:col-span-5 flex flex-col justify-start">
+                  <div className="sticky top-24 space-y-3">
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/40 shadow-inner group">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={screenshot}
                         alt={`${project.name} dashboard screenshot`}
                         className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
                         loading="lazy"
                       />
-                    ) : (
-                      <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center text-muted-foreground">
-                        <BarChart2 className="h-12 w-12 text-primary/40 mb-3" />
-                        <p className="text-sm font-semibold text-foreground">Dashboard Screenshot Slot</p>
-                        <p className="text-xs text-muted-foreground mt-1">Upload dashboard capture via Admin CMS</p>
+                    </div>
+
+                    {project.screenshots && project.screenshots.length > 1 && (
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        {project.screenshots.slice(1, 3).map((shotUrl, i) => (
+                          <div key={i} className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted/30">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={shotUrl}
+                              alt={`${project.name} secondary visual ${i + 1}`}
+                              className="h-full w-full object-contain p-1"
+                              loading="lazy"
+                            />
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
-
-                  {project.screenshots && project.screenshots.length > 1 && (
-                    <div className="grid grid-cols-2 gap-2 pt-2">
-                      {project.screenshots.slice(1, 3).map((shotUrl, i) => (
-                        <div key={i} className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted/30">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={shotUrl}
-                            alt={`${project.name} secondary visual ${i + 1}`}
-                            className="h-full w-full object-contain p-1"
-                            loading="lazy"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="rounded-lg bg-muted/30 p-3 text-xs text-muted-foreground border border-border/50">
-                    <p className="font-medium text-foreground">Recruiter takeaway:</p>
-                    <p className="mt-0.5">Tested on real schemas with query execution, verifiable datasets, and reproducible metrics.</p>
-                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </article>

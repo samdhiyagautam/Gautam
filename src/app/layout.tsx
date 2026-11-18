@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: "/" },
     title: {
       default: title,
-      template: "%s | Gautam Samdhiya Portfolio",
+      template: "%s | Gautam Samdhiya",
     },
     description,
     keywords: [
@@ -60,9 +60,8 @@ export async function generateMetadata(): Promise<Metadata> {
       "Power BI",
       "SQL",
       "Python",
-      "AI Automation",
-      "Next.js",
-      "Web Development",
+      "Excel",
+      "Business Intelligence",
     ],
     authors: [{ name: "Gautam Samdhiya" }],
     creator: "Gautam Samdhiya",
@@ -82,11 +81,11 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_US",
       url: siteUrl,
-      siteName: "Gautam Samdhiya Portfolio",
+      siteName: "Gautam Samdhiya",
       title,
       description,
       ...(ogImage
-        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: "Gautam Samdhiya Portfolio" }] }
+        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: "Gautam Samdhiya — Data Analyst" }] }
         : {}),
     },
     twitter: {
@@ -118,7 +117,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: profile.name.includes("[ADD") ? "Portfolio Owner" : profile.name,
+    name: profile.name.includes("[ADD") ? "Gautam Samdhiya" : profile.name,
     jobTitle: "Data Analyst",
     description: profile.headline,
     url: siteUrl,

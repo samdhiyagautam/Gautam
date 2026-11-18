@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { GitBranch, Link2, Mail, Briefcase, Heart } from 'lucide-react';
+import { GitBranch, Link2, Mail, Heart } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
 import { Reveal } from './reveal';
@@ -20,8 +20,10 @@ export function Footer({ profile }: { profile: Profile }) {
         <Reveal variant="fade">
         <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
           <div className="md:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2 mb-4" aria-label="Go to homepage">
-              <Briefcase className="h-8 w-8 text-primary" />
+            <Link href="/" className="flex items-center space-x-2.5 mb-4" aria-label="Gautam Samdhiya homepage">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs tracking-wider shrink-0" aria-hidden="true">
+                GS
+              </div>
               <span className="text-xl font-bold tracking-tight">{profile.name}</span>
             </Link>
             <p className="text-muted-foreground text-sm mb-6 max-w-xs">
