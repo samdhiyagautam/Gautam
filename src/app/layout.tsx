@@ -124,7 +124,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     url: siteUrl,
     worksFor: {
       "@type": "Organization",
-      name: "Dhuri Na Venture Private Limited",
+      name: "Dhurina",
     },
     knowsAbout: ["Data Analysis", "SQL", "Python", "Power BI", "Excel", "Business Reporting", "AI Automation", "Next.js"],
     ...(sameAs.length > 0 ? { sameAs } : {}),

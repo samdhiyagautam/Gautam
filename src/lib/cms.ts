@@ -255,11 +255,28 @@ function mapSeo(row: SeoRow): SEO {
   };
 }
 
+// Public CMS reads must never hang the render. When Supabase is unreachable
+// (offline dev, DNS failure, outage) waiting for the request to fail can take
+// 7+ seconds per call; racing a short timeout lets the page fall back to the
+// constants immediately instead.
+const READ_TIMEOUT_MS = 3000;
+
+function withReadTimeout<T>(
+  promise: PromiseLike<{ data: T | null; error: unknown }>
+): Promise<{ data: T | null; error: unknown } | null> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), READ_TIMEOUT_MS)),
+  ]);
+}
+
 async function query<T>(table: string, build: (supabase: Awaited<ReturnType<typeof createClient>>) => PromiseLike<{ data: T | null; error: unknown }>): Promise<T | null> {
   if (!isSupabaseConfigured()) return null;
   try {
     const supabase = await createClient();
-    const { data, error } = await build(supabase);
+    const result = await withReadTimeout(build(supabase));
+    if (!result) return null;
+    const { data, error } = result;
     if (error || !data) return null;
     return data;
   } catch {
@@ -326,12 +343,16 @@ export async function getPublishedProject(id: string): Promise<Project | null> {
   }
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("projects")
-      .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
-      .eq("id", id)
-      .eq("status", "published")
-      .maybeSingle();
+    const result = await withReadTimeout(
+      supabase
+        .from("projects")
+        .select("id, name, category, problem, approach, solution, role, technologies, key_features, outcome, github_url, live_demo_url, case_study_url, thumbnail, screenshots, dataset_url, attachments, video_url, videos, is_featured, display_order, status, created_at, updated_at")
+        .eq("id", id)
+        .eq("status", "published")
+        .maybeSingle()
+    );
+    if (!result) return null;
+    const { data, error } = result;
     if (error || !data) return null;
     return mapProject(data as ProjectRow);
   } catch {
@@ -399,7 +420,11 @@ async function getAdminRow<T, R>(
   if (!isSupabaseConfigured()) return null;
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase.from(table).select(columns).eq("id", id).maybeSingle();
+    const result = await withReadTimeout(
+      supabase.from(table).select(columns).eq("id", id).maybeSingle()
+    );
+    if (!result) return null;
+    const { data, error } = result;
     if (error || !data) return null;
     return map(data as R);
   } catch {
@@ -475,7 +500,11 @@ export async function listProjectsAdmin(): Promise<{ rows: Project[]; live: bool
   }
   try {
     const supabase = await createClient();
-    const { data, error } = await projectQuery(supabase, false);
+    const result = await withReadTimeout(projectQuery(supabase, false));
+    if (!result) {
+      return { rows: FALLBACK_PROJECTS, live: false };
+    }
+    const { data, error } = result;
     if (error || !data) {
       return { rows: FALLBACK_PROJECTS, live: false };
     }

@@ -73,17 +73,10 @@ export const WHAT_I_BRING = [
 export const CAREER_JOURNEY = [
   {
     role: 'Assistant Manager',
-    company: 'Dhuri Na Venture Private Limited',
+    company: 'Dhurina',
     period: '2+ Years',
     description: 'Data + AI + Technology',
     isCurrent: true,
-  },
-  {
-    role: '[ADD EXACT DESIGNATION]',
-    company: 'MAS Educative',
-    period: '[ADD DATES]',
-    description: 'Professional Foundation',
-    isCurrent: false,
   },
 ];
 
@@ -107,8 +100,8 @@ export const FALLBACK_PROFILE: Profile = {
   heroDescription:
     'Data Analyst with 2+ years of professional experience as an Assistant Manager, combining business understanding, data analytics with SQL, Python, Power BI and Excel, AI-assisted workflows and modern technology to solve practical problems.',
   about:
-    "I turn business problems into practical solutions using data, AI and modern technology. With 2+ years of experience as an Assistant Manager at Dhuri Na Venture Private Limited, I combine business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.\n\nMy journey from MAS Educative to Assistant Manager has been defined by continuous learning and practical application. I work with Python, SQL, Power BI, and Excel for data analysis; build web applications with Next.js, React, Supabase, and PostgreSQL; and leverage AI to accelerate research, analysis, development, and creative workflows.\n\nI focus on solving the underlying business problem rather than simply using technology. Whether it's building a dashboard that drives decisions, automating a repetitive workflow, or developing a web application that streamlines operations, my approach is always: understand the problem first, then apply the right tools.",
-  location: '[ADD YOUR LOCATION]',
+    "I turn business problems into practical solutions using data, AI and modern technology. With 2+ years of experience as an Assistant Manager at Dhurina, I combine business understanding, data analytics, AI-assisted workflows, and modern technology to solve practical problems.\n\nMy journey has been defined by continuous learning and practical application. I work with Python, SQL, Power BI, and Excel for data analysis; build web applications with Next.js, React, Supabase, and PostgreSQL; and leverage AI to accelerate research, analysis, development, and creative workflows.\n\nI focus on solving the underlying business problem rather than simply using technology. Whether it's building a dashboard that drives decisions, automating a repetitive workflow, or developing a web application that streamlines operations, my approach is always: understand the problem first, then apply the right tools.",
+  location: 'Ranchi, Jharkhand, India',
   email: 'gautamsamdhiya2000@gmail.com',
   phone: '8797918451',
   linkedin: 'https://www.linkedin.com/in/connectwithgautam',
@@ -121,9 +114,9 @@ export const FALLBACK_PROFILE: Profile = {
 export const FALLBACK_EXPERIENCES: Experience[] = [
   {
     id: 'fallback-exp-1',
-    company: 'Dhuri Na Venture Private Limited',
+    company: 'Dhurina',
     designation: 'Assistant Manager',
-    startDate: '2022-01',
+    startDate: '2024-10',
     endDate: null,
     isCurrent: true,
     responsibilities: [
@@ -145,22 +138,6 @@ export const FALLBACK_EXPERIENCES: Experience[] = [
       'As Assistant Manager, I bridge business requirements with technical solutions. My role combines data analytics, business intelligence, web development, and AI-enabled automation to drive operational efficiency and data-driven decision making.',
     order: 1,
     status: 'published',
-    createdAt: new Date(0).toISOString(),
-    updatedAt: new Date(0).toISOString(),
-  },
-  {
-    id: 'fallback-exp-2',
-    company: 'MAS Educative',
-    designation: '[ADD EXACT DESIGNATION]',
-    startDate: '[ADD START DATE]',
-    endDate: '[ADD END DATE]',
-    isCurrent: false,
-    responsibilities: ['[ADD VERIFIED RESPONSIBILITY 1]', '[ADD VERIFIED RESPONSIBILITY 2]'],
-    projects: ['[ADD PROJECT 1]'],
-    technologies: ['[ADD TECHNOLOGY 1]'],
-    description: '[ADD ROLE DESCRIPTION]',
-    order: 2,
-    status: 'draft',
     createdAt: new Date(0).toISOString(),
     updatedAt: new Date(0).toISOString(),
   },

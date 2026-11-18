@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileText, Eye, Clock, Calendar, Award, TrendingUp, Mail } from 'lucide-react';
+import { Download, FileText, Eye, Clock, Calendar, Award, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +32,7 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
               <p className="text-muted-foreground">
                 {resumeExists
                   ? 'Current version reflecting my latest experience and skills.'
-                  : 'A full resume is available on request. In the meantime, review my experience, skills, and selected work below.'
+                  : 'Download the formatted PDF below, or review my experience, skills, and selected work.'
                 }
               </p>
             </CardHeader>
@@ -55,10 +55,11 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                   </>
                 ) : (
                   <>
+                    {/* public/resume.pdf is committed and verified — always downloadable. */}
                     <Button size="lg" variant="premium" asChild className="w-full sm:w-auto">
-                      <a href="#contact" className="flex items-center space-x-2">
-                        <Mail className="h-5 w-5" />
-                        <span>Request Resume</span>
+                      <a href="/resume.pdf" download className="flex items-center space-x-2">
+                        <Download className="h-5 w-5" />
+                        <span>Download PDF</span>
                       </a>
                     </Button>
                     <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
@@ -104,7 +105,7 @@ export function Resume({ resume, experiences }: { resume: ResumeData | null; exp
                     <h4 className="font-semibold">What recruiters usually ask for</h4>
                     <p className="text-sm text-muted-foreground mt-1">
                       Experience history, analytics tooling, and availability — all covered in
-                      the summary below. For the formatted PDF, use Request Resume above.
+                      the summary below. For the formatted PDF, use Download PDF above.
                     </p>
                   </div>
                 </div>
