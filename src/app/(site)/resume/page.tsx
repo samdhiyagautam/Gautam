@@ -3,8 +3,9 @@ import { Resume } from "@/components/portfolio/resume";
 import { getPublishedResume, getPublishedExperiences } from "@/lib/cms";
 
 export const metadata: Metadata = {
-  title: "Resume",
-  description: "Download or view my professional resume",
+  title: "Resume | Gautam Samdhiya — Data Analyst",
+  description:
+    "Download or view the professional ATS-friendly resume of Gautam Samdhiya: Data Analyst with 2+ years experience in SQL, Power BI, Excel, and Python.",
 };
 
 export default async function ResumePage() {

@@ -54,7 +54,7 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
                     <div>
                       <h4 className="font-semibold mb-3 flex items-center space-x-2">
                         <CheckCircle className="h-5 w-5 text-primary" />
-                        <span>Key Responsibilities</span>
+                        <span>Key Achievements &amp; Impact</span>
                       </h4>
                       <ul className="space-y-2 pl-4">
                         {realItems(exp.responsibilities, 'Details available on request.').map((resp, i) => (

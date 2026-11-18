@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Scroll3D } from './scroll-3d';
-import { ArrowRight, ArrowUpRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
+import { ArrowRight, Download, Mail, MapPin, Link2, GitBranch } from 'lucide-react';
 import { PROFESSIONAL_SNAPSHOT } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
 import type { Profile } from '@/types';
@@ -36,48 +36,33 @@ export function Hero({ profile, hasResume }: { profile: Profile; hasResume: bool
               <span className="text-foreground">Data Analyst · SQL · Python · Power BI</span>
             </div>
 
-            <h1 className="hero-enter mt-6 text-[2.6rem] sm:text-6xl lg:text-[4.4rem] font-bold tracking-[-0.03em] leading-[1.02] text-balance" style={{ animationDelay: '90ms' }}>
-              I turn data, AI
-              <br />
-              &amp; technology into
-              <br />
-              <span className="text-muted-foreground">practical solutions.</span>
+            <h1 className="hero-enter mt-6 text-[2.4rem] sm:text-5xl lg:text-[4rem] font-bold tracking-[-0.03em] leading-[1.08] text-balance" style={{ animationDelay: '90ms' }}>
+              Data Analyst who turns messy operational data into{" "}
+              <span className="text-muted-foreground">dashboards and decisions.</span>
             </h1>
 
-            <p className="hero-enter mx-auto lg:mx-0 mt-6 max-w-xl text-lg sm:text-xl text-muted-foreground leading-relaxed text-balance" style={{ animationDelay: '180ms' }}>
+            <div className="hero-enter mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-sm font-medium" style={{ animationDelay: '140ms' }}>
+              <span className="text-foreground font-semibold">Top Tools:</span>
+              <span className="rounded-full bg-primary/10 border border-primary/20 px-3 py-0.5 text-xs font-semibold text-primary">
+                SQL · Power BI · Excel · Python
+              </span>
+            </div>
+
+            <p className="hero-enter mx-auto lg:mx-0 mt-5 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed text-balance" style={{ animationDelay: '180ms' }}>
               {profile.heroDescription}
             </p>
 
-            <p className="hero-enter mx-auto lg:mx-0 mt-4 max-w-xl text-base font-medium text-foreground/90 text-balance" style={{ animationDelay: '220ms' }}>
-              I help teams turn operational data into clear decisions, reliable dashboards, and practical automation.
-            </p>
-
-            <div className="hero-enter mt-9 flex flex-col sm:flex-row items-center sm:justify-start justify-center gap-3" style={{ animationDelay: '260ms' }}>
+            <div className="hero-enter mt-8 flex flex-col sm:flex-row items-center sm:justify-start justify-center gap-3.5" style={{ animationDelay: '240ms' }}>
               <Button size="xl" asChild variant="premium" className="w-full sm:w-auto">
                 <a href="#projects" className="flex items-center gap-2">
-                  <span>View selected work</span>
+                  <span>View projects</span>
                   <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
                 </a>
               </Button>
-              {hasResume ? (
-                <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
-                  <a href="/resume" className="flex items-center gap-2">
-                    <Download className="h-5 w-5" aria-hidden="true" />
-                    <span>Download resume</span>
-                  </a>
-                </Button>
-              ) : (
-                <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
-                  <a href="#contact" className="flex items-center gap-2">
-                    <Download className="h-5 w-5" aria-hidden="true" />
-                    <span>Request resume</span>
-                  </a>
-                </Button>
-              )}
-              <Button size="xl" variant="ghost" asChild className="w-full sm:w-auto group">
-                <a href="#contact" className="flex items-center gap-1.5">
-                  <span>Contact me</span>
-                  <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+              <Button size="xl" variant="outline" asChild className="w-full sm:w-auto">
+                <a href={hasResume ? "/resume.pdf" : "/resume"} download="Gautam-Samdhiya-Resume.pdf" className="flex items-center gap-2">
+                  <Download className="h-5 w-5" aria-hidden="true" />
+                  <span>Download resume</span>
                 </a>
               </Button>
             </div>

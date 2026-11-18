@@ -351,12 +351,14 @@ export async function getPublishedProject(id: string): Promise<Project | null> {
         .eq("status", "published")
         .maybeSingle()
     );
-    if (!result) return null;
+    if (!result) return FALLBACK_PROJECTS.find((p) => p.id === id && p.status === "published") ?? null;
     const { data, error } = result;
-    if (error || !data) return null;
+    if (error || !data) {
+      return FALLBACK_PROJECTS.find((p) => p.id === id && p.status === "published") ?? null;
+    }
     return mapProject(data as ProjectRow);
   } catch {
-    return null;
+    return FALLBACK_PROJECTS.find((p) => p.id === id && p.status === "published") ?? null;
   }
 }
 
@@ -527,5 +529,7 @@ export async function getAllResumes(): Promise<Resume[]> {
 export { isSupabaseConfigured };
 
 export function isContactConfigured(): boolean {
-  return !!(process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL);
+  const hasResend = !!(process.env.RESEND_API_KEY && (process.env.CONTACT_TO_EMAIL || process.env.ADMIN_EMAIL));
+  const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return hasResend || hasSupabase;
 }

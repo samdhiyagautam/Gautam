@@ -20,9 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 const FALLBACK_TITLE =
-  "Gautam Samdhiya | Data Analyst (SQL, Python, Power BI, Excel)";
+  "Gautam Samdhiya | Data Analyst (SQL, Power BI, Excel, Python)";
 const FALLBACK_DESCRIPTION =
-  "Data Analyst with 2+ years of professional experience as an Assistant Manager. SQL, Python, Power BI and Excel for business reporting, dashboards and practical problem-solving.";
+  "Data Analyst with 2+ years of professional experience as an Assistant Manager. Transforming messy operational data into reliable Power BI dashboards, automated SQL/Python pipelines, and clear business decisions.";
 
 // Site metadata comes from published SEO settings when Supabase is
 // configured, otherwise from the built-in defaults below.

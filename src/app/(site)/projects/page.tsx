@@ -3,8 +3,9 @@ import { Projects } from "@/components/portfolio/projects";
 import { getPublishedProjects } from "@/lib/cms";
 
 export const metadata: Metadata = {
-  title: "Projects",
-  description: "Selected projects demonstrating practical problem-solving across data, AI, and web development",
+  title: "Case Studies | Data Analytics Projects",
+  description:
+    "Three end-to-end data analytics case studies featuring real ball-by-ball IPL analysis, retail sales KPI modeling, and operational executive dashboards using SQL, Python, Power BI, and Excel.",
 };
 
 export default async function ProjectsPage() {

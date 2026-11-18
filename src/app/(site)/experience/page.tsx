@@ -3,8 +3,9 @@ import { Experience } from "@/components/portfolio/experience";
 import { getPublishedExperiences } from "@/lib/cms";
 
 export const metadata: Metadata = {
-  title: "Experience",
-  description: "My professional experience timeline and key achievements",
+  title: "Experience | Assistant Manager & Data Analyst",
+  description:
+    "Professional work history at Dhurina: operational Power BI dashboards, automated SQL/Python reporting pipelines, and cross-departmental data-driven decisions.",
 };
 
 export default async function ExperiencePage() {

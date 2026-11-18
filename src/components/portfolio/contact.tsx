@@ -57,9 +57,8 @@ export function Contact({
     {
       icon: Phone,
       label: 'Phone',
-      value: profile.phone,
-      href: `tel:${profile.phone}`,
-      description: 'Available during business hours',
+      value: 'Available on request',
+      description: 'Shared during interview scheduling',
     },
   ];
   const [formData, setFormData] = useState({

@@ -3,8 +3,9 @@ import { Skills } from "@/components/portfolio/skills";
 import { getPublishedSkills } from "@/lib/cms";
 
 export const metadata: Metadata = {
-  title: "Skills",
-  description: "My technical skills organized by category with proficiency levels",
+  title: "Skills | SQL, Power BI, Excel, Python & DAX",
+  description:
+    "Data analytics technical skill stack: SQL schema design & queries, Power BI dashboards, DAX measures, Excel Power Query, Python (Pandas) automation, and ETL pipelines.",
 };
 
 export default async function SkillsPage() {

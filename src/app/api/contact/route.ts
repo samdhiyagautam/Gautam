@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { createClient } from "@/lib/supabase/server";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_LENGTHS = { name: 100, email: 254, subject: 200, message: 5000 } as const;
@@ -65,37 +66,74 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Validation failed.", fields: errors }, { status: 422 });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const toEmail = process.env.CONTACT_TO_EMAIL;
-  if (!apiKey || !toEmail) {
-    return NextResponse.json(
-      { error: "Message delivery is not configured yet. Please email directly instead." },
-      { status: 503 }
-    );
-  }
-
   const name = (body.name as string).trim().replace(/[\r\n]+/g, " ");
   const email = (body.email as string).trim().replace(/[\r\n]+/g, "");
   const subject = (body.subject as string).trim().replace(/[\r\n]+/g, " ");
   const message = (body.message as string).trim();
-  const from = process.env.CONTACT_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
 
+  let dbSaved = false;
+
+  // 1. Store message in Supabase
   try {
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from,
-      to: [toEmail],
-      replyTo: email,
-      subject: `[Portfolio] ${subject}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-      html: `<p><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p><p><strong>Subject:</strong> ${escapeHtml(subject)}</p><hr /><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>`,
-    });
-    if (error) {
-      return NextResponse.json({ error: "Could not deliver the message. Please email directly." }, { status: 502 });
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      const supabase = await createClient();
+      const { error: dbError } = await supabase.from("contact_messages").insert({
+        name,
+        email,
+        subject,
+        message,
+        ip_address: ip,
+        status: "unread",
+      });
+      if (dbError) {
+        console.warn("[contact] Supabase insert note:", dbError.message);
+      } else {
+        dbSaved = true;
+      }
     }
-  } catch {
-    return NextResponse.json({ error: "Could not deliver the message. Please email directly." }, { status: 502 });
+  } catch (err) {
+    console.warn("[contact] Supabase error:", err);
   }
 
-  return NextResponse.json({ success: true });
+  // 2. Email notification (if Resend is configured)
+  const apiKey = process.env.RESEND_API_KEY;
+  const toEmail = process.env.CONTACT_TO_EMAIL || process.env.ADMIN_EMAIL;
+  let emailSent = false;
+
+  if (apiKey && toEmail) {
+    const from = process.env.CONTACT_FROM_EMAIL || "Portfolio <onboarding@resend.dev>";
+    try {
+      const resend = new Resend(apiKey);
+      const { error: resendError } = await resend.emails.send({
+        from,
+        to: [toEmail],
+        replyTo: email,
+        subject: `[Portfolio Inquiry] ${subject}`,
+        text: `From: ${name} <${email}>\nIP: ${ip}\n\n${message}`,
+        html: `<p><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p><p><strong>Subject:</strong> ${escapeHtml(subject)}</p><p><strong>IP:</strong> ${escapeHtml(ip)}</p><hr /><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>`,
+      });
+      if (!resendError) {
+        emailSent = true;
+      } else {
+        console.error("[contact] Resend error:", resendError);
+      }
+    } catch (sendErr) {
+      console.error("[contact] Email dispatch failed:", sendErr);
+    }
+  }
+
+  // If neither Supabase nor Resend is configured or could succeed
+  if (!dbSaved && !emailSent && (!apiKey || !toEmail)) {
+    // If Supabase wasn't configured and Resend wasn't configured, notify user
+    return NextResponse.json(
+      { error: "Direct messaging is currently offline. Please email directly at the email listed on this page." },
+      { status: 503 }
+    );
+  }
+
+  return NextResponse.json({
+    success: true,
+    dbSaved,
+    emailSent,
+  });
 }

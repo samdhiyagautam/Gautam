@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { FolderKanban } from "lucide-react";
+import { FolderKanban, Image as ImageIcon } from "lucide-react";
 import { saveProject } from "@/actions/admin";
 import { AdminForm, SubmitButton, StatusField, ChoiceField, FieldError } from "./form-ui";
 import { PROJECT_CATEGORIES } from "@/lib/constants";
@@ -21,6 +21,8 @@ function joinLines(list: string[]): string {
 export function ProjectForm({ initial }: { initial?: Project | null }) {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(saveProject, { ok: true, message: "" });
+  const [selectedShotNames, setSelectedShotNames] = useState<string[]>([]);
+  const [selectedThumbName, setSelectedThumbName] = useState<string | null>(null);
 
   useEffect(() => {
     if (!state.message) return;
@@ -115,27 +117,68 @@ export function ProjectForm({ initial }: { initial?: Project | null }) {
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="thumbnailFile">Thumbnail Image (JPG/PNG/WebP, max 5 MB)</Label>
-              <Input id="thumbnailFile" name="thumbnailFile" type="file" accept=".jpg,.jpeg,.png,.webp" />
-              {initial?.thumbnail ? (
-                <p className="text-xs text-muted-foreground break-all">Current: {initial.thumbnail.split("/").pop()} — choose a file to replace it.</p>
+              <Label htmlFor="thumbnailFile">Thumbnail / Hero Image (JPG/PNG/WebP, max 5 MB)</Label>
+              <Input
+                id="thumbnailFile"
+                name="thumbnailFile"
+                type="file"
+                accept=".jpg,.jpeg,.png,.webp"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  setSelectedThumbName(f ? f.name : null);
+                }}
+              />
+              {selectedThumbName ? (
+                <p className="text-xs text-primary font-medium">Selected to upload: {selectedThumbName}</p>
+              ) : initial?.thumbnail ? (
+                <div className="flex items-center gap-3 pt-1">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={initial.thumbnail} alt="Thumbnail preview" className="h-10 w-16 rounded object-cover border border-border" />
+                  <p className="text-xs text-muted-foreground break-all">Current: {initial.thumbnail.split("/").pop()}</p>
+                </div>
               ) : (
-                <p className="text-xs text-muted-foreground">No thumbnail yet — cards show a category icon instead.</p>
+                <p className="text-xs text-muted-foreground">No thumbnail yet — cards show an analytics icon.</p>
               )}
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="screenshotFiles">Screenshot Images (JPG/PNG/WebP, max 5 MB each)</Label>
-              <Input id="screenshotFiles" name="screenshotFiles" type="file" multiple accept=".jpg,.jpeg,.png,.webp" />
+              <Label htmlFor="screenshotFiles">Dashboard Screenshot Images (JPG/PNG/WebP, max 5 MB each)</Label>
+              <Input
+                id="screenshotFiles"
+                name="screenshotFiles"
+                type="file"
+                multiple
+                accept=".jpg,.jpeg,.png,.webp"
+                onChange={(e) => {
+                  const names = Array.from(e.target.files || []).map((f) => f.name);
+                  setSelectedShotNames(names);
+                }}
+              />
+              {selectedShotNames.length > 0 ? (
+                <p className="text-xs text-primary font-medium">
+                  {selectedShotNames.length} new screenshot{selectedShotNames.length > 1 ? "s" : ""} selected to upload.
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground">Select one or more dashboard captures to upload.</p>
+              )}
             </div>
           </div>
+
           {initial && initial.screenshots.length > 0 && (
-            <div className="space-y-2">
-              <Label>Uploaded screenshots (check to remove)</Label>
-              <div className="space-y-1">
+            <div className="space-y-2 rounded-xl border border-border bg-muted/20 p-4">
+              <Label className="text-sm font-semibold flex items-center gap-2">
+                <ImageIcon className="h-4 w-4 text-primary" />
+                <span>Uploaded Dashboard Screenshots (check to remove):</span>
+              </Label>
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
                 {initial.screenshots.map((url) => (
-                  <label key={url} className="flex items-center gap-2 text-sm">
-                    <input type="checkbox" name="removeScreenshots" value={url} className="h-4 w-4" />
-                    <span className="truncate text-muted-foreground">{url.split("/").pop()}</span>
+                  <label key={url} className="relative flex flex-col rounded-lg border border-border bg-card p-2 cursor-pointer hover:border-primary/50 transition-colors">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt="Screenshot" className="h-24 w-full rounded object-contain bg-background/50 mb-2" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <input type="checkbox" name="removeScreenshots" value={url} className="h-4 w-4 rounded border-border text-destructive focus:ring-destructive" />
+                      <span className="truncate flex-1">{url.split("/").pop()}</span>
+                    </div>
                   </label>
                 ))}
               </div>

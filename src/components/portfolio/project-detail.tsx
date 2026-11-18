@@ -91,6 +91,30 @@ export function ProjectDetailView({ project }: { project: Project }) {
             </CardContent>
           </Card>
 
+          {(project.dataUsed || project.datasetUrl) && (
+            <Card>
+              <CardContent className="p-6 pt-0">
+                <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                  <Table className="h-5 w-5 text-primary" />
+                  <span>Data Used</span>
+                </h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  {project.dataUsed || "Production operational dataset configured for analytical modeling."}
+                </p>
+                {project.datasetUrl && !isPlaceholderLink(project.datasetUrl) && (
+                  <div className="mt-4">
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={project.datasetUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        <Table className="h-4 w-4" />
+                        <span>Source Dataset / Reference</span>
+                      </a>
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardContent className="p-6 pt-0">
               <h2 className="text-2xl font-bold mb-4">Approach</h2>
@@ -107,9 +131,9 @@ export function ProjectDetailView({ project }: { project: Project }) {
 
           <Card>
             <CardContent className="p-6 pt-0">
-              <h2 className="text-2xl font-bold mb-4">Key Features</h2>
+              <h2 className="text-2xl font-bold mb-4">Key Insights &amp; Analytical Findings</h2>
               <ul className="space-y-3">
-                {project.keyFeatures.map((feature: string, i: number) => (
+                {(project.keyInsights && project.keyInsights.length > 0 ? project.keyInsights : project.keyFeatures).map((feature: string, i: number) => (
                   <li key={i} className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-muted-foreground">{feature}</span>
@@ -119,10 +143,10 @@ export function ProjectDetailView({ project }: { project: Project }) {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-6 pt-0">
-              <h2 className="text-2xl font-bold mb-4">Outcome</h2>
-              <p className="text-muted-foreground leading-relaxed">{project.outcome}</p>
+              <h2 className="text-2xl font-bold mb-2 text-primary">Result &amp; Business Impact</h2>
+              <p className="text-foreground font-medium leading-relaxed">{project.outcome}</p>
             </CardContent>
           </Card>
 

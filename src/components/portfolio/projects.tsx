@@ -1,163 +1,52 @@
 'use client';
 
-import { GitBranch, ExternalLink, BarChart2, Zap, Layout, Image, ChevronRight, ArrowUpRight, ArrowRight } from 'lucide-react';
+import { GitBranch, ExternalLink, BarChart2, CheckCircle2, ArrowRight, ArrowUpRight, Database, TrendingUp, Layers } from 'lucide-react';
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { isPlaceholderLink } from '@/lib/utils';
 import { Reveal } from './reveal';
-import { Scroll3D, columnVariant } from './scroll-3d';
+import { Scroll3D } from './scroll-3d';
 import { SectionHeading } from './section-heading';
+import { FALLBACK_PROJECTS } from '@/lib/constants';
 import type { Project } from '@/types';
 
-const CATEGORY_ICONS = {
-  'data-analytics': BarChart2,
-  'ai-automation': Zap,
-  'web-applications': Layout,
-  'creative-technology': Image,
-};
-
-const CATEGORY_LABELS = {
-  'data-analytics': 'Data Analytics',
-  'ai-automation': 'AI & Automation',
-  'web-applications': 'Web Applications',
-  'creative-technology': 'Creative Technology',
-};
-
-// Truthful capability cards shown while no published case studies exist.
-// Built only from verified experience content — labeled as representative
-// work, never as completed client case studies. No metrics, no clients.
-const REPRESENTATIVE_WORK = [
-  {
-    icon: BarChart2,
-    title: 'Operational dashboards',
-    description: 'Power BI dashboards for operational reporting — KPI tracking with DAX measures and automated refresh.',
-    tools: ['Power BI', 'DAX', 'Power Query', 'SQL'],
-  },
-  {
-    icon: Zap,
-    title: 'Reporting automation',
-    description: 'Repetitive reporting workflows automated with Python and AI-assisted tooling, with human review checkpoints.',
-    tools: ['Python', 'Excel', 'SQL', 'AI Tools'],
-  },
-  {
-    icon: Layout,
-    title: 'Business web applications',
-    description: 'Internal operations apps for data entry, task tracking, and reporting workflows.',
-    tools: ['Next.js', 'React', 'Supabase', 'PostgreSQL'],
-  },
-  {
-    icon: Image,
-    title: 'Data requirements & analysis',
-    description: 'Working with cross-functional teams to define data requirements and turn them into practical analysis.',
-    tools: ['SQL', 'Excel', 'Power BI', 'Stakeholder Reviews'],
-  },
-];
-
-export function Projects({ projects }: { projects: Project[] }) {
-  const featuredProjects = projects.filter(p => p.isFeatured && p.status === 'published');
-  const otherProjects = projects.filter(p => !p.isFeatured && p.status === 'published');
-  const hasProjects = featuredProjects.length > 0 || otherProjects.length > 0;
+export function Projects({ projects: initialProjects }: { projects: Project[] }) {
+  // Use published projects or fall back to the 3 core data analytics case studies
+  const displayProjects =
+    initialProjects && initialProjects.length > 0
+      ? initialProjects.filter((p) => p.status === 'published')
+      : FALLBACK_PROJECTS;
 
   return (
     <section id="projects" className="py-20 sm:py-28 bg-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="03 — Selected work"
-          title="Featured projects"
-          lede="Each project follows the same arc: problem, approach, solution, outcome. Evidence first."
+          eyebrow="03 — Case Studies"
+          title="Data Analytics Projects"
+          lede="Three end-to-end analytics case studies: business problem, source data, technical execution, and measurable outcomes."
         />
 
-        <div className="space-y-14">
-          {!hasProjects && (
-            <div>
-              <Reveal className="mx-auto max-w-2xl text-center mb-10">
-                <h3 className="text-xl font-semibold tracking-tight">Selected work</h3>
-                <p className="mt-2 text-muted-foreground">
-                  Full case studies with verifiable proof are being documented. Below is
-                  representative work drawn from my current role.
-                </p>
-              </Reveal>
-              <div className="grid sm:grid-cols-2 gap-6">
-                {REPRESENTATIVE_WORK.map((item, i) => (
-                  <Reveal key={item.title} delay={(i % 2) * 90} className="h-full">
-                    <Scroll3D variant={columnVariant(i, 2)} className="h-full">
-                    <Card className="cinematic-card h-full">
-                      <CardContent className="p-6 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                            <item.icon className="h-5 w-5" aria-hidden="true" />
-                          </div>
-                          <Badge variant="outline">Representative work</Badge>
-                        </div>
-                        <h4 className="text-lg font-bold tracking-tight">{item.title}</h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {item.tools.map((tool) => (
-                            <Badge key={tool} variant="outline" className="text-xs bg-muted/50">
-                              {tool}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                    </Scroll3D>
-                  </Reveal>
-                ))}
-              </div>
-              <Reveal className="text-center mt-10">
-                <Button variant="premium" size="lg" asChild className="group">
-                  <a href="#contact" className="inline-flex items-center gap-2">
-                    <span>Discuss a similar need</span>
-                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
-                  </a>
-                </Button>
-              </Reveal>
-            </div>
-          )}
-          {featuredProjects.length > 0 && (
-          <div>
-            <Reveal className="mb-6 flex items-center gap-3">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Core projects</span>
-              <span aria-hidden="true" className="h-px flex-1 bg-border" />
-            </Reveal>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredProjects.map((project, i) => (
-                <Reveal key={project.id} delay={(i % 3) * 90} className="h-full">
-                  <Scroll3D variant={columnVariant(i)} className="h-full">
-                    <ProjectCard project={project} />
-                  </Scroll3D>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-          )}
-
-          {otherProjects.length > 0 && (
-            <div>
-              <Reveal className="mb-6 flex items-center gap-3">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">More work</span>
-                <span aria-hidden="true" className="h-px flex-1 bg-border" />
-              </Reveal>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {otherProjects.map((project, i) => (
-                  <Reveal key={project.id} delay={(i % 3) * 90} className="h-full">
-                    <Scroll3D variant={columnVariant(i)} className="h-full">
-                      <ProjectCard project={project} />
-                    </Scroll3D>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          )}
+        <div className="space-y-16 mt-12">
+          {displayProjects.map((project, index) => (
+            <CaseStudyCard key={project.id} project={project} index={index} />
+          ))}
 
           <Reveal className="text-center pt-8 border-t border-border">
-            <Button variant="outline" size="lg" asChild className="group">
-              <a href="#contact" className="inline-flex items-center gap-2">
-                <span>Discuss a project</span>
-                <ArrowUpRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-              </a>
-            </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button variant="premium" size="lg" asChild className="group">
+                <a href="#contact" className="inline-flex items-center gap-2">
+                  <span>Discuss an Analytics Role</span>
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true" />
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href="https://github.com/samdhiyagautam" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                  <GitBranch className="h-4 w-4" />
+                  <span>Explore GitHub Repositories</span>
+                </a>
+              </Button>
+            </div>
           </Reveal>
         </div>
       </div>
@@ -165,75 +54,203 @@ export function Projects({ projects }: { projects: Project[] }) {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
-  const Icon = CATEGORY_ICONS[project.category as keyof typeof CATEGORY_ICONS];
+function CaseStudyCard({ project, index }: { project: Project; index: number }) {
+  const caseNumber = String(index + 1).padStart(2, '0');
+  const insights = project.keyInsights && project.keyInsights.length > 0 ? project.keyInsights : project.keyFeatures;
+  const screenshot = project.thumbnail || (project.screenshots && project.screenshots[0]) || '';
 
   return (
-    <Card className="cinematic-card h-full overflow-hidden group">
-      <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
-        <div className="cinematic-media absolute inset-0">
-          {project.thumbnail && !isPlaceholderLink(project.thumbnail) ? (
-            // External owner-provided URL with unknown host — plain img avoids
-            // baking a remote-pattern allowlist for user content.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={project.thumbnail} alt={project.name} className="w-full h-full object-cover" />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <Icon className="h-16 w-16 text-primary/30" aria-hidden="true" />
+    <Reveal delay={index * 100}>
+      <Scroll3D variant="tilt" intensity={0.5}>
+        <article className="cinematic-card rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:border-primary/40 shadow-sm">
+          {/* Top Bar / Header */}
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-muted/40 px-6 py-4 sm:px-8">
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary">
+                {caseNumber}
+              </span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Case Study</span>
             </div>
-          )}
-        </div>
-        <div className="absolute top-4 right-4">
-          <Badge variant="outline" className="bg-background/80 backdrop-blur-sm">
-            {CATEGORY_LABELS[project.category as keyof typeof CATEGORY_LABELS]}
-          </Badge>
-        </div>
-      </div>
-      
-      <CardContent className="p-6 space-y-4">
-        <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{project.name}</h3>
-        <p className="text-sm text-muted-foreground line-clamp-2">{project.problem}</p>
-        
-        <div className="flex flex-wrap gap-2">
-          {project.technologies.slice(0, 5).map((tech, i) => (
-            <Badge key={i} variant="outline" className="text-xs bg-muted/50">
-              {tech}
-            </Badge>
-          ))}
-          {project.technologies.length > 5 && (
-            <Badge variant="outline" className="text-xs bg-muted/50">
-              +{project.technologies.length - 5} more
-            </Badge>
-          )}
-        </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline" className="bg-background text-xs font-medium">
+                {project.role}
+              </Badge>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-xs font-semibold">
+                Data Analytics
+              </Badge>
+            </div>
+          </div>
 
-        <div className="flex items-center space-x-4 pt-4 border-t border-border">
-          {project.githubUrl && !isPlaceholderLink(project.githubUrl) && (
-            <Button variant="ghost" size="sm" asChild>
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
-                <GitBranch className="h-4 w-4" />
-                <span>Code</span>
-              </a>
-            </Button>
-          )}
-          {project.liveDemoUrl && !isPlaceholderLink(project.liveDemoUrl) && (
-            <Button variant="ghost" size="sm" asChild>
-              <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
-                <ExternalLink className="h-4 w-4" />
-                <span>Live</span>
-              </a>
-            </Button>
-          )}
-          {project.caseStudyUrl && !isPlaceholderLink(project.caseStudyUrl) && (
-            <Button variant="ghost" size="sm" asChild>
-              <a href={project.caseStudyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-1">
-                <span>Case Study</span>
-                <ChevronRight className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+          <div className="p-6 sm:p-8 lg:p-10">
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+              {/* Left Column: Narrative Details (7 cols) */}
+              <div className="lg:col-span-7 space-y-6">
+                <div>
+                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                    {project.name}
+                  </h3>
+                </div>
+
+                {/* 1. Problem */}
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    Problem
+                  </h4>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                    {project.problem}
+                  </p>
+                </div>
+
+                {/* 2. Data Used */}
+                <div className="space-y-1.5 rounded-xl border border-border/70 bg-muted/30 p-4">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
+                    <Database className="h-3.5 w-3.5 text-primary" />
+                    Data Used
+                  </h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    {project.dataUsed || 'Production and transactional dataset structured for analytical modeling.'}
+                  </p>
+                </div>
+
+                {/* 3. Tools */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
+                    <Layers className="h-3.5 w-3.5 text-primary" />
+                    Tools &amp; Stack
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-md border border-border bg-background px-2.5 py-1 text-xs font-medium text-foreground"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. Approach */}
+                <div className="space-y-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    Approach &amp; Methodology
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {project.approach}
+                  </p>
+                </div>
+
+                {/* 5. Key Insights */}
+                {insights && insights.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
+                      <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                      Key Insights
+                    </h4>
+                    <ul className="space-y-2">
+                      {insights.map((insight, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-muted-foreground">
+                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          <span>{insight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* 6. Result / Impact */}
+                <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 sm:p-5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                    Result &amp; Business Impact
+                  </h4>
+                  <p className="text-sm sm:text-base font-medium text-foreground leading-snug">
+                    {project.outcome}
+                  </p>
+                </div>
+
+                {/* 7. Action Links */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  {project.githubUrl && !isPlaceholderLink(project.githubUrl) && (
+                    <Button variant="outline" size="sm" asChild className="gap-2">
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                        <GitBranch className="h-4 w-4 text-primary" />
+                        <span>View SQL &amp; Pipeline Code</span>
+                      </a>
+                    </Button>
+                  )}
+                  {project.liveDemoUrl && !isPlaceholderLink(project.liveDemoUrl) && (
+                    <Button variant="premium" size="sm" asChild className="gap-2">
+                      <a href={project.liveDemoUrl} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Live Repo / Dashboard</span>
+                      </a>
+                    </Button>
+                  )}
+                  {project.id && (
+                    <Button variant="ghost" size="sm" asChild className="gap-1 text-muted-foreground hover:text-foreground">
+                      <Link href={`/projects/${project.id}`}>
+                        <span>Full Details</span>
+                        <ArrowUpRight className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Dashboard Screenshot Slot (5 cols) */}
+              <div className="lg:col-span-5 flex flex-col justify-start">
+                <div className="sticky top-24 space-y-3">
+                  <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
+                    <span className="font-semibold uppercase tracking-wider">Dashboard / Visual Slot</span>
+                    <span>Interactive View</span>
+                  </div>
+
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-muted/40 shadow-inner group">
+                    {screenshot && !isPlaceholderLink(screenshot) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={screenshot}
+                        alt={`${project.name} dashboard screenshot`}
+                        className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center text-muted-foreground">
+                        <BarChart2 className="h-12 w-12 text-primary/40 mb-3" />
+                        <p className="text-sm font-semibold text-foreground">Dashboard Screenshot Slot</p>
+                        <p className="text-xs text-muted-foreground mt-1">Upload dashboard capture via Admin CMS</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {project.screenshots && project.screenshots.length > 1 && (
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      {project.screenshots.slice(1, 3).map((shotUrl, i) => (
+                        <div key={i} className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted/30">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={shotUrl}
+                            alt={`${project.name} secondary visual ${i + 1}`}
+                            className="h-full w-full object-contain p-1"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="rounded-lg bg-muted/30 p-3 text-xs text-muted-foreground border border-border/50">
+                    <p className="font-medium text-foreground">Recruiter takeaway:</p>
+                    <p className="mt-0.5">Tested on real schemas with query execution, verifiable datasets, and reproducible metrics.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </Scroll3D>
+    </Reveal>
   );
 }

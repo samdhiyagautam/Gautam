@@ -53,11 +53,13 @@ export interface Project {
   name: string;
   category: ProjectCategory;
   problem: string;
+  dataUsed?: string;
   approach: string;
   solution: string;
   role: string;
   technologies: string[];
   keyFeatures: string[];
+  keyInsights?: string[];
   outcome: string;
   githubUrl: string;
   liveDemoUrl: string;
