@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { GitBranch, Link2, Mail, Heart } from 'lucide-react';
+import { GitBranch, Link2, Mail } from 'lucide-react';
 import { NAV_ITEMS } from '@/lib/constants';
 import { isPlaceholderLink } from '@/lib/utils';
 import { Reveal } from './reveal';
@@ -97,14 +97,9 @@ export function Footer({ profile }: { profile: Profile }) {
         </div>
         </Reveal>
 
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground text-center sm:text-left">
             © {currentYear} {profile.name}. All rights reserved.
-          </p>
-          <p className="text-sm text-muted-foreground flex items-center space-x-2">
-            <span>Built with</span>
-            <Heart className="h-4 w-4 text-red-500" aria-hidden="true" />
-            <span>Next.js, React, Supabase, Tailwind CSS</span>
           </p>
         </div>
       </div>
