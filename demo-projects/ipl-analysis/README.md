@@ -1,8 +1,9 @@
 # IPL Cricket Analytics — SQL + Python
 
 End-to-end analysis of **real Indian Premier League (IPL) match data** — 1,243 matches
-and 295,732 ball-by-ball deliveries (2008–2026) — using SQL as the primary tool and a
-zero-dependency Python pipeline to load, run, and export everything.
+and 295,732 ball-by-ball deliveries (2008–2026) — using SQL as the primary tool, a
+zero-dependency Python pipeline to load, run, and export everything, and a formula-driven
+Excel / Google Sheets workbook for the full project.
 
 This is **not sample data**. Every number below comes from real matches and can be
 cross-checked against public scorecards (e.g. ESPNcricinfo).
@@ -25,6 +26,8 @@ cross-checked against public scorecards (e.g. ESPNcricinfo).
 | `scripts/analyze.py` | Loads CSVs into SQLite, runs every query, exports `results/` + `charts/` (stdlib only) |
 | `results/*.csv` | One result file per question (12 files) |
 | `charts/season_runs.svg` | Total runs per season |
+| `IPL-Analytics-Workbook.xlsx` | Excel / Google Sheets deliverable: 18 sheets, % dashboard first, 6 charts |
+| `excel/` | Node builder: verified aggregates → workbook, chart renderer, verification scripts |
 | `data/` | Committed real data: `matches.csv` (~0.2 MB), `deliveries.csv` (~28 MB) |
 
 ## How to run
@@ -47,6 +50,69 @@ sqlite3 ipl.db -cmd ".mode csv" \
   ""
 # then run any query from sql/02_analysis_queries.sql
 ```
+
+## Excel / Google Sheets workbook
+
+[`IPL-Analytics-Workbook.xlsx`](IPL-Analytics-Workbook.xlsx) is the full project in one
+workbook: **18 sheets, 6,814 live formulas, 6 dashboard charts and 15 in-cell data bars**,
+built from the same verified aggregates as `results/`.
+
+**Percentages first.** The Dashboard opens with eight live KPI rates — toss winner win %
+(51.6%), field-first (54.7%), bat-first (45.3%), chase (54.2%), defend (45.8%), dot-ball
+rate (35.6%), boundary share (57.9%) and extras share (5.0%) — followed by volume KPIs,
+top-8 team win rates, five headline findings and six charts.
+
+| Sheet group | Sheets |
+|---|---|
+| Dashboard | `Dashboard`, `KPI Summary` |
+| The 12 SQL analyses | `Season Summary`, `Top Run Scorers`, `Top Wicket Takers`, `Best Economy`, `Toss Impact`, `Chase vs Defend`, `Venue Averages`, `Team Wins`, `Head to Head`, `Highest Totals` |
+| Pivot sources | `Team Season` (166 rows), `Batting Stats` (739), `Bowling Stats` (407), `Wicket Types` |
+| Raw grain | `Matches` — all 1,243 matches with live Result / Toss Winner Won columns |
+| Guide | `How To Use` — import steps, pivots, Power Query, definitions, limitations |
+
+Strike rates, economies, win %, chase %, shares of totals, wickets in hand and every
+percentage are **formulas**, not hard-coded values, so they recalculate when you edit a
+cell. The workbook sets `fullCalcOnLoad`, so Excel and Google Sheets compute everything on
+open.
+
+### Import into Google Sheets
+
+1. Open [sheets.google.com](https://sheets.google.com) and create a blank spreadsheet.
+2. **File → Import → Upload** → choose `IPL-Analytics-Workbook.xlsx` → **Import data**.
+3. Open the **Dashboard** tab. Percentages recalculate and the six charts appear as
+   floating images. If an image is missing, insert it from `excel/assets/*.png`.
+
+### Power Query — full ball-by-ball grain
+
+The workbook keeps pre-aggregated batting, bowling and team tables so it stays fast; the
+full 295,732-row delivery grain is in `data/deliveries.csv`. To query it in Excel:
+**Data → Get Data → From File → From Text/CSV**, load the CSV, then apply the same
+definitions as `sql/02_analysis_queries.sql` (innings ≤ 2, legal ball = no wide/no-ball,
+bowler wickets = the six credited types).
+
+### Rebuild and verify
+
+```bash
+cd excel
+npm install
+npm run all        # charts -> workbook -> 601 data checks + 208 workbook checks
+```
+
+`npm run charts` needs Microsoft Edge on Windows to rasterise the SVG charts; the chart
+images are committed, so `npm run build` works without Edge.
+
+**Honest notes**
+
+- The six charts are embedded PNGs, not native Excel chart objects — ExcelJS has no chart
+  API. Every number behind them is in the sheets, so they can be rebuilt.
+- The workbook stores aggregated tables plus the 1,243-match table, not all 295,732
+  deliveries (the CSV is 28 MB) — use Power Query or the CSV for that grain.
+- Verification is programmatic: `excel/verify-data.mjs` cross-checks 601 values against
+  `results/*.csv`, and `excel/verify-workbook.mjs` reads the saved `.xlsx` back and checks
+  208 things (sheet order, formulas, totals, charts, data bars, cross-sheet references).
+  The file was not opened in the Excel desktop UI during the build because Office
+  activation was unavailable on the build machine; Excel and Google Sheets recalculate on
+  open via `fullCalcOnLoad`.
 
 ## Key findings (all verifiable)
 
@@ -86,5 +152,6 @@ sqlite3 ipl.db -cmd ".mode csv" \
 
 SQL analytics on 300k rows (aggregations, CTEs, CASE pivots, HAVING thresholds),
 schema design with indexes, data cleaning and consolidation from a raw multi-file
-source, CSV/SVG export pipelines in dependency-free Python, and careful data
-attribution + licensing.
+source, CSV/SVG export pipelines in dependency-free Python, a formula-driven
+Excel / Google Sheets workbook (6,814 formulas, pivot-ready tables, dashboard),
+and careful data attribution + licensing.

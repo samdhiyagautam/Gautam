@@ -1,0 +1,18 @@
+{
+  "name": "ipl-analytics-workbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Builds IPL-Analytics-Workbook.xlsx (Excel + Google Sheets) from the verified project data in data/ and results/.",
+  "scripts": {
+    "charts": "node make_charts.mjs",
+    "build": "node build_workbook.mjs",
+    "verify:data": "node verify-data.mjs",
+    "verify:workbook": "node verify-workbook.mjs",
+    "verify": "npm run verify:data && npm run verify:workbook",
+    "all": "npm run charts && npm run build && npm run verify"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
