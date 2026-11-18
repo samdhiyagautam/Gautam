@@ -85,7 +85,6 @@ export const PROFESSIONAL_SNAPSHOT = [
   { label: 'Assistant Manager', value: 'Current Role' },
   { label: 'Data & Analytics', value: 'Core Competency' },
   { label: 'AI-Enabled Workflows', value: 'Productivity Multiplier' },
-  { label: 'Web Applications', value: 'Technical Capability' },
 ];
 
 // ---------------------------------------------------------------------------
